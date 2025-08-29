@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de Formación: Tableros Avanzados con R-Shiny</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: #5dade2;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Header */
+        .main-header {
+            background: var(--secondary-color);
+            padding: 80px 20px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .main-header h1 {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+        }
+        .main-header p {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 0;
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 50px;
+        }
+
+        /* Module Items */
+        .module-block {
+            margin-bottom: 60px;
+        }
+        
+        .block-title {
+            font-size: 2.2rem;
+            color: var(--link-color);
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .module-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left-width: 4px;
+            border-left-color: var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .module-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-left-color: var(--link-color);
+        }
+
+        .module-item h4 {
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin: 0 0 10px 0;
+        }
+
+        .module-item p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        .module-item p b {
+            color: var(--text-color);
+        }
+
+        /* Resource Section */
+        .resources-section {
+             background-color: var(--secondary-color);
+        }
+        .resource-card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .resource-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        .resource-card-link {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            font-weight: bold;
+            padding: 0.75rem 1rem;
+            border-radius: 0 0 0.75rem 0.75rem;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+         .resource-card-link:hover {
+             background-color: #ffae42;
+         }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <h1>Programa de Formación</h1>
+            <p>Desarrollo de Tableros de Resultados Avanzados con R-Shiny para el ICFES</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Thematic Content Section -->
+        <section class="section">
+            <h2 class="section-title">Contenido Académico</h2>
+            
+            <div class="module-block">
+                <h3 class="block-title">Bloque I: Fundamentos y Prototipado</h3>
+                <div class="module-grid">
+                    <a href="sesion_1.html" class="module-item">
+                        <h4>MÓDULO 1: Principios y Ecosistema</h4>
+                        <p><b>Temas:</b> Ciclo de vida MLOps. R-Shiny vs. Power BI. Metodologías de proyectos de datos. Configuración del entorno con Git/GitHub.</p>
+                    </a>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 2: Análisis Exploratorio Interactivo (EDA)</h4>
+                        <p><b>Temas:</b> Creación de una primera app para EDA. `ggplot2` y `plotly`. Diseño de layouts básicos.</p>
+                    </div>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 3: Estructura y Reactividad</h4>
+                        <p><b>Temas:</b> El paradigma de reactividad. Optimización con `reactive()`. Aplicaciones modulares (`ui`/`server`).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-block">
+                <h3 class="block-title">Bloque II: Desarrollo del Producto de Datos</h3>
+                <div class="module-grid">
+                     <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 4: Pipelines de Datos en Shiny</h4>
+                        <p><b>Temas:</b> Carga y transformación de datos (`dplyr`). Implementación de pipelines de inferencia. Manejo de errores.</p>
+                    </div>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 5: Integración de Modelos</h4>
+                        <p><b>Temas:</b> Desacoplamiento de artefactos. Carga de modelos pre-entrenados (`.rds`). Creación de simuladores.</p>
+                    </div>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 6: Visualización Avanzada</h4>
+                        <p><b>Temas:</b> Tablas interactivas con `DT`. Mapas con `leaflet`. Interfaces complejas.</p>
+                    </div>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 7: Generación de Artefactos</h4>
+                        <p><b>Temas:</b> Reportes parametrizados con `rmarkdown`. Implementación de descargas. Automatización.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-block">
+                <h3 class="block-title">Bloque III: Profesionalización y Operaciones</h3>
+                <div class="module-grid">
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 8: Arquitectura Profesional</h4>
+                        <p><b>Temas:</b> Diseño con `shinydashboard`. Branding y estética institucional.</p>
+                    </div>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 9: Conectividad y Gobernanza</h4>
+                        <p><b>Temas:</b> Conexión a bases de datos y APIs. Gestión de credenciales y seguridad.</p>
+                    </div>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 10: Control de Versiones Avanzado</h4>
+                        <p><b>Temas:</b> Flujos de trabajo colaborativos con Git. Trazabilidad de cambios.</p>
+                    </div>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 11: Despliegue y Mantenimiento (CI/CD)</h4>
+                        <p><b>Temas:</b> Gestión de dependencias (`renv`). Despliegue. Introducción a Docker y CI/CD.</p>
+                    </div>
+                    <div class="module-item" style="opacity: 0.6; cursor: not-allowed;">
+                        <h4>MÓDULO 12: Proyecto Final</h4>
+                        <p><b>Temas:</b> Desarrollo guiado de un producto de datos completo. Simulación de un ciclo MLOps.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Supplementary Resources Section -->
+        <section class="section resources-section">
+             <h2 class="section-title">Portal de Recursos de Apoyo</h2>
+             <div class="module-grid" style="margin-top: 50px;">
+                 <div class="resource-card">
+                     <div class="resource-card-content">
+                         <h4 style="font-size: 1.8rem;">Ruta de Aprendizaje</h4>
+                         <p>Explora los 12 módulos del curso de R-Shiny de forma interactiva. Gira las tarjetas para ver los detalles de cada módulo.</p>
+                     </div>
+                     <a href="https://g.co/gemini/share/807ef8b60d22" target="_blank" class="resource-card-link">Abrir Ruta</a>
+                 </div>
+                 <div class="resource-card">
+                     <div class="resource-card-content">
+                         <h4 style="font-size: 1.8rem;">Diagrama MLOps + Gemini</h4>
+                         <p>Visualiza el ciclo de MLOps completo, potenciado con las capacidades de la API de Gemini para automatizar y enriquecer cada fase.</p>
+                     </div>
+                     <a href="https://g.co/gemini/share/63b2f1a34490" target="_blank" class="resource-card-link">Ver Diagrama</a>
+                 </div>
+                 <div class="resource-card">
+                     <div class="resource-card-content">
+                         <h4 style="font-size: 1.8rem;">Ciclo de Vida Detallado</h4>
+                         <p>Una guía visual y profunda de cada fase del proyecto, desde la definición del negocio hasta el monitoreo.</p>
+                     </div>
+                     <a href="https://g.co/gemini/share/de887f482938" target="_blank" class="resource-card-link">Explorar Ciclo</a>
+                 </div>
+                 <div class="resource-card">
+                     <div class="resource-card-content">
+                         <h4 style="font-size: 1.8rem;">Mapeo de Estructura AWS</h4>
+                         <p>Conecta la teoría con la práctica. Este diagrama superpone la estructura de directorios de un proyecto sobre el ciclo de vida de AWS.</p>
+                     </div>
+                     <a href="https://g.co/gemini/share/8881344c5255" target="_blank" class="resource-card-link">Ver Mapeo</a>
+                 </div>
+             </div>
+        </section>
+    </main>
+</body>
+</html>

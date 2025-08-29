@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Repositorios y Control de Versiones</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+
+        /* Call to Action Box */
+        .cta-box {
+            background: var(--secondary-color);
+            border-left: 5px solid var(--primary-color);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 50px;
+        }
+        .cta-box h3 {
+            margin-top: 0;
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        .cta-box p {
+            margin: 10px 0 0 0;
+        }
+        .cta-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+        .cta-link:hover {
+            transform: scale(1.05);
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+
+        /* Step-by-step guide */
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        .step p {
+            margin-bottom: 20px;
+        }
+        .step img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Project Structure */
+        .project-structure {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1.1rem;
+            border: 1px solid var(--border-color);
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        .project-structure ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .project-structure li {
+            margin-bottom: 10px;
+        }
+        .project-structure .folder { color: #5dade2; }
+        .project-structure .file { color: #e0e0e0; }
+        .project-structure .comment { color: var(--text-muted); font-style: italic; }
+
+        /* MLOps Connection */
+        .mlops-mapping {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            align-items: center;
+            text-align: left;
+            margin-top: 50px;
+        }
+        .mlops-mapping img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .mapping-list .map-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .map-item .icon { font-size: 2rem; color: var(--primary-color); width: 40px; }
+        .map-item .text strong {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--text-color);
+        }
+        .map-item .text span {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .mlops-mapping {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Navigation Section */
+        .navigation-section {
+            background: var(--secondary-color);
+            padding: 60px 30px;
+            border-radius: 15px;
+            margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px;
+            font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex;
+            align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        .home-button {
+            background-color: var(--card-bg);
+            color: #5dade2;
+            border: 2px solid #5dade2;
+        }
+        .next-button {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+        .nav-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Repositorios y Control de Versiones</h1>
+            <p class="subtitle center-p">La base para la colaboración, reproducibilidad y despliegue de proyectos de datos.</p>
+        </header>
+
+        <!-- SECTION 1: INTRODUCTION -->
+        <section class="section">
+            <h2 id="por-que">¿Por qué controlar las versiones?</h2>
+            <p>
+                Todo proyecto de datos comienza con una idea y un script. Sin embargo, rápidamente evoluciona a un estado de caos con archivos como `analisis_v1.R`, `analisis_v2_corregido.R`, y `analisis_final_AHORASI.R`. Esta práctica no es sostenible, dificulta la colaboración y hace imposible saber qué versión del código generó un resultado específico.
+            </p>
+            <p>
+                El control de versiones es el pilar fundamental que transforma un proyecto de un esfuerzo individual y desordenado a una iniciativa de ingeniería robusta y colaborativa, permitiendo tener una "máquina del tiempo" para cada cambio realizado.
+            </p>
+        </section>
+
+        <!-- SECTION 2: GIT & GITHUB -->
+        <section class="section">
+            <h2 id="git-github">Git y GitHub: El Dúo Dinámico</h2>
+            <p class="center-p">
+                Para implementar un control de versiones profesional, se utiliza una combinación de dos herramientas: Git y GitHub. Es crucial entender que no son lo mismo.
+            </p>
+            <div class="mlops-mapping" style="gap: 80px;">
+                <div style="text-align: center;">
+                    <i class="fa-brands fa-git-alt" style="font-size: 8rem; color: #f05033;"></i>
+                    <h3 style="font-size: 2.5rem; margin-top: 10px;">Git</h3>
+                    <p class="center-p" style="font-size: 1.1rem;">Es el **software** que se instala localmente. Es un sistema de control de versiones distribuido que permite rastrear cada cambio en los archivos del proyecto. Piense en él como el motor que registra la historia de su proyecto.</p>
+                </div>
+                <div style="text-align: center;">
+                    <i class="fa-brands fa-github" style="font-size: 8rem; color: #ffffff;"></i>
+                    <h3 style="font-size: 2.5rem; margin-top: 10px;">GitHub</h3>
+                    <p class="center-p" style="font-size: 1.1rem;">Es la **plataforma web** que aloja los repositorios de Git. Es el centro colaborativo donde el equipo puede compartir código, revisar cambios y gestionar el proyecto. Piense en él como la "nube social" para su código.</p>
+                </div>
+            </div>
+            <div class="cta-box">
+                <h3><i class="fa-solid fa-user-plus"></i> Acción Requerida: Crear una Cuenta en GitHub</h3>
+                <p>GitHub es el portafolio de facto para cualquier profesional de datos. Es esencial que cada miembro del equipo tenga una cuenta.</p>
+                <p>Se solicita a todos los participantes crear su usuario en la plataforma. Más adelante, se compartirán los nombres de usuario para formar equipos y colaborar en los repositorios del proyecto.</p>
+                <a href="https://github.com/join" target="_blank" class="cta-link">Crear mi cuenta de GitHub <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
+
+        <!-- SECTION 3: INSTALLATION -->
+        <section class="section">
+            <h2 id="instalacion">Instalación y Configuración</h2>
+            <p class="center-p">Antes de poder versionar, es necesario instalar y configurar Git en cada máquina de trabajo.</p>
+            <div class="step-guide">
+                <div class="step">
+                    <h3>Paso 1: Descargar e Instalar Git</h3>
+                    <p>La instalación es un proceso directo. Se debe descargar el instalador desde el sitio web oficial y seguir las instrucciones, aceptando las opciones por defecto que son adecuadas para la mayoría de los usuarios.</p>
+                    <a href="https://git-scm.com/downloads" target="_blank" class="cta-link" style="background-color: #f05033; color: white;">Descargar Git</a>
+                </div>
+                <div class="step">
+                    <h3>Paso 2: Configuración Inicial</h3>
+                    <p>Una vez instalado, es fundamental identificarse. Abra una terminal (Git Bash en Windows, o Terminal en Mac/Linux) y ejecute los siguientes comandos, reemplazando los datos de ejemplo con su nombre y correo electrónico (el mismo utilizado en GitHub).</p>
+                    <pre><code>git config --global user.name "Tu Nombre Completo"
+git config --global user.email "tu_email@ejemplo.com"</code></pre>
+                    <p>Esta configuración es global y se aplicará a todos los proyectos en su máquina, "firmando" cada cambio que realice.</p>
+                </div>
+                <div class="step">
+                    <h3>Paso 3: Integración con el IDE</h3>
+                    <p>Tanto RStudio como Visual Studio Code tienen una excelente integración nativa con Git, lo que facilita enormemente el flujo de trabajo.</p>
+                    <p><strong>En RStudio:</strong> Al crear un "Nuevo Proyecto" (New Project), se puede seleccionar la opción "Version Control" y luego "Git". Allí, se pega la URL del repositorio de GitHub y RStudio se encarga de clonarlo y configurar el proyecto. La pestaña "Git" aparecerá automáticamente en el panel superior derecho, permitiendo visualizar cambios, hacer commits y sincronizar con GitHub de forma visual.</p>
+                    <p><strong>En Visual Studio Code:</strong> VS Code detecta automáticamente los repositorios de Git. Su pestaña "Source Control" (Control de código fuente) en la barra lateral izquierda permite realizar todas las operaciones comunes (stage, commit, push, pull) de manera intuitiva.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: WORKSHOP -->
+        <section class="section">
+            <h2 id="taller">Taller Práctico: Mi Primer Repositorio</h2>
+            <p class="center-p">En esta sección se guiará el proceso para crear un repositorio en GitHub, conectarlo a un proyecto local y sincronizar la primera versión de una aplicación de datos.</p>
+            <div class="step-guide">
+                <div class="step">
+                    <h3>Paso 1: Crear un Repositorio en GitHub</h3>
+                    <p>En su perfil de GitHub, haga clic en el botón "New" para crear un nuevo repositorio. Asígnele un nombre (ej. `mi-primera-app-shiny`), seleccione la opción "Public", y muy importante, marque la casilla "Add a README file". Esto inicializa el repositorio con un primer archivo.</p>
+                </div>
+                <div class="step">
+                    <h3>Paso 2: Sincronizar (Clonar) el Repositorio</h3>
+                    <p>En la página de su nuevo repositorio en GitHub, haga clic en el botón verde "Code", asegúrese de que la pestaña "HTTPS" esté seleccionada y copie la URL. Luego, en su máquina local, abra una terminal, navegue a la carpeta donde desea guardar sus proyectos y ejecute el comando `git clone` seguido de la URL copiada.</p>
+                    <pre><code># Reemplace la URL con la de su propio repositorio
+git clone https://github.com/tu-usuario/mi-primera-app-shiny.git</code></pre>
+                    <p>Este comando crea una carpeta con el nombre del repositorio que es una copia exacta del proyecto en GitHub y ya está conectada a él.</p>
+                </div>
+                <div class="step">
+                    <h3>Paso 3: Crear la Estructura y el Primer Commit</h3>
+                    <p>Abra la nueva carpeta con su IDE (RStudio o VS Code). Cree la estructura de carpetas que definimos anteriormente (`data`, `R`, etc.). Ahora, modifique el archivo `README.md` para describir su proyecto. Guarde los cambios.</p>
+                    <p>Para registrar esta primera versión, se siguen tres pasos en la terminal (o usando la interfaz del IDE):</p>
+                    <pre><code># 1. Añadir todos los archivos nuevos o modificados al "área de preparación" (staging area)
+git add .
+
+# 2. Confirmar los cambios con un mensaje descriptivo
+git commit -m "feat: Se crea la estructura inicial del proyecto y se actualiza el README"
+
+# 3. Subir (sincronizar) los cambios a GitHub
+git push</code></pre>
+                    <p>Si actualiza la página de GitHub, verá los cambios reflejados.</p>
+                </div>
+                 <div class="step">
+                    <h3>Paso 4: Crear la Primera Data App</h3>
+                    <p>Dentro de la carpeta del proyecto, cree un archivo llamado `app.R` con el siguiente contenido básico. Este es el esqueleto de una aplicación Shiny.</p>
+                    <pre><code># Cargar la librería Shiny
+library(shiny)
+
+# Definir la Interfaz de Usuario (UI)
+ui <- fluidPage(
+  titlePanel("Mi Primera Aplicación de Datos"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("bins",
+                  "Número de bins:",
+                  min = 1,
+                  max = 50,
+                  value = 30)
+    ),
+    mainPanel(
+      plotOutput("distPlot")
+    )
+  )
+)
+
+# Definir la lógica del Servidor
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+    x    <- faithful[, 2]
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    hist(x, breaks = bins, col = '#ff9900', border = 'white',
+         xlab = 'Tiempo de espera entre erupciones (en mins)',
+         main = 'Histograma de tiempos de espera')
+  })
+}
+
+# Ejecutar la aplicación
+shinyApp(ui = ui, server = server)
+</code></pre>
+                    <p>Guarde el archivo y sincronice los cambios con GitHub repitiendo los comandos `git add .`, `git commit -m "..."`, y `git push`.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SECTION 5: PROJECT STRUCTURE -->
+        <section class="section">
+            <h2 id="arquitectura">La Arquitectura de un Proyecto de Datos</h2>
+            <p class="center-p">
+                Un proyecto reproducible y fácil de desplegar comienza con una estructura de directorios estandarizada. Mantener esta organización es vital, ya que plataformas de despliegue como **Railway** o **Hugging Face Spaces** dependen de una estructura predecible para construir y ejecutar las aplicaciones R/Shiny.
+            </p>
+            <div class="project-structure">
+                <ul>
+                    <li><i class="fa-solid fa-folder folder"></i> mi-proyecto/</li>
+                    <ul>
+                        <li><i class="fa-solid fa-folder folder"></i> data/ <span class="comment"># Contiene todos los datos</span></li>
+                        <ul>
+                            <li><i class="fa-solid fa-file-csv file"></i> raw/ <span class="comment"># Datos crudos, nunca se modifican</span></li>
+                            <li><i class="fa-solid fa-file-csv file"></i> processed/ <span class="comment"># Datos limpios y listos para modelar</span></li>
+                        </ul>
+                        <li><i class="fa-solid fa-folder folder"></i> R/ <span class="comment"># Scripts con funciones de ayuda</span></li>
+                        <ul>
+                            <li><i class="fa-solid fa-file-code file"></i> data_processing.R</li>
+                            <li><i class="fa-solid fa-file-code file"></i> model_training.R</li>
+                        </ul>
+                         <li><i class="fa-solid fa-folder folder"></i> models/ <span class="comment"># Modelos entrenados y guardados</span></li>
+                        <ul>
+                            <li><i class="fa-solid fa-file-zipper file"></i> best_model.rds</li>
+                        </ul>
+                        <li><i class="fa-solid fa-folder folder"></i> www/ <span class="comment"># Recursos para la app Shiny (CSS, imágenes)</span></li>
+                        <li><i class="fa-solid fa-file-code file"></i> app.R <span class="comment"># El archivo principal de la aplicación Shiny</span></li>
+                        <li><i class="fa-solid fa-file file"></i> .gitignore <span class="comment"># Archivos a ignorar por Git (ej. datos grandes)</span></li>
+                        <li><i class="fa-solid fa-file-alt file"></i> README.md <span class="comment"># Documentación del proyecto</span></li>
+                    </ul>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECTION 6: MLOps Connection -->
+        <section class="section">
+            <h2 id="mlops">Conectando al Ciclo de Vida MLOps</h2>
+            <p class="center-p">
+                Esta estructura de carpetas no es arbitraria. Cada directorio y artefacto de nuestro proyecto R/Shiny se mapea directamente a una fase del ciclo de vida MLOps que vimos anteriormente. El repositorio de GitHub actúa como el registro central que une todo el proceso.
+            </p>
+            <div class="mlops-mapping">
+                <div>
+                     <img src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2021/02/22/3-ML-Lifecycle-Detail.jpg" alt="Ciclo de Vida de Machine Learning de AWS">
+                </div>
+                <div class="mapping-list">
+                    <div class="map-item">
+                        <div class="icon"><i class="fa-solid fa-database"></i></div>
+                        <div class="text">
+                            <strong>Data Preparation</strong>
+                            <span>Los scripts en `R/` generan los datos en `data/processed/`.</span>
+                        </div>
+                    </div>
+                     <div class="map-item">
+                        <div class="icon"><i class="fa-solid fa-brain"></i></div>
+                        <div class="text">
+                            <strong>Model Training</strong>
+                            <span>El script de entrenamiento en `R/` produce el artefacto del modelo.</span>
+                        </div>
+                    </div>
+                     <div class="map-item">
+                        <div class="icon"><i class="fa-solid fa-box-archive"></i></div>
+                        <div class="text">
+                            <strong>Model Artifact</strong>
+                            <span>El archivo `best_model.rds` guardado en la carpeta `models/`.</span>
+                        </div>
+                    </div>
+                     <div class="map-item">
+                        <div class="icon"><i class="fa-solid fa-rocket"></i></div>
+                        <div class="text">
+                            <strong>Deploy</strong>
+                            <span>El `app.R` que carga el modelo y lo expone como una aplicación interactiva.</span>
+                        </div>
+                    </div>
+                     <div class="map-item">
+                        <div class="icon"><i class="fa-solid fa-code-branch"></i></div>
+                        <div class="text">
+                            <strong>Model Registry (Conceptual)</strong>
+                            <span>El repositorio de GitHub, que versiona el código, los punteros a los datos y los modelos.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NAVIGATION SECTION -->
+        <section class="section navigation-section">
+            <h2>Fin del Módulo 1</h2>
+            <p class="center-p">Con un repositorio configurado y una estructura de proyecto definida, hemos completado las bases. Ahora estamos listos para explorar cómo construir y desplegar aplicaciones de datos más complejas.</p>
+            <div class="nav-buttons">
+                <a href="introduccion.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver a Introducción</a>
+                <a href="https://izainea.github.io/capacitacion_icfes_rosario" class="nav-button home-button"><i class="fa-solid fa-house"></i> Volver al Inicio</a>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- ANIMATIONS ON SCROLL ---
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+    </script>
+
+</body>
+</html>
+

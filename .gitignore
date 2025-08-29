@@ -1,0 +1,32 @@
+# Archivos de historial y entorno de R
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata/
+
+# Archivos de paquetes (usar renv o similar en su lugar)
+*.so
+*.dll
+*.o
+
+# Datos (generalmente no se versionan si son grandes)
+data/
+# Descomentar la siguiente línea si los datos son pequeños y se quieren versionar
+# !data/
+
+# Modelos (a menudo grandes, considere usar Git LFS si necesita versionarlos)
+models/
+
+# Archivos de caché de Knitr y RMarkdown
+*_cache/
+/cache/
+*.utf8.md
+*.knit.md
+
+# Archivos generados por Shiny
+rsconnect/
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+*.sh

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2.2: Anatomía de una App Shiny</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .anatomy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+            text-align: left;
+            margin-top: 50px;
+        }
+        .anatomy-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            border-top: 4px solid var(--primary-color);
+        }
+        .anatomy-card h3 { font-size: 2.5rem; margin-top: 0; }
+        .anatomy-card .icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 15px; }
+
+        @media (max-width: 768px) {
+            .anatomy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .nav-button:hover {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Anatomía de una App Shiny</h1>
+            <p class="subtitle center-p">El Esqueleto y el Cerebro: Entendiendo UI y Server.</p>
+        </header>
+
+        <!-- SECTION 1: INTRODUCTION -->
+        <section class="section">
+            <h2 id="introduccion">De Script a Aplicación</h2>
+            <p>
+                Un script de R es como una receta de cocina: una serie de pasos que se ejecutan en orden para obtener un resultado final. Es un monólogo. Una aplicación Shiny, en cambio, es como tener una conversación con un chef experto. Tú le haces preguntas (moviendo un slider, seleccionando una opción) y él te responde al instante con un nuevo platillo (un gráfico actualizado, una tabla filtrada).
+            </p>
+            <p>
+                Para lograr esta magia, toda aplicación Shiny se construye sobre dos componentes fundamentales que trabajan en equipo: la <strong>UI (User Interface)</strong> y el <strong>Server (Servidor)</strong>. Ambos viven juntos en un archivo llamado <code>app.R</code>, que es el corazón de nuestro producto de datos.
+            </p>
+        </section>
+
+        <!-- SECTION 2: THE TWO PILLARS -->
+        <section class="section">
+            <h2 id="pilares">Los Dos Pilares: UI y Server</h2>
+            <p class="center-p">Pensemos en la construcción de una casa para entender estos dos conceptos.</p>
+            <div class="anatomy-grid">
+                <div class="anatomy-card">
+                    <div class="icon"><i class="fa-solid fa-object-group"></i></div>
+                    <h3>UI (User Interface)</h3>
+                    <p><strong>La Analogía:</strong> Son los planos y la fachada de la casa. Definen dónde estarán las habitaciones, las ventanas y las puertas. Es todo lo que el visitante puede ver y tocar.</p>
+                    <p><strong>La Realidad:</strong> Es el <strong>"qué"</strong> ve el usuario. La UI define la apariencia de la aplicación: el título, los paneles, los menús, los botones, los sliders y los espacios vacíos donde se mostrarán los resultados. Es el esqueleto de la aplicación, escrito en R.</p>
+                </div>
+                <div class="anatomy-card">
+                    <div class="icon"><i class="fa-solid fa-gears"></i></div>
+                    <h3>Server (Servidor)</h3>
+                    <p><strong>La Analogía:</strong> Es el sistema eléctrico, la plomería y la cocina. Es lo que hace que la casa sea funcional. Cuando abres el grifo (interactúas con la UI), el sistema de plomería (el Server) se encarga de que salga agua.</p>
+                    <p><strong>La Realidad:</strong> Es el <strong>"cómo"</strong> funciona la aplicación. El Server es el cerebro que contiene toda la lógica de R. Carga los datos, ejecuta los cálculos, genera los gráficos y reacciona a las acciones del usuario en la UI para entregarle resultados actualizados.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: WORKSHOP -->
+        <section class="section">
+            <h2 id="taller">Taller Práctico: Construyendo Nuestra Primera App</h2>
+            <p class="center-p">Vamos a crear una aplicación simple que cargue los datos del examen Saber 11 y muestre un histograma del puntaje global. Crearemos un único archivo, <code>app.R</code>, en la raíz de nuestro proyecto.</p>
+            <div class="step-guide">
+                <div class="step">
+                    <h3>Paso 1: El Código Completo de `app.R`</h3>
+                    <p>Copia y pega el siguiente código en tu archivo <code>app.R</code>. A continuación, desglosaremos cada parte.</p>
+                    <pre><code># 1. Cargar las librerías necesarias
+library(shiny)
+library(readr)
+library(ggplot2)
+
+# 2. Definir la Interfaz de Usuario (UI) - El Esqueleto
+ui <- fluidPage(
+    # Título de la aplicación que se verá en el navegador
+    titlePanel("Análisis Básico - Puntaje Global Saber 11"),
+    
+    # Diseño con una barra lateral
+    sidebarLayout(
+        # Panel lateral para los controles de entrada
+        sidebarPanel(
+            # Un slider para que el usuario elija el número de barras del histograma
+            sliderInput(inputId = "bins",
+                        label = "Número de Bins (barras):",
+                        min = 1,
+                        max = 50,
+                        value = 30)
+        ),
+        
+        # Panel principal para mostrar los resultados (salidas)
+        mainPanel(
+           # Un espacio reservado para mostrar un gráfico que se generará en el Server
+           plotOutput(outputId = "distPlot")
+        )
+    )
+)
+
+# 3. Definir la Lógica del Servidor - El Cerebro
+server <- function(input, output) {
+
+    # Cargar los datos desde el archivo .txt
+    # Usamos .. para subir un nivel desde la raíz y luego entrar a data/raw
+    saber11_data <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE)
+
+    # La lógica para generar el histograma
+    output$distPlot <- renderPlot({
+        
+        # Generar el gráfico con ggplot2
+        ggplot(saber11_data, aes(x = punt_global)) +
+            geom_histogram(bins = input$bins, fill = "#ff9900", color = "#1e1e1e") +
+            labs(title = "Distribución del Puntaje Global",
+                 x = "Puntaje Global",
+                 y = "Frecuencia") +
+            theme_minimal(base_size = 16)
+    })
+}
+
+# 4. Ejecutar la Aplicación
+shinyApp(ui = ui, server = server)
+</code></pre>
+                </div>
+                <div class="step">
+                    <h3>Paso 2: Entendiendo la Comunicación UI-Server</h3>
+                    <p>La magia de Shiny reside en cómo se comunican la UI y el Server:</p>
+                    <ul>
+                        <li>En la <strong>UI</strong>, creamos un control con <code>sliderInput(inputId = "bins", ...)</code>. El <code>inputId</code> es el nombre único de este control.</li>
+                        <li>En el <strong>Server</strong>, podemos acceder al valor actual de ese slider en cualquier momento usando <code>input$bins</code>.</li>
+                        <li>En el <strong>Server</strong>, creamos un gráfico dentro de <code>output$distPlot <- renderPlot({...})</code>. El nombre <code>distPlot</code> es el identificador único de esta salida.</li>
+                        <li>En la <strong>UI</strong>, le decimos a Shiny dónde mostrar ese gráfico con <code>plotOutput(outputId = "distPlot")</code>.</li>
+                    </ul>
+                    <p>Cuando el usuario mueve el slider, <code>input$bins</code> cambia de valor, el código dentro de <code>renderPlot</code> se vuelve a ejecutar automáticamente con el nuevo valor, y el gráfico en <code>plotOutput</code> se actualiza. ¡Eso es la <strong>reactividad</strong>!</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SECTION 4: GITIGNORE -->
+        <section class="section">
+            <h2 id="gitignore">El Guardián del Repositorio: `.gitignore`</h2>
+            <p>
+                No todo lo que está en la carpeta de tu proyecto debe ser guardado en Git. Hay archivos temporales, datos muy pesados, o credenciales secretas que no queremos versionar. Para esto existe el archivo <code>.gitignore</code>.
+            </p>
+            <p>
+                Este es un archivo de texto simple que contiene una lista de los archivos y carpetas que Git debe ignorar por completo. Es fundamental para mantener tu repositorio limpio, seguro y liviano. Basado en el archivo que proporcionaste, esta es una excelente configuración inicial para un proyecto de R.
+            </p>
+            <pre><code># Archivos de historial y entorno de R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Datos (generalmente no se versionan si son grandes o sensibles)
+# Al añadir "data/", le decimos a Git que ignore esta carpeta y todo su contenido.
+data/
+
+# Modelos (suelen ser archivos binarios grandes)
+models/
+
+# Archivos generados por Shiny al desplegar
+rsconnect/
+
+# Archivos de sistema operativo que no son parte del proyecto
+.DS_Store
+Thumbs.db
+</code></pre>
+        </section>
+
+        <!-- NAVIGATION SECTION -->
+        <section class="section navigation-section">
+            <h2>Próximo Paso: Puesta en Producción</h2>
+            <p class="center-p">Ya tienes tu primera aplicación funcional y entiendes su estructura. El siguiente paso es compartirla con el mundo. En la próxima lección, aprenderemos a desplegar nuestra app en la web.</p>
+            <div class="nav-buttons">
+                <a href="git_tutorial.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver a Git</a>
+                <a href="produccion_app.html" class="nav-button next-button">Siguiente: Puesta en Producción <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+    </script>
+
+</body>
+</html>

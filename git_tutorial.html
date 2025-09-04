@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2.1: El Ritmo Esencial de Git</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        
+        code {
+            background-color: var(--secondary-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+            align-items: stretch;
+        }
+        .workflow-step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            border-top: 4px solid var(--info-color);
+            text-align: left;
+        }
+        .workflow-step .step-number {
+            font-family: 'Teko', sans-serif;
+            font-size: 4rem;
+            color: var(--info-color);
+            line-height: 1;
+        }
+        .workflow-step h3 {
+            font-size: 1.8rem;
+            margin: 10px 0;
+            color: var(--text-color);
+        }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .nav-button:hover {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>El Ritmo Esencial de Git</h1>
+            <p class="subtitle center-p">Commits y Pushes: Guardando y Sincronizando tu Progreso.</p>
+        </header>
+
+        <!-- SECTION 1: INTRODUCTION -->
+        <section class="section">
+            <h2 id="por-que">Git como una Máquina del Tiempo</h2>
+            <p>
+                Imagina que estás jugando un videojuego largo y complejo. ¿Qué haces antes de enfrentar a un jefe final? ¡Guardas la partida! Si algo sale mal, puedes volver a ese punto exacto y reintentarlo. Git funciona con esta misma idea. Cada vez que haces un <strong>commit</strong>, estás creando un "punto de guardado" (snapshot) de tu proyecto.
+            </p>
+            <p>
+                Esta "máquina del tiempo" es la habilidad más importante que Git nos ofrece. Nos libera del miedo a experimentar, porque siempre podemos volver a una versión anterior que sabíamos que funcionaba. Olvídate de los archivos <code>analisis_final.R</code>, <code>analisis_final_v2.R</code> y <code>analisis_final_AHORA_SI.R</code>. Con Git, tienes un historial limpio y profesional de cada cambio.
+            </p>
+        </section>
+
+        <!-- SECTION 2: THE CORE WORKFLOW -->
+        <section class="section">
+            <h2 id="flujo">El Ritmo de Tres Pasos: Add, Commit, Push</h2>
+            <p class="center-p">
+                El flujo de trabajo básico que realizarás decenas de veces al día se resume en tres comandos. Piénsalo como el proceso de tomar una foto y subirla a un álbum en la nube.
+            </p>
+            <div class="workflow-grid">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <h3><i class="fa-solid fa-plus-square"></i> git add</h3>
+                    <p><strong>La Analogía:</strong> Elegir qué cosas incluirás en la foto. <br> <strong>La Realidad:</strong> Le dices a Git qué archivos específicos, que has creado o modificado, quieres incluir en tu próximo "punto de guardado". A esta zona de preparación se le llama "Staging Area".</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <h3><i class="fa-solid fa-camera"></i> git commit</h3>
+                    <p><strong>La Analogía:</strong> Tomar la foto y escribir una descripción en la parte de atrás. <br> <strong>La Realidad:</strong> Creas el "punto de guardado" permanente en tu máquina local. Cada commit debe ir acompañado de un mensaje (<code>-m</code>) que describa claramente qué cambiaste. Ej: "Se añade gráfico de dispersión".</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <h3><i class="fa-solid fa-cloud-arrow-up"></i> git push</h3>
+                    <p><strong>La Analogía:</strong> Subir tu foto al álbum compartido en la nube (GitHub). <br> <strong>La Realidad:</strong> Sincronizas los commits que tienes en tu máquina local con el repositorio remoto en GitHub, para que tu equipo pueda ver tus cambios y tengas una copia de seguridad.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: WORKSHOP -->
+        <section class="section">
+            <h2 id="taller">Taller Práctico: Mi Primer Ciclo de Cambios</h2>
+            <p class="center-p">Vamos a poner en práctica el ritmo de tres pasos. Usaremos el proyecto que ya clonamos en el módulo anterior.</p>
+            <div class="step-guide">
+                <div class="step">
+                    <h3>Paso 1: Modificar un Archivo</h3>
+                    <p>Abre tu proyecto en RStudio o VS Code. Busca el archivo <code>README.md</code> y añade una nueva línea de texto. Por ejemplo: "Este proyecto contendrá un dashboard para el análisis de los resultados de las pruebas Saber 11." Guarda el archivo.</p>
+                    <p>En la pestaña "Git" de RStudio o en "Source Control" de VS Code, verás que el archivo <code>README.md</code> aparece como modificado.</p>
+                </div>
+                <div class="step">
+                    <h3>Paso 2: Ejecutar el Ciclo `add` y `commit`</h3>
+                    <p>Abre una terminal en la carpeta de tu proyecto. Si usas RStudio, puedes ir a <code>Tools > Shell...</code>.</p>
+                    <pre><code># PASO 1: ADD
+# Le decimos a Git que incluya el README.md en la "foto".
+# El punto (.) es un atajo para añadir todos los archivos modificados.
+git add .
+
+# PASO 2: COMMIT
+# Tomamos la "foto" con un mensaje descriptivo.
+git commit -m "docs: Se actualiza la descripción del proyecto en el README"
+</code></pre>
+                    <p>¡Listo! Has creado tu primer "punto de guardado" en tu repositorio local. En este momento, GitHub todavía no sabe nada de este cambio.</p>
+                </div>
+                <div class="step">
+                    <h3>Paso 3: Sincronizar con `push`</h3>
+                    <p>Ahora, vamos a compartir nuestro trabajo con el mundo (o al menos, con nuestro repositorio en GitHub).</p>
+                    <pre><code># PASO 3: PUSH
+# Sube tus commits de la rama 'main' al repositorio remoto llamado 'origin'
+git push origin main</code></pre>
+                    <p>Ahora, si vas a tu repositorio en GitHub y refrescas la página, verás que el archivo <code>README.md</code> contiene los cambios que acabas de hacer.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SECTION 4: BRANCHES INTRO -->
+        <section class="section">
+            <h2 id="ramas">Un Vistazo al Futuro: Las Ramas</h2>
+            <p>
+                Ya dominas el ciclo fundamental. Pero, ¿qué pasa si quieres probar una idea nueva y radical sin arriesgar el trabajo que ya funciona? En lugar de hacer una copia de tu carpeta (<code>mi-proyecto-copia</code>), Git te ofrece una solución mucho más elegante: <strong>las ramas (branches)</strong>.
+            </p>
+            <p>
+                Una rama es simplemente una línea de desarrollo independiente. Puedes crear una nueva rama para trabajar en una nueva funcionalidad, y si la idea no funciona, simplemente la desechas. Si funciona, la integras de nuevo a tu rama principal <code>main</code>.
+            </p>
+            <pre><code># Para crear una nueva rama llamada "experimento"
+git branch experimento
+
+# Para moverte a esa nueva rama y empezar a trabajar en ella
+git checkout experimento
+</code></pre>
+            <p>No te preocupes por dominar esto ahora. Lo importante es saber que existen. En módulos más avanzados, aprenderemos a usarlas para colaborar en equipo de forma profesional. Por ahora, sigue practicando el ritmo de <strong>add, commit y push</strong> en la rama <code>main</code>.</p>
+        </section>
+
+        <!-- NAVIGATION SECTION -->
+        <section class="section navigation-section">
+            <h2>Próximo Paso: La Anatomía de la App</h2>
+            <p class="center-p">Ahora que sabes cómo guardar y sincronizar tu trabajo de forma segura, estás listo para empezar a construir. En la siguiente lección, diseccionaremos los componentes fundamentales de una aplicación Shiny.</p>
+            <div class="nav-buttons">
+                <a href="repositorios.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver a Repositorios</a>
+                <a href="anatomia_app.html" class="nav-button next-button">Siguiente: Anatomía de una Data App <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+    </script>
+
+</body>
+</html>
+

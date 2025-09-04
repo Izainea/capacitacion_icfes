@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2.3: Puesta en Producción</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        .step img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+        }
+        .cta-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+        .cta-link:hover {
+            transform: scale(1.05);
+        }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .home-button {
+            background-color: var(--card-bg); color: #5dade2; border: 2px solid #5dade2;
+        }
+        .nav-button:hover {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Puesta en Producción</h1>
+            <p class="subtitle center-p">De tu Máquina a la Web: Compartiendo tu Aplicación con el Mundo.</p>
+        </header>
+
+        <!-- SECTION 1: INTRODUCTION -->
+        <section class="section">
+            <h2 id="introduccion">¿Por qué Desplegar?</h2>
+            <p>
+                Hemos construido una aplicación funcional en nuestra máquina local. Podemos ejecutarla, interactuar con ella y ver los resultados. Pero su verdadero poder se desata cuando otros pueden hacer lo mismo sin necesidad de tener R, RStudio o nuestro código fuente instalado.
+            </p>
+            <p>
+                La "Puesta en Producción" o "Despliegue" (Deployment) es el proceso de tomar nuestra aplicación y alojarla en un servidor web, haciéndola accesible a través de una URL, como cualquier otra página de internet. Este es el puente final que conecta nuestro análisis con los usuarios finales, convirtiendo un script en un verdadero producto de datos.
+            </p>
+        </section>
+
+        <!-- SECTION 2: SHINYAPPS.IO -->
+        <section class="section">
+            <h2 id="shinyapps">Nuestra Plataforma: `shinyapps.io`</h2>
+            <p>
+                Existen muchas formas de desplegar una aplicación Shiny, desde servidores propios hasta complejos servicios en la nube. Sin embargo, para empezar, usaremos la opción más sencilla y directa: <strong>shinyapps.io</strong>.
+            </p>
+            <p>
+                Es un servicio ofrecido por Posit (la empresa detrás de RStudio) que está diseñado específicamente para alojar aplicaciones Shiny. Su plan gratuito es perfecto para portafolios, prototipos y los proyectos de este curso. Nos permite publicar nuestras aplicaciones directamente desde RStudio con solo un par de clics.
+            </p>
+            
+        </section>
+
+        <!-- SECTION 3: WORKSHOP -->
+        <section class="section">
+            <h2 id="taller">Taller Práctico: ¡A Producción en 5 Pasos!</h2>
+            <p class="center-p">Vamos a tomar la aplicación que construimos en la lección anterior y la publicaremos en la web.</p>
+            <div class="step-guide">
+                <div class="step">
+                    <h3>Paso 1: Crear una Cuenta Gratuita</h3>
+                    <p>El primer paso es registrarse en la plataforma. Visita la página de `shinyapps.io` y crea una cuenta nueva. Elige el plan gratuito ("Free"), que es más que suficiente para nuestros objetivos.</p>
+                    <a href="https://www.shinyapps.io/admin/#/signup" target="_blank" class="cta-link">Crear mi cuenta en shinyapps.io <i class="fa-solid fa-user-plus"></i></a>
+                </div>
+                <div class="step">
+                    <h3>Paso 2: Instalar `rsconnect`</h3>
+                    <p>Para que RStudio pueda comunicarse con tu cuenta de `shinyapps.io`, necesitas un paquete especial llamado `rsconnect`. Abre tu consola de R (en RStudio) y ejecuta el siguiente comando para instalarlo.</p>
+                    <pre><code>install.packages('rsconnect')</code></pre>
+                </div>
+                <div class="step">
+                    <h3>Paso 3: Conectar tu Cuenta</h3>
+                    <p>Este es el paso clave de configuración. Una vez que hayas iniciado sesión en tu dashboard de `shinyapps.io`, ve a la sección <strong>Account <i class="fa-solid fa-angle-right"></i> Tokens</strong>. Verás un botón que dice "+ Add Token". Al hacer clic, te mostrará un comando para copiar.</p>
+                    <p>Este comando contendrá tu "token" y "secret" personales, que son como tu usuario y contraseña para la API. Cópialo y pégalo en tu consola de R. Se verá algo así:</p>
+                    
+                    <pre><code># Tu comando será único y contendrá tus credenciales
+rsconnect::setAccountInfo(name='tu-nombre-de-usuario',
+			  token='TU_TOKEN_PERSONAL',
+			  secret='&lt;TU_SECRET_PERSONAL&gt;')</code></pre>
+                    <p>Al ejecutarlo, tu RStudio quedará permanentemente conectado a tu cuenta de `shinyapps.io`.</p>
+                </div>
+                 <div class="step">
+                    <h3>Paso 4: ¡Desplegar la Aplicación!</h3>
+                    <p>Con tu archivo <code>app.R</code> abierto en RStudio, busca el botón azul con el logo de Shiny en la esquina superior derecha del panel del editor. Tiene un tooltip que dice "Publish Application".</p>
+                    <p>Haz clic en él. Te aparecerá una ventana para confirmar qué archivos quieres subir (normalmente RStudio detecta <code>app.R</code> y los datos que lee). Dale un nombre a tu aplicación (ej. `mi-primer-dashboard`) y haz clic en "Publish".</p>
+                    <p>Se abrirá una ventana de "Deploy" que te mostrará el progreso. RStudio empaquetará tu código, lo subirá a los servidores de `shinyapps.io` e instalará las librerías necesarias. Cuando termine, ¡tu aplicación estará viva en una URL pública!</p>
+                    
+                    <div style="background-color: var(--secondary-color); border-left: 4px solid var(--info-color); padding: 20px; margin-top: 25px; border-radius: 8px; text-align: left;">
+                        <h4 style="margin-top: 0; color: var(--info-color); font-family: 'Teko', sans-serif; font-size: 1.8rem;"><i class="fa-brands fa-vscode"></i> Nota para usuarios de Visual Studio Code</h4>
+                        <p style="font-size: 1.1rem; line-height: 1.6;">Si usas VS Code con la extensión de R, no tendrás el botón de "Publish". ¡No hay problema! El proceso se hace desde la terminal de R integrada. Simplemente asegúrate de que tu terminal esté en la carpeta raíz del proyecto y ejecuta el siguiente comando:</p>
+                        <pre><code># Despliega la aplicación en el directorio actual
+rsconnect::deployApp()</code></pre>
+                        <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 0;">Este comando hace exactamente lo mismo que el botón de RStudio.</p>
+                    </div>
+                </div>
+                 <div class="step">
+                    <h3>Paso 5 (Opcional pero Recomendado): Gestión de Dependencias</h3>
+                    <p>`shinyapps.io` es inteligente y usualmente detecta qué paquetes necesita tu app (como `shiny`, `readr`, `ggplot2`). Sin embargo, en proyectos más complejos, es una buena práctica gestionar las dependencias explícitamente con un paquete llamado <strong>`renv`</strong>.</p>
+                    <p>`renv` crea una librería de paquetes aislada para tu proyecto, asegurando que siempre se usen las versiones correctas. Para inicializarlo en tu proyecto, simplemente ejecuta en la consola:</p>
+                    <pre><code># Instalar renv si no lo tienes
+install.packages('renv')
+
+# Inicializar renv en tu proyecto actual
+renv::init()
+
+# Después de instalar nuevos paquetes, toma una "foto" de las dependencias
+renv::snapshot()</code></pre>
+                    <p>Esto crea un archivo `renv.lock` que `shinyapps.io` usará para recrear el entorno exacto, garantizando la máxima reproducibilidad. ¡Este es un pilar fundamental de MLOps!</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- NAVIGATION SECTION -->
+        <section class="section navigation-section">
+            <h2>¡Fin del Módulo 2!</h2>
+            <p class="center-p">¡Felicitaciones! Has completado el ciclo completo: desde un repositorio vacío hasta una aplicación web funcional. Has aprendido el ritmo de Git, la anatomía de una app Shiny y cómo compartir tu trabajo. Estás listo para enfrentar desafíos más complejos.</p>
+            <div class="nav-buttons">
+                <a href="anatomia_app.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver a Anatomía</a>
+                <a href="index.html" class="nav-button home-button"><i class="fa-solid fa-home"></i> Volver al Inicio del Curso</a>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+    </script>
+
+</body>
+</html>
+

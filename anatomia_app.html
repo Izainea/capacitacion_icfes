@@ -73,13 +73,7 @@
 
         .section {
             margin-bottom: 100px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
+            /* Las propiedades de animación han sido removidas para asegurar la visibilidad */
         }
 
         p {
@@ -92,6 +86,29 @@
         }
         .center-p {
              text-align: center;
+        }
+
+        .anatomy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+            text-align: left;
+            margin-top: 50px;
+        }
+        .anatomy-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            border-top: 4px solid var(--primary-color);
+        }
+        .anatomy-card h3 { font-size: 2.5rem; margin-top: 0; }
+        .anatomy-card .icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 15px; }
+
+        @media (max-width: 768px) {
+            .anatomy-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         pre {
@@ -124,29 +141,6 @@
             color: var(--primary-color);
             margin-top: 0;
         }
-
-        .anatomy-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: start;
-            text-align: left;
-            margin-top: 50px;
-        }
-        .anatomy-card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 10px;
-            border-top: 4px solid var(--primary-color);
-        }
-        .anatomy-card h3 { font-size: 2.5rem; margin-top: 0; }
-        .anatomy-card .icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 15px; }
-
-        @media (max-width: 768px) {
-            .anatomy-grid {
-                grid-template-columns: 1fr;
-            }
-        }
         
         .navigation-section {
             background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
@@ -168,6 +162,7 @@
         .nav-button:hover {
             transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
+
     </style>
 </head>
 <body>
@@ -175,170 +170,370 @@
     <div class="container">
 
         <header>
-            <h1>Anatomía de una App Shiny</h1>
-            <p class="subtitle center-p">El Esqueleto y el Cerebro: Entendiendo UI y Server.</p>
+            <h1>Anatomía de una Aplicación Shiny</h1>
+            <p class="subtitle center-p">El Esqueleto y el Cerebro: Desglosando los Componentes de la Interactividad.</p>
         </header>
 
-        <!-- SECTION 1: INTRODUCTION -->
-        <section class="section">
-            <h2 id="introduccion">De Script a Aplicación</h2>
-            <p>
-                Un script de R es como una receta de cocina: una serie de pasos que se ejecutan en orden para obtener un resultado final. Es un monólogo. Una aplicación Shiny, en cambio, es como tener una conversación con un chef experto. Tú le haces preguntas (moviendo un slider, seleccionando una opción) y él te responde al instante con un nuevo platillo (un gráfico actualizado, una tabla filtrada).
-            </p>
-            <p>
-                Para lograr esta magia, toda aplicación Shiny se construye sobre dos componentes fundamentales que trabajan en equipo: la <strong>UI (User Interface)</strong> y el <strong>Server (Servidor)</strong>. Ambos viven juntos en un archivo llamado <code>app.R</code>, que es el corazón de nuestro producto de datos.
-            </p>
-        </section>
+        <main>
+            <section class="section" id="introduccion">
+                <h2>El Esqueleto y el Cerebro</h2>
+                <p>
+                    En la lección anterior, establecimos el ritmo de nuestro trabajo con Git. Ahora, vamos a sumergirnos en la arquitectura de lo que estamos construyendo. Una aplicación Shiny puede parecer compleja, pero en su núcleo, toda la magia se reduce a dos componentes fundamentales que colaboran entre sí.
+                </p>
+                <p>
+                    Entender esta separación de responsabilidades no solo es clave para construir apps, sino también para depurarlas y escalarlas. Pensemos en ello como la construcción de un cuerpo: necesitamos un esqueleto que le dé forma y un cerebro que lo controle.
+                </p>
+            </section>
 
-        <!-- SECTION 2: THE TWO PILLARS -->
-        <section class="section">
-            <h2 id="pilares">Los Dos Pilares: UI y Server</h2>
-            <p class="center-p">Pensemos en la construcción de una casa para entender estos dos conceptos.</p>
-            <div class="anatomy-grid">
-                <div class="anatomy-card">
-                    <div class="icon"><i class="fa-solid fa-object-group"></i></div>
-                    <h3>UI (User Interface)</h3>
-                    <p><strong>La Analogía:</strong> Son los planos y la fachada de la casa. Definen dónde estarán las habitaciones, las ventanas y las puertas. Es todo lo que el visitante puede ver y tocar.</p>
-                    <p><strong>La Realidad:</strong> Es el <strong>"qué"</strong> ve el usuario. La UI define la apariencia de la aplicación: el título, los paneles, los menús, los botones, los sliders y los espacios vacíos donde se mostrarán los resultados. Es el esqueleto de la aplicación, escrito en R.</p>
+            <section class="section" id="componentes">
+                <h2>Los Dos Pilares: UI y Server</h2>
+                <p class="center-p">Toda aplicación Shiny vive en un archivo llamado <code>app.R</code> y se compone de dos objetos principales: <code>ui</code> y <code>server</code>.</p>
+                <div class="anatomy-grid">
+                    <div class="anatomy-card">
+                        <div class="icon"><i class="fa-solid fa-object-group"></i></div>
+                        <h3>UI (User Interface)</h3>
+                        <p><strong>El Esqueleto.</strong> La UI define <strong>qué</strong> ve el usuario. Es la parte visual y estructural de la aplicación. Se encarga de dibujar los paneles, los títulos, los botones, los sliders y los espacios donde se mostrarán nuestros gráficos. Es, en esencia, una forma de escribir HTML y CSS usando la sintaxis de R.</p>
+                    </div>
+                    <div class="anatomy-card">
+                        <div class="icon"><i class="fa-solid fa-gears"></i></div>
+                        <h3>Server (Servidor)</h3>
+                        <p><strong>El Cerebro.</strong> El Server contiene <strong>cómo</strong> funciona la aplicación. Es el motor lógico que se ejecuta en segundo plano. Aquí es donde cargamos datos, hacemos cálculos, entrenamos modelos y, lo más importante, generamos los outputs (gráficos, tablas) que se mostrarán en la UI. El Server "escucha" las acciones del usuario en la UI y "reacciona" a ellas, actualizando los resultados en tiempo real.</p>
+                    </div>
                 </div>
-                <div class="anatomy-card">
-                    <div class="icon"><i class="fa-solid fa-gears"></i></div>
-                    <h3>Server (Servidor)</h3>
-                    <p><strong>La Analogía:</strong> Es el sistema eléctrico, la plomería y la cocina. Es lo que hace que la casa sea funcional. Cuando abres el grifo (interactúas con la UI), el sistema de plomería (el Server) se encarga de que salga agua.</p>
-                    <p><strong>La Realidad:</strong> Es el <strong>"cómo"</strong> funciona la aplicación. El Server es el cerebro que contiene toda la lógica de R. Carga los datos, ejecuta los cálculos, genera los gráficos y reacciona a las acciones del usuario en la UI para entregarle resultados actualizados.</p>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- SECTION 3: WORKSHOP -->
-        <section class="section">
-            <h2 id="taller">Taller Práctico: Construyendo Nuestra Primera App</h2>
-            <p class="center-p">Vamos a crear una aplicación simple que cargue los datos del examen Saber 11 y muestre un histograma del puntaje global. Crearemos un único archivo, <code>app.R</code>, en la raíz de nuestro proyecto.</p>
-            <div class="step-guide">
-                <div class="step">
-                    <h3>Paso 1: El Código Completo de `app.R`</h3>
-                    <p>Copia y pega el siguiente código en tu archivo <code>app.R</code>. A continuación, desglosaremos cada parte.</p>
-                    <pre><code># 1. Cargar las librerías necesarias
-library(shiny)
-library(readr)
-library(ggplot2)
-
-# 2. Definir la Interfaz de Usuario (UI) - El Esqueleto
-ui <- fluidPage(
-    # Título de la aplicación que se verá en el navegador
-    titlePanel("Análisis Básico - Puntaje Global Saber 11"),
-    
-    # Diseño con una barra lateral
-    sidebarLayout(
-        # Panel lateral para los controles de entrada
-        sidebarPanel(
-            # Un slider para que el usuario elija el número de barras del histograma
-            sliderInput(inputId = "bins",
-                        label = "Número de Bins (barras):",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-        
-        # Panel principal para mostrar los resultados (salidas)
-        mainPanel(
-           # Un espacio reservado para mostrar un gráfico que se generará en el Server
-           plotOutput(outputId = "distPlot")
-        )
-    )
-)
-
-# 3. Definir la Lógica del Servidor - El Cerebro
-server <- function(input, output) {
-
-    # Cargar los datos desde el archivo .txt
-    # Usamos .. para subir un nivel desde la raíz y luego entrar a data/raw
-    saber11_data <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE)
-
-    # La lógica para generar el histograma
-    output$distPlot <- renderPlot({
-        
-        # Generar el gráfico con ggplot2
-        ggplot(saber11_data, aes(x = punt_global)) +
-            geom_histogram(bins = input$bins, fill = "#ff9900", color = "#1e1e1e") +
-            labs(title = "Distribución del Puntaje Global",
-                 x = "Puntaje Global",
-                 y = "Frecuencia") +
-            theme_minimal(base_size = 16)
-    })
-}
-
-# 4. Ejecutar la Aplicación
-shinyApp(ui = ui, server = server)
-</code></pre>
-                </div>
-                <div class="step">
-                    <h3>Paso 2: Entendiendo la Comunicación UI-Server</h3>
-                    <p>La magia de Shiny reside en cómo se comunican la UI y el Server:</p>
-                    <ul>
-                        <li>En la <strong>UI</strong>, creamos un control con <code>sliderInput(inputId = "bins", ...)</code>. El <code>inputId</code> es el nombre único de este control.</li>
-                        <li>En el <strong>Server</strong>, podemos acceder al valor actual de ese slider en cualquier momento usando <code>input$bins</code>.</li>
-                        <li>En el <strong>Server</strong>, creamos un gráfico dentro de <code>output$distPlot <- renderPlot({...})</code>. El nombre <code>distPlot</code> es el identificador único de esta salida.</li>
-                        <li>En la <strong>UI</strong>, le decimos a Shiny dónde mostrar ese gráfico con <code>plotOutput(outputId = "distPlot")</code>.</li>
-                    </ul>
-                    <p>Cuando el usuario mueve el slider, <code>input$bins</code> cambia de valor, el código dentro de <code>renderPlot</code> se vuelve a ejecutar automáticamente con el nuevo valor, y el gráfico en <code>plotOutput</code> se actualiza. ¡Eso es la <strong>reactividad</strong>!</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- SECTION 4: GITIGNORE -->
-        <section class="section">
-            <h2 id="gitignore">El Guardián del Repositorio: `.gitignore`</h2>
-            <p>
-                No todo lo que está en la carpeta de tu proyecto debe ser guardado en Git. Hay archivos temporales, datos muy pesados, o credenciales secretas que no queremos versionar. Para esto existe el archivo <code>.gitignore</code>.
-            </p>
-            <p>
-                Este es un archivo de texto simple que contiene una lista de los archivos y carpetas que Git debe ignorar por completo. Es fundamental para mantener tu repositorio limpio, seguro y liviano. Basado en el archivo que proporcionaste, esta es una excelente configuración inicial para un proyecto de R.
-            </p>
-            <pre><code># Archivos de historial y entorno de R
+            <section class="section" id="taller">
+                <h2>Taller Práctico: Construyendo Nuestra Primera App</h2>
+                <p class="center-p">Vamos a aplicar estos conceptos para construir el esqueleto de nuestra aplicación de análisis exploratorio (EDA) de los datos del ICFES.</p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: La Estructura del Archivo <code>.gitignore</code></h3>
+                        <p>Antes de escribir el código de la app, debemos decirle a Git qué archivos ignorar. Esto es crucial para mantener nuestro repositorio limpio y seguro. En la raíz de tu proyecto, crea un archivo llamado <code>.gitignore</code> y añade el siguiente contenido.</p>
+                        <pre><code># Archivos de historial y entorno de R
 .Rhistory
 .RData
 .Rproj.user/
+.Ruserdata/
 
-# Datos (generalmente no se versionan si son grandes o sensibles)
-# Al añadir "data/", le decimos a Git que ignore esta carpeta y todo su contenido.
+# Archivos de paquetes (usar renv o similar en su lugar)
+*.so
+*.dll
+*.o
+
+# Datos (generalmente no se versionan si son grandes)
 data/
+# Descomentar la siguiente línea si los datos son pequeños y se quieren versionar
+# !data/
 
-# Modelos (suelen ser archivos binarios grandes)
+# Modelos (a menudo grandes, considere usar Git LFS si necesita versionarlos)
 models/
 
-# Archivos generados por Shiny al desplegar
+# Archivos de caché de Knitr y RMarkdown
+*_cache/
+/cache/
+*.utf8.md
+*.knit.md
+
+# Archivos generados por Shiny
 rsconnect/
 
-# Archivos de sistema operativo que no son parte del proyecto
-.DS_Store
+# Archivos de sistema operativo
+.DS.Store
 Thumbs.db
+*.sh
 </code></pre>
-        </section>
+                        <p>Este archivo le dice a Git que ignore archivos temporales de R, datos locales (que pueden ser muy grandes) y credenciales de despliegue, asegurando que solo el código fuente esencial sea versionado.</p>
+                    </div>
 
-        <!-- NAVIGATION SECTION -->
-        <section class="section navigation-section">
-            <h2>Próximo Paso: Puesta en Producción</h2>
-            <p class="center-p">Ya tienes tu primera aplicación funcional y entiendes su estructura. El siguiente paso es compartirla con el mundo. En la próxima lección, aprenderemos a desplegar nuestra app en la web.</p>
-            <div class="nav-buttons">
-                <a href="git_tutorial.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver a Git</a>
-                <a href="produccion_app.html" class="nav-button next-button">Siguiente: Puesta en Producción <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-        </section>
+                    <div class="step">
+                        <h3>Antes de Continuar: ¿Dónde Estoy? (Para Usuarios de VS Code)</h3>
+                        <p>Un paso crucial antes de instalar paquetes o correr la app es asegurarse de que la terminal de VS Code está "apuntando" al directorio correcto de tu proyecto. </p>
+                        <p><strong>¡Ojo! Consola de R vs. Terminal del Sistema:</strong><br>
+                        Lo que te sucedió con <code>ls</code> es clave: una cosa es la <b>terminal del sistema</b> (Bash, PowerShell, etc.) y otra la <b>consola de R</b>.
+                        <ul>
+                            <li>En la <b>terminal del sistema</b>, usas <code>ls</code> (o <code>dir</code> en Windows) para ver archivos.</li>
+                            <li>En la <b>consola de R</b>, el comando para ver los archivos en tu directorio es <code>dir()</code>.</li>
+                        </ul>
+                        </p>
+                        <p>Para verificar tu ubicación desde la <b>consola de R</b>, usa el siguiente comando:</p>
+                        <pre><code># Muestra el directorio de trabajo actual en R
+getwd()
 
+# Lista los archivos en ese directorio
+dir()</code></pre>
+                        <p>Si al usar <code>dir()</code> no ves tus archivos de proyecto, necesitas cambiar el directorio con <code>setwd("ruta/a/tu/proyecto")</code>.</p>
+                        <p><strong>Truco útil:</strong> Para limpiar la pantalla de la consola de R en cualquier momento, usa el atajo de teclado <strong>Ctrl + L</strong>.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <h3>Paso 2: Instalar las Dependencias</h3>
+                        <p>Nuestra aplicación necesita ciertas "herramientas" o paquetes de R para funcionar. Para construir un dashboard interactivo y visualmente atractivo, usaremos varias librerías clave. Abre tu consola de R y ejecuta el siguiente comando para instalarlas todas de una vez.</p>
+                        <pre><code>install.packages(c("shiny", "readr", "ggplot2", "plotly", "dplyr", "bslib"))</code></pre>
+                        <p>Solo necesitas hacer esto una vez. Estas librerías nos darán el poder de crear la app, leer datos, manipularlos, crear gráficos y darles un estilo profesional.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 3: Escribir el Código Base de la App</h3>
+                        <p>Primero, creemos la estructura inicial. En la raíz de tu proyecto, crea (o reemplaza) el archivo <code>app.R</code> con este código. Por ahora, solo cargará los datos y mostrará una tabla, como antes.</p>
+                        <pre><code># Cargar la librería Shiny
+library(shiny)
+library(readr) # Para leer archivos de texto
+
+# <b> --- </b> UI (User Interface) <b> --- </b>
+# Define la apariencia de la aplicación
+ui <- fluidPage(
+  titlePanel("Visor de Datos Saber 11"),
+  sidebarLayout(
+    sidebarPanel(
+      h3("Controles"),
+      p("Aquí irán nuestros filtros e inputs en el futuro.")
+    ),
+    mainPanel(
+      h2("Datos Cargados"),
+      dataTableOutput("tabla_datos")
+    )
+  )
+)
+
+# <b> --- </b> SERVER (Lógica del Servidor) <b> --- </b>
+# Define cómo funciona la aplicación
+server <- function(input, output) {
+  datos <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";")
+  output$tabla_datos <- renderDataTable({
+    datos
+  })
+}
+
+# <b> --- </b> Ejecutar la Aplicación <b> --- </b>
+shinyApp(ui = ui, server = server)
+</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <h3>Paso 4: Ejecutar la Aplicación Localmente</h3>
+                        <p>Con el código listo, es hora de ver nuestra creación en acción. Hay dos maneras sencillas de ejecutar la aplicación desde tu editor:</p>
+                        <p><strong>1. Usando el Botón "Run App" (RStudio):</strong> Si tienes el archivo <code>app.R</code> abierto en RStudio, verás un botón "Run App" en la parte superior del panel del editor. Al hacer clic, RStudio lanzará la aplicación en una nueva ventana.</p>
+                        
+                        <p><strong>2. Usando la Consola (RStudio y VS Code):</strong> Este método funciona en cualquier entorno. Asegúrate de que tu terminal o consola de R esté en el directorio raíz de tu proyecto (la carpeta que contiene <code>app.R</code>) y ejecuta el siguiente comando:</p>
+                        <pre><code>shiny::runApp()</code></pre>
+                        <p>Ambos métodos iniciarán un servidor web local y te mostrarán tu aplicación Shiny funcionando.</p>
+                        <p><strong>¿Cómo detener la aplicación?</strong><br>
+                        Cuando una app está corriendo, tu consola de R estará ocupada. Para detener la aplicación y poder volver a usar la consola, simplemente presiona la tecla <strong><code>Esc</code></strong> o busca y haz clic en el ícono de "Stop" (una señal de pare roja) que aparece en la consola de R.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 5: Construyendo un Dashboard Completo con Tarjetas y Pestañas</h3>
+                        <p>Ahora, transformemos nuestra app de un simple visor a un dashboard más completo. Reemplaza todo el contenido de tu archivo <code>app.R</code> con el siguiente código. Este código introduce tarjetas de KPIs (indicadores clave), pestañas para organizar el contenido y texto dinámico.</p>
+                        <pre><code># Cargar todas las librerías necesarias
+library(shiny)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(bslib)
+
+# <b> --- </b> Lógica de Datos (fuera del Server) <b> --- </b>
+# Leemos y preparamos los datos una sola vez al iniciar la app
+datos_saber <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE) %>%
+  na.omit() # Asegurarnos de quitar NAs para los cálculos
+
+puntajes_choices <- datos_saber %>%
+  select(starts_with("punt_")) %>%
+  names()
+
+# Cálculos para las tarjetas de KPI
+total_estudiantes <- format(nrow(datos_saber), big.mark = ",")
+puntaje_global_promedio <- round(mean(datos_saber$punt_global, na.rm = TRUE), 1)
+colegios_oficiales <- format(sum(datos_saber$cole_naturaleza == "OFICIAL"), big.mark = ",")
+colegios_no_oficiales <- format(sum(datos_saber$cole_naturaleza == "NO OFFICIAL"), big.mark = ",")
+
+
+# <b> --- </b> UI (User Interface) <b> --- </b>
+ui <- fluidPage(
+  theme = bs_theme(bootswatch = "darkly"),
+  titlePanel("Dashboard Exploratorio Pruebas Saber 11"),
+
+  # Fila para las tarjetas de KPIs
+  fluidRow(
+    # Tarjeta 1: Total Estudiantes
+    column(3,
+           div(class = "kpi-card",
+               h3(textOutput("total_estudiantes_kpi")),
+               p("Total Estudiantes en la Muestra")
+           )
+    ),
+    # Tarjeta 2: Puntaje Global Promedio
+    column(3,
+           div(class = "kpi-card",
+               h3(textOutput("puntaje_global_kpi")),
+               p("Puntaje Global Promedio")
+           )
+    ),
+    # Tarjeta 3: Colegios Oficiales
+    column(3,
+           div(class = "kpi-card",
+               h3(textOutput("colegios_oficiales_kpi")),
+               p("Colegios Oficiales")
+           )
+    ),
+    # Tarjeta 4: Colegios No Oficiales
+    column(3,
+           div(class = "kpi-card",
+               h3(textOutput("colegios_no_oficiales_kpi")),
+               p("Colegios No Oficiales")
+           )
+    )
+  ),
+
+  hr(), # Una línea horizontal para separar
+
+  sidebarLayout(
+    sidebarPanel(
+      h3("Filtros del Gráfico"),
+      selectInput(
+        inputId = "var_x",
+        label = "Seleccione Puntaje Eje X:",
+        choices = puntajes_choices,
+        selected = "punt_matematicas"
+      ),
+      selectInput(
+        inputId = "var_y",
+        label = "Seleccione Puntaje Eje Y:",
+        choices = puntajes_choices,
+        selected = "punt_lectura_critica"
+      )
+    ),
+    mainPanel(
+      # Usaremos pestañas para organizar mejor el contenido
+      tabsetPanel(
+        type = "tabs",
+        tabPanel("Gráfico Interactivo",
+                 h3(textOutput("titulo_grafico")),
+                 plotlyOutput("scatter_plot")
+        ),
+        tabPanel("Tabla de Datos",
+                 h3("Datos Completos"),
+                 p("Explora los datos crudos en la siguiente tabla interactiva."),
+                 dataTableOutput("tabla_completa")
+        )
+      )
+    )
+  ),
+
+  # Estilos CSS para las tarjetas de KPI
+  tags$style(HTML("
+    .kpi-card {
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      border-top: 4px solid #ff9900;
+      margin-bottom: 20px;
+    }
+    .kpi-card h3 {
+      font-family: 'Teko', sans-serif;
+      font-size: 3rem;
+      margin-top: 0;
+      color: #ff9900;
+    }
+    .kpi-card p {
+      text-align: center;
+      margin-bottom: 0;
+      color: #a0a0a0;
+      font-size: 1rem;
+    }
+  "))
+)
+
+# <b> --- </b> SERVER (Lógica del Servidor) <b> --- </b>
+server <- function(input, output) {
+
+  # KPIs para las tarjetas
+  output$total_estudiantes_kpi <- renderText({ total_estudiantes })
+  output$puntaje_global_kpi <- renderText({ puntaje_global_promedio })
+  output$colegios_oficiales_kpi <- renderText({ colegios_oficiales })
+  output$colegios_no_oficiales_kpi <- renderText({ colegios_no_oficiales })
+
+  # Título dinámico para el gráfico
+  output$titulo_grafico <- renderText({
+    paste("Relación entre", toupper(gsub("_", " ", input$var_x)), "y", toupper(gsub("_", " ", input$var_y)))
+  })
+
+  # Renderizar el gráfico de dispersión interactivo
+  output$scatter_plot <- renderPlotly({
+    p <- ggplot(datos_saber, aes_string(x = input$var_x, y = input$var_y)) +
+      geom_point(aes(color = cole_naturaleza), alpha = 0.6) +
+      labs(
+        x = "", # Los quitamos porque el título dinámico ya es suficiente
+        y = "",
+        color = "Naturaleza Colegio"
+      ) +
+      theme_minimal() +
+      theme(
+        legend.position = "bottom" # Mover leyenda abajo
+      )
+    ggplotly(p)
+  })
+
+  # Renderizar la tabla de datos completa
+  output$tabla_completa <- renderDataTable({
+    datos_saber
+  })
+}
+
+# <b> --- </b> Ejecutar la Aplicación <b> --- </b>
+shinyApp(ui = ui, server = server)
+</code></pre>
+                        <p>Vuelve a ejecutar la aplicación. ¡Ahora verás un dashboard mucho más informativo y organizado! </p>
+                    </div>
+
+
+                    <div class="step">
+                        <h3>Paso 6: Versionar el Resultado</h3>
+                        <p>¡Felicidades! Has creado un dashboard interactivo y funcional. Este es un hito importante. Ahora, guarda tu progreso usando el flujo de trabajo de Git.</p>
+                        <pre><code># Añade los archivos nuevos y modificados
+git add .gitignore app.R
+
+# Crea un "punto de guardado" con un mensaje claro y actualizado
+git commit -m "feat: Transforma la app en un dashboard con KPIs y pestañas"
+
+# Sube tus cambios al repositorio remoto en GitHub
+git push
+</code></pre>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section navigation-section">
+                <h2>¿Qué Sigue?</h2>
+                <p class="center-p">Ya tenemos una aplicación que carga datos y la hemos guardado en nuestro control de versiones. El siguiente paso es el más emocionante: compartirla con el mundo.</p>
+                <div class="nav-buttons">
+                    <a href="git_tutorial.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver a Git</a>
+                    <a href="produccion_app.html" class="nav-button next-button">Siguiente: Puesta en Producción <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
     </div>
 
+    <!-- Script de animación removido para asegurar la visibilidad del contenido -->
+    <!--
     <script>
-        const sections = document.querySelectorAll('.section');
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            sections.forEach(section => {
+                observer.observe(section);
             });
-        }, { threshold: 0.1 });
-        sections.forEach(section => observer.observe(section));
+        });
     </script>
+    -->
 
 </body>
 </html>
+

@@ -43,7 +43,7 @@
             margin: auto;
         }
 
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             font-family: 'Teko', sans-serif;
             font-weight: 600;
             letter-spacing: 1px;
@@ -73,7 +73,6 @@
 
         .section {
             margin-bottom: 100px;
-            /* Las propiedades de animación han sido removidas para asegurar la visibilidad */
         }
 
         p {
@@ -140,6 +139,24 @@
             font-size: 2.2rem;
             color: var(--primary-color);
             margin-top: 0;
+        }
+
+        .info-box {
+            background: rgba(93, 173, 226, 0.1);
+            border-left: 5px solid var(--info-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 30px;
+        }
+        .info-box h4 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--info-color);
+        }
+        .info-box p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
         }
         
         .navigation-section {
@@ -316,8 +333,14 @@ shinyApp(ui = ui, server = server)
                         
                         <p><strong>2. Usando la Consola (RStudio y VS Code):</strong> Este método funciona en cualquier entorno. Asegúrate de que tu terminal o consola de R esté en el directorio raíz de tu proyecto (la carpeta que contiene <code>app.R</code>) y ejecuta el siguiente comando:</p>
                         <pre><code>shiny::runApp()</code></pre>
-                        <p>Ambos métodos iniciarán un servidor web local y te mostrarán tu aplicación Shiny funcionando.</p>
-                        <p><strong>¿Cómo detener la aplicación?</strong><br>
+                        
+                        <div class="info-box">
+                            <h4><i class="fa-solid fa-circle-exclamation"></i> Solucionando un Error Común</h4>
+                            <p>Si al ejecutar <code>shiny::runApp()</code> ves un error que dice <strong><code>Error in shinyAppDir(): App dir must contain either app.R or server.R</code></strong>, ¡no te preocupes! Es el error más común al empezar.</p>
+                            <p>Simplemente significa que tu consola de R no está "viendo" el archivo <code>app.R</code>. La solución es volver al paso <strong>"Antes de Continuar: ¿Dónde Estoy?"</strong> y usar <code>getwd()</code> y <code>setwd()</code> para navegar a la carpeta correcta de tu proyecto.</p>
+                        </div>
+                        
+                        <p style="margin-top: 30px;"><strong>¿Cómo detener la aplicación?</strong><br>
                         Cuando una app está corriendo, tu consola de R estará ocupada. Para detener la aplicación y poder volver a usar la consola, simplemente presiona la tecla <strong><code>Esc</code></strong> o busca y haz clic en el ícono de "Stop" (una señal de pare roja) que aparece en la consola de R.</p>
                     </div>
 

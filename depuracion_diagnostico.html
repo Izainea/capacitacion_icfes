@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 3.4: Depuración y Diagnóstico</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+            --danger-color: #e74c3c;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .image-container {
+            margin-top: 20px;
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .next-button.disabled {
+            background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed;
+        }
+        .nav-button:hover:not(.disabled) {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Depuración y Diagnóstico</h1>
+            <p class="subtitle center-p">Iluminando la Caja Negra: Herramientas para Entender tu App.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>¿Por Qué Mi App No Funciona?</h2>
+                <p>
+                    Inevitablemente, llegará un momento en que tu aplicación no se comporte como esperas: un gráfico no aparece, los datos no se filtran correctamente o la app simplemente se cierra con un error críptico. En un script normal, los errores suelen ser lineales y fáciles de rastrear. Pero en Shiny, la reactividad puede hacer que el proceso se sienta como una <strong>"caja negra"</strong>.
+                </p>
+                <p>
+                    Un cambio en un input puede desencadenar una compleja cadena de eventos, y si algo sale mal en medio de esa cadena, puede ser difícil identificar la causa raíz. La depuración (debugging) en Shiny no se trata solo de encontrar errores, sino de <strong>entender el flujo reactivo</strong>. Afortunadamente, R y Shiny nos proporcionan herramientas poderosas para iluminar esa caja negra.
+                </p>
+            </section>
+            
+            <section class="section" id="herramientas">
+                <h2>Tus Herramientas de Detective</h2>
+                <p class="center-p">Para resolver los misterios de tu aplicación, necesitas las herramientas adecuadas. Aquí están las tres más importantes, de la más simple a la más avanzada.</p>
+                <div class="step-guide">
+                    <div class="step" style="border-left-color: var(--info-color);">
+                        <h3><code>print()</code> y <code>cat()</code>: La Linterna</h3>
+                        <p>Son las herramientas más básicas y rápidas. Permiten imprimir el valor de un objeto o un mensaje directamente en la consola de R mientras la app se ejecuta. Son perfectas para verificaciones rápidas: "¿Está llegando el valor correcto de este input?" o "¿Cuántas filas tiene mi dataframe después de filtrar?".</p>
+                        <p>Dentro de un contexto reactivo, <code>cat()</code> suele ser más fiable que <code>print()</code>. Úsalo con un salto de línea (<code>\n</code>) para mantener tu consola ordenada.</p>
+                    </div>
+                    <div class="step" style="border-left-color: var(--primary-color);">
+                        <h3><code>browser()</code>: El Microscopio</h3>
+                        <p>Esta es la herramienta de depuración más poderosa de R. Cuando colocas <code>browser()</code> en tu código, actúa como un "punto de interrupción" (breakpoint). La ejecución de la aplicación se congela en esa línea exacta y te da control total sobre la consola de R en el entorno de la función. Puedes inspeccionar cualquier objeto, probar código línea por línea y entender el estado exacto de tu app en ese momento. Es indispensable para diagnosticar problemas complejos.</p>
+                    </div>
+                    <div class="step" style="border-left-color: var(--danger-color);">
+                        <h3><code>reactlog</code>: El Mapa del Flujo Reactivo</h3>
+                        <p>Shiny tiene una herramienta de diagnóstico visual increíble llamada <code>reactlog</code>. Cuando la activas, registra cada evento reactivo que ocurre en tu aplicación. Después de interactuar con la app, puedes presionar una combinación de teclas (<code>Ctrl + F3</code> o <code>Cmd + F3</code>) y se abrirá una visualización interactiva de tu grafo reactivo. Te muestra exactamente qué input causó qué reacción en cadena, qué partes se invalidaron y cuánto tiempo tomó cada cálculo. Es la mejor herramienta para optimizar el rendimiento y entender por qué una parte de tu app se actualiza (o no).</p>
+                        <div class="image-container">
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section" id="taller">
+                <h2>Taller Práctico: Encontrando al Culpable</h2>
+                <p class="center-p">Vamos a aplicar estas técnicas en nuestra aplicación modular para verlas en acción.</p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: "Escuchar" la Reactividad con <code>cat()</code></h3>
+                        <p>Abre tu archivo <code>server.R</code>. Dentro del conductor <code>eventReactive</code>, añade una línea con <code>cat()</code> para que nos notifique en la consola cada vez que se ejecute.</p>
+                        <pre><code># En server.R
+datos_analisis <- eventReactive(input$run_analysis, {
+  
+  # Añadimos esta línea para "escuchar"
+  cat("--> El conductor eventReactive 'datos_analisis' se está ejecutando.\n")
+  
+  datos_saber %>%
+    filter(cole_naturaleza == input$naturaleza_select)
+})</code></pre>
+                        <p>Ejecuta la app y mira la consola de R. No verás nada hasta que presiones el botón "Ejecutar Análisis". Esto te confirma visualmente cómo funciona el <code>eventReactive</code>.</p>
+                    </div>
+                     <div class="step">
+                        <h3>Paso 2: Inspeccionar con <code>browser()</code></h3>
+                        <p>Ahora, vamos a pausar la ejecución para inspeccionar. Añade <code>browser()</code> justo después de la línea de <code>cat()</code>.</p>
+                        <pre><code># En server.R, dentro del mismo eventReactive
+datos_analisis <- eventReactive(input$run_analysis, {
+  cat("--> El conductor eventReactive 'datos_analisis' se está ejecutando.\n")
+  
+  # Pausamos la ejecución aquí
+  browser()
+  
+  datos_saber %>%
+    filter(cole_naturaleza == input$naturaleza_select)
+})</code></pre>
+                        <p>Ejecuta la app y presiona el botón. La app se "congelará" y tu consola de R se volverá interactiva. Prueba a escribir <code>input$naturaleza_select</code> o <code>head(datos_saber)</code> para ver los valores en ese momento. Escribe <code>c</code> o <code>Q</code> en la consola para salir del modo de depuración y continuar la ejecución.</p>
+                    </div>
+                     <div class="step">
+                        <h3>Paso 3: Visualizar el Grafo con <code>reactlog</code></h3>
+                        <p>Abre tu archivo <code>global.R</code> y añade esta línea al principio. Esto activará el registro de eventos reactivos.</p>
+                        <pre><code># Al inicio de global.R
+options(shiny.reactlog = TRUE)
+
+# ... resto de tu código de global.R (librerías, datos, etc.) ...
+</code></pre>
+                        <p>Ahora, sigue estos pasos:
+                           <ol>
+                               <li>Ejecuta tu aplicación.</li>
+                               <li>Interactúa con ella: cambia los selectores, presiona el botón de análisis varias veces.</li>
+                               <li>Mientras la app está corriendo, presiona <strong><code>Ctrl + F3</code></strong> (en Windows/Linux) o <strong><code>Cmd + F3</code></strong> (en Mac).</li>
+                           </ol>
+                           Se abrirá una nueva pestaña en tu navegador con el mapa visual de todo lo que acaba de suceder. ¡Explóralo!
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section navigation-section">
+                <h2>¡Fin del Módulo 3!</h2>
+                <p class="center-p">¡Felicitaciones! Has completado la base fundamental para ser un desarrollador de Shiny profesional. Ahora entiendes la reactividad, sabes cómo controlar el flujo, cómo estructurar tu código de forma escalable y, lo más importante, cómo diagnosticar problemas cuando surgen.</p>
+                <div class="nav-buttons">
+                    <a href="arquitectura_modularizacion.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 3.3: Arquitectura</a>
+                    <a href="#" class="nav-button next-button disabled">Siguiente Módulo <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

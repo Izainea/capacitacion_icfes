@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 3.1: El Paradigma de la Reactividad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+            --danger-color: #e74c3c;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+
+        .reactive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+            align-items: stretch;
+            text-align: left;
+        }
+        .reactive-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+        }
+        .reactive-card h3 {
+            font-size: 2.2rem;
+            margin-top: 0;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .reactive-card p {
+            font-size: 1.1rem;
+        }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .next-button.disabled {
+            background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed;
+        }
+        .nav-button:hover:not(.disabled) {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        
+        .image-container {
+            margin-top: 40px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>El Paradigma de la Reactividad</h1>
+            <p class="subtitle center-p">Entendiendo el motor que impulsa la interactividad en Shiny.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>El Cerebro Eficiente de Shiny</h2>
+                <p>
+                    Hemos visto que una aplicación Shiny reacciona a nuestras acciones, pero la verdadera magia está en <em>cómo</em> lo hace. El secreto se llama <strong>programación reactiva</strong>, y es lo que hace que Shiny sea tan poderoso y eficiente. A diferencia de un script normal que se ejecuta de arriba a abajo una sola vez, una aplicación Shiny está "viva", esperando constantemente a que algo suceda.
+                </p>
+                <p>
+                    La mejor analogía sigue siendo una hoja de cálculo: si tienes `A1 = 10`, `A2 = 20` y `B1 = SUM(A1:A2)`, B1 muestra `30`. Si cambias `A1` a `15`, `B1` se actualiza instantáneamente a `35`. Notablemente, si tienes otra fórmula en la celda `C1` que no depende de `A1`, esta no se recalcula. Shiny opera bajo este mismo principio de "dependencias": construye un <strong>grafo reactivo</strong> invisible que conecta los inputs con los outputs.
+                </p>
+                
+                <p>
+                    Este grafo es un mapa de relaciones. Cuando un input cambia, Shiny recorre el mapa y re-ejecuta de forma inteligente solo las partes del código que dependen de ese input. Esto evita cálculos innecesarios y hace que la aplicación sea rápida y fluida, incluso con operaciones complejas.
+                </p>
+            </section>
+            
+            <section class="section" id="componentes">
+                <h2>Los Actores del Drama Reactivo</h2>
+                <p class="center-p">Dentro de la función <code>server</code>, el flujo de la reactividad es manejado por tres tipos de actores principales. Entender sus roles es la clave para dominar Shiny.</p>
+                <div class="reactive-grid">
+                    <div class="reactive-card" style="border-top: 4px solid var(--info-color);">
+                        <h3><i class="fa-solid fa-right-from-bracket"></i> 1. Fuentes Reactivas</h3>
+                        <p><strong>Su Rol:</strong> Iniciar la acción (los "Triggers").<br>
+                        Son los puntos de partida del grafo reactivo. Disparan los cambios. El más importante es el objeto <code>input</code>, que contiene una lista con los valores actualizados de todos los controles de la UI (<code>sliderInput</code>, <code>selectInput</code>, etc.). Cuando un usuario interactúa con un control, el valor correspondiente en <code>input</code> cambia, iniciando una cadena de reacciones en todo el grafo.</p>
+                    </div>
+                    <div class="reactive-card" style="border-top: 4px solid var(--danger-color);">
+                        <h3><i class="fa-solid fa-left-long"></i> 2. Endpoints Reactivos</h3>
+                        <p><strong>Su Rol:</strong> Mostrar el resultado.<br>
+                        Son los destinos finales del grafo. Su único trabajo es tomar los resultados de los cálculos y enviarlos a la UI para que el usuario los vea. Se definen asignando a un elemento del objeto <code>output</code> (ej. <code>output$distPlot</code>) una función de renderizado (ej. <code>renderPlot()</code>). Este código se re-ejecuta cada vez que una de las fuentes reactivas de las que depende cambia.</p>
+                    </div>
+                    <div class="reactive-card" style="border-top: 4px solid var(--success-color);">
+                        <h3><i class="fa-solid fa-arrows-spin"></i> 3. Conductores Reactivos</h3>
+                        <p><strong>Su Rol:</strong> Optimizar el proceso.<br>
+                        Son expresiones intermedias que se sitúan entre las fuentes y los endpoints. Su función es realizar cálculos, filtrar datos o preparar resultados que pueden ser utilizados por <strong>múltiples endpoints</strong>. Son la clave para escribir código eficiente y limpio (principio DRY: "Don't Repeat Yourself"), evitando la repetición de lógica y cálculos costosos.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section navigation-section">
+                <h2>¿Qué Sigue?</h2>
+                <p class="center-p">Ahora que entiendes la teoría detrás de la reactividad y conoces a sus actores principales, estás listo para ver cómo controlarlos. En la siguiente lección, nos sumergiremos en los diferentes tipos de conductores reactivos.</p>
+                <div class="nav-buttons">
+                    <a href="sesion_3.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 3</a>
+                    <a href="conductores_reactivos.html" class="nav-button next-button">Siguiente: Conductores Reactivos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

@@ -1,28 +1,10 @@
-# Cargar todas las librerías necesarias
-library(shiny)
-library(readr)
-library(dplyr)
-library(ggplot2)
-library(plotly)
-library(bslib)
+# ==============================================================================
+# ARCHIVO UI: EL ARQUITECTO VISUAL
+# ==============================================================================
+# Este script define únicamente la interfaz de usuario (el "esqueleto").
+# Su responsabilidad es describir qué ve el usuario, pero no cómo funciona.
+# ------------------------------------------------------------------------------
 
-#  ---  Lógica de Datos (fuera del Server)  --- 
-# Leemos y preparamos los datos una sola vez al iniciar la app
-datos_saber <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE) %>%
-  na.omit() # Asegurarnos de quitar NAs para los cálculos
-
-puntajes_choices <- datos_saber %>%
-  select(starts_with("punt_")) %>%
-  names()
-
-# Cálculos para las tarjetas de KPI
-total_estudiantes <- format(nrow(datos_saber), big.mark = ",")
-puntaje_global_promedio <- round(mean(datos_saber$punt_global, na.rm = TRUE), 1)
-colegios_oficiales <- format(sum(datos_saber$cole_naturaleza == "OFICIAL"), big.mark = ",")
-colegios_no_oficiales <- format(sum(datos_saber$cole_naturaleza == "NO OFFICIAL"), big.mark = ",")
-
-
-#  ---  UI (User Interface)  --- 
 ui <- fluidPage(
   theme = bs_theme(bootswatch = "darkly"),
   titlePanel("Dashboard Exploratorio Pruebas Saber 11"),
@@ -119,41 +101,3 @@ ui <- fluidPage(
   "))
 )
 
-#  ---  SERVER (Lógica del Servidor)  --- 
-server <- function(input, output) {
-
-  # KPIs para las tarjetas
-  output$total_estudiantes_kpi <- renderText({ total_estudiantes })
-  output$puntaje_global_kpi <- renderText({ puntaje_global_promedio })
-  output$colegios_oficiales_kpi <- renderText({ colegios_oficiales })
-  output$colegios_no_oficiales_kpi <- renderText({ colegios_no_oficiales })
-
-  # Título dinámico para el gráfico
-  output$titulo_grafico <- renderText({
-    paste("Relación entre", toupper(gsub("_", " ", input$var_x)), "y", toupper(gsub("_", " ", input$var_y)))
-  })
-
-  # Renderizar el gráfico de dispersión interactivo
-  output$scatter_plot <- renderPlotly({
-    p <- ggplot(datos_saber, aes_string(x = input$var_x, y = input$var_y)) +
-      geom_point(aes(color = cole_naturaleza), alpha = 0.6) +
-      labs(
-        x = "", # Los quitamos porque el título dinámico ya es suficiente
-        y = "",
-        color = "Naturaleza Colegio"
-      ) +
-      theme_minimal() +
-      theme(
-        legend.position = "bottom" # Mover leyenda abajo
-      )
-    ggplotly(p)
-  })
-
-  # Renderizar la tabla de datos completa
-  output$tabla_completa <- renderDataTable({
-    datos_saber
-  })
-}
-
-#  ---  Ejecutar la Aplicación  --- 
-shinyApp(ui = ui, server = server)

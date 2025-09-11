@@ -100,6 +100,27 @@
             word-wrap: break-word;
             color: #c9d1d9;
         }
+        
+        .code-block-title {
+            text-align: left;
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: -10px;
+            padding: 5px 15px;
+            border-radius: 5px 5px 0 0;
+            display: inline-block;
+        }
+        
+        .code-problem {
+            color: white;
+            background-color: var(--danger-color);
+        }
+        
+        .code-solution {
+            color: var(--secondary-color);
+            background-color: var(--success-color);
+        }
 
         code {
             background-color: var(--secondary-color);
@@ -272,6 +293,77 @@ git commit -m "feat(analysis): Implementa control de ejecución con eventReactiv
 # Sube los cambios a GitHub
 git push
 </code></pre>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- NUEVA SECCIÓN DE ERRORES COMUNES -->
+            <section class="section" id="errores-comunes">
+                <h2><i class="fa-solid fa-lightbulb"></i> Apéndice: Desmitificando Errores Comunes</h2>
+                <p class="center-p">Entender estos errores es un paso clave para dominar el flujo de datos en tus aplicaciones. Veamos dos casos prácticos que ilustran conceptos fundamentales de la reactividad.</p>
+                
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Error 1: El Bucle Infinito (Recursión Accidental)</h3>
+                        <p>Este es uno de los errores conceptuales más comunes. Ocurre cuando un conductor reactivo intenta usarse a sí mismo como fuente de datos, creando un ciclo que Shiny no puede resolver.</p>
+                        
+                        <span class="code-block-title code-problem">Código Problemático</span>
+                        <pre><code># Se intenta crear un reactive que se llama a sí mismo
+datos_saber_muestra <- reactive({
+  if (input$naturaleza_colegio == "Todos") {
+    # PROBLEMA: ¡Está intentando devolver su propio resultado!
+    return(datos_saber_muestra) 
+  } else {
+    # PROBLEMA: ¡Está intentando filtrar su propio resultado!
+    return(datos_saber_muestra %>% filter(cole_naturaleza == input$naturaleza_colegio))
+  }
+})</code></pre>
+                        <p><strong>La causa:</strong> El conductor `datos_saber_muestra` se está llamando a sí mismo dentro de su propia definición. Es como decir: "Para definir X, primero necesito el valor de X".</p>
+                        
+                        <span class="code-block-title code-solution">Código Corregido</span>
+                        <pre><code># El conductor ahora parte del dataframe original "datos_saber"
+datos_filtrados <- eventReactive(input$run_analysis, {
+  # Usamos el dataframe original como fuente
+  df <- datos_saber 
+  
+  if (input$naturaleza_colegio == "Todos") {
+    return(df)
+  } else {
+    return(df %>% filter(cole_naturaleza == input$naturaleza_colegio))
+  }
+})</code></pre>
+                         <p><strong>La solución:</strong> Un conductor reactivo siempre debe partir de una fuente no reactiva (como el `datos_saber` original) o de *otro* conductor reactivo ya definido.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Error 2: El "Contexto Reactivo" Perdido</h3>
+                        <p>Este error ilustra la regla más importante de Shiny: <strong>solo puedes usar un valor reactivo (ej. `datos_filtrados()`) dentro de un contexto reactivo (ej. `renderText`, `observeEvent`).</strong></p>
+
+                        <span class="code-block-title code-problem">Código Problemático</span>
+                        <pre><code># 1. Se intenta llamar a un reactive FUERA de un contexto reactivo
+total_estudiantes_kpi <- format(nrow(datos_filtrados())) 
+
+# 2. El renderText tiene una sintaxis incorrecta
+output$total_estudiantes_kpi <- renderText({
+  total_estudiantes_kpi,  # Esto no funciona como se espera
+  big.mark = "," 
+})</code></pre>
+                        <p><strong>La causa:</strong> El código fuera de un `render...` o `observe...` se ejecuta solo una vez al inicio. No puedes llamar a `datos_filtrados()` ahí porque su valor depende de interacciones del usuario que aún no han ocurrido.</p>
+                        
+                        <span class="code-block-title code-solution">Código Corregido</span>
+                        <pre><code># La lógica completa se mueve DENTRO del renderText
+output$total_estudiantes_kpi <- renderText({
+  
+  # 1. Llama al reactive para obtener el dataframe filtrado
+  df_filtrado <- datos_filtrados()
+  
+  # 2. Calcula y formatea el resultado en un solo paso
+  total <- nrow(df_filtrado)
+  
+  # 3. La función devuelve el valor final formateado
+  format(total, big.mark = ",")
+})</code></pre>
+                        <p><strong>La solución:</strong> Toda la lógica que dependa de un valor reactivo debe estar contenida **dentro** de un bloque de código reactivo. Así, Shiny sabe que debe re-ejecutar ese bloque cuando el valor reactivo del que depende cambie.</p>
                     </div>
                 </div>
             </section>

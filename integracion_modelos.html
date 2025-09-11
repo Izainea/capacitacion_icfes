@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 4.2: Integración de Artefactos de Modelo</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .info-box {
+            background: rgba(40, 167, 69, 0.1);
+            border-left: 5px solid var(--success-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 30px;
+        }
+        .info-box h4 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--success-color);
+        }
+        .info-box p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+        }
+
+        .project-structure {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1.1rem;
+            border: 1px solid var(--border-color);
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        .project-structure ul { list-style-type: none; padding-left: 20px; }
+        .project-structure li { margin-bottom: 10px; }
+        .project-structure .folder { color: #5dade2; }
+        .project-structure .file { color: #e0e0e0; }
+        .project-structure .highlight { color: var(--primary-color); font-weight: bold; }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid var(--info-color);
+            text-align: left;
+        }
+        .feature-card .icon {
+            font-size: 2rem;
+            color: var(--info-color);
+            margin-bottom: 15px;
+        }
+        .feature-card h3 {
+            font-size: 1.6rem;
+            color: var(--text-color);
+            margin: 0 0 10px 0;
+        }
+        .feature-card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .next-button.disabled {
+            background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed;
+        }
+        .nav-button:hover:not(.disabled) {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Integración de Artefactos de Modelo</h1>
+            <p class="subtitle center-p">Conectando la Ciencia de Datos con la Aplicación de Usuario.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>El Modelo como Artefacto</h2>
+                <p>
+                    En un flujo MLOps maduro, el entrenamiento de modelos y el desarrollo de aplicaciones son dos procesos <b>completamente separados</b>. Un científico de datos experimenta, entrena y valida un modelo, y el resultado de su trabajo es un <b>artefacto</b>: un archivo que encapsula la lógica predictiva. La aplicación Shiny actúa entonces como un <b>consumidor</b> de este artefacto.
+                </p>
+                <p>¿Por qué esta separación?</p>
+                <div class="card-grid">
+                    <div class="feature-card">
+                        <div class="icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        <h3>Rendimiento</h3>
+                        <p>El entrenamiento puede tardar horas. Una app web debe cargar en segundos. Desacoplar asegura que la app solo cargue el modelo final, no que lo entrene.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fa-solid fa-repeat"></i></div>
+                        <h3>Reproducibilidad</h3>
+                        <p>El artefacto se versiona junto con el código que lo generó, garantizando que siempre sepamos qué versión del modelo está en producción.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fa-solid fa-users"></i></div>
+                        <h3>Colaboración</h3>
+                        <p>Permite que los científicos de datos (creadores de modelos) y los desarrolladores (creadores de apps) trabajen en paralelo y de forma independiente.</p>
+                    </div>
+                </div>
+                 <p style="margin-top: 40px;">En R, la forma más común de guardar un modelo es como un archivo <code>.rds</code> usando las funciones <code>saveRDS()</code> y <code>readRDS()</code>.</p>
+            </section>
+            
+            <section class="section" id="taller">
+                <h2>Guía Práctica: De un Modelo a un Simulador Interactivo</h2>
+                <p class="center-p">Vamos a simular el ciclo completo: crearemos un script que "entrena" un modelo, lo guardará como un artefacto y luego lo integraremos en nuestra app Shiny para crear un simulador de puntajes.</p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: Crear el Artefacto de Entrenamiento</h3>
+                        <p>Este script simula el trabajo de un científico de datos. Su única responsabilidad es entrenar un modelo y guardar el resultado en la carpeta <code>/models</code>, como dicta nuestra arquitectura.</p>
+                        <p><b>Acción:</b> Dentro de la carpeta <code>/R</code>, crea un nuevo archivo llamado <code>model_training.R</code>.</p>
+                        <pre><code># Contenido: R/model_training.R
+
+# Cargamos las librerías necesarias para este script
+library(readr)
+library(dplyr)
+
+# 1. Cargamos los datos crudos (simulando un entorno de entrenamiento)
+datos_crudos <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE) %>% na.omit()
+
+# 2. Entrenamos un modelo lineal simple
+# El objetivo es predecir el puntaje de matemáticas basándose en los otros puntajes
+modelo_puntaje <- lm(
+  punt_matematicas ~ punt_lectura_critica + punt_sociales_ciudadanas + punt_ciencias_naturales,
+  data = datos_crudos
+)
+
+# 3. Guardamos el modelo entrenado como un artefacto en la carpeta /models
+# Este es el único resultado que nos importa de este script
+saveRDS(modelo_puntaje, "models/modelo_puntaje_mat.rds")
+
+message("==> Modelo entrenado y guardado exitosamente en /models/modelo_puntaje_mat.rds")
+</code></pre>
+                        <p><b>Para ejecutarlo:</b> Abre una consola de R en tu proyecto y corre <code>source("R/model_training.R")</code>. Verás que aparece un nuevo archivo <code>modelo_puntaje_mat.rds</code> en tu carpeta <code>/models</code>.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 2: Versionar el Modelo y su Script</h3>
+                        <p>Ahora tenemos dos nuevos archivos: el código que crea el modelo y el modelo mismo. Ambos deben ser versionados.</p>
+                        <div class="project-structure">
+                            <ul>
+                                <li><i class="fa-solid fa-folder folder"></i> mi-proyecto/</li>
+                                <ul>
+                                     <li><i class="fa-solid fa-folder folder highlight"></i> R/</li>
+                                     <ul>
+                                        <li><i class="fa-solid fa-file-code file"></i> data_processing.R</li>
+                                        <li><i class="fa-solid fa-file-code file highlight"></i> model_training.R &nbsp;&nbsp;&lt;-- NUEVO</li>
+                                     </ul>
+                                     <li><i class="fa-solid fa-folder folder highlight"></i> models/</li>
+                                     <ul>
+                                        <li><i class="fa-solid fa-file-archive file highlight"></i> modelo_puntaje_mat.rds &nbsp;&nbsp;&lt;-- NUEVO</li>
+                                     </ul>
+                                     <li>...</li>
+                                </ul>
+                            </ul>
+                        </div>
+                        <p><b>Acción:</b> Versiona estos cambios con Git.</p>
+                        <pre><code>git add R/model_training.R models/modelo_puntaje_mat.rds
+git commit -m "feat(model): Crea script de entrenamiento y guarda artefacto de modelo lineal"
+git push
+</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 3: Cargar el Artefacto del Modelo en la App</h3>
+                        <p>Al igual que con el pipeline de datos, el <code>global.R</code> es el lugar ideal para cargar el modelo. Se carga una sola vez y queda disponible para que el <code>server</code> lo use.</p>
+                        <p><b>Acción:</b> Añade la carga del modelo a tu <code>global.R</code>.</p>
+                        <pre><code># En global.R, después de cargar los datos
+
+# 4. Cargar el artefacto del modelo pre-entrenado
+modelo_matematicas <- readRDS("models/modelo_puntaje_mat.rds")
+
+message("==> Modelo de predicción cargado en memoria.")
+</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 4: Crear la Interfaz del Simulador en la UI</h3>
+                        <p>Necesitamos controles para que el usuario ingrese los datos para la predicción y un lugar para mostrar el resultado.</p>
+                        <p><b>Acción:</b> Modifica tu <code>ui.R</code> para añadir una nueva pestaña.</p>
+                        <pre><code># En ui.R, dentro del tabsetPanel
+
+tabPanel("Simulador de Puntaje",
+    sidebarLayout(
+        sidebarPanel(
+            h3("Ingrese los puntajes:"),
+            numericInput("sim_lectura", "Puntaje Lectura Crítica:", 100, min = 0, max = 100),
+            numericInput("sim_sociales", "Puntaje Sociales:", 100, min = 0, max = 100),
+            numericInput("sim_ciencias", "Puntaje Ciencias Naturales:", 100, min = 0, max = 100),
+            actionButton("run_prediction", "Predecir Puntaje de Matemáticas", icon = icon("calculator"))
+        ),
+        mainPanel(
+            h2("Resultado de la Predicción"),
+            div(
+                style = "background-color: #1e1e1e; padding: 30px; border-radius: 15px; text-align: center;",
+                h3("El puntaje predicho en matemáticas es:"),
+                h1(style="color: #28a745; font-size: 5rem;", textOutput("prediction_result"))
+            )
+        )
+    )
+)
+</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 5: Implementar la Lógica de Predicción en el Server</h3>
+                        <p>Finalmente, conectamos los inputs del usuario con el modelo cargado para generar y mostrar la predicción.</p>
+                        <p><b>Acción:</b> Añade este bloque de código a tu <code>server.R</code>.</p>
+                        <pre><code># En server.R
+
+# Lógica para la predicción del puntaje
+puntaje_predicho <- eventReactive(input$run_prediction, {
+    
+    # 1. Crear un dataframe con los datos de entrada del usuario
+    #    Los nombres de las columnas DEBEN COINCIDIR EXACTAMENTE con los del modelo.
+    nuevos_datos <- data.frame(
+        punt_lectura_critica = input$sim_lectura,
+        punt_sociales_ciudadanas = input$sim_sociales,
+        punt_ciencias_naturales = input$sim_ciencias
+    )
+    
+    # 2. Usar la función predict() con el modelo cargado
+    prediccion <- predict(modelo_matematicas, newdata = nuevos_datos)
+    
+    # 3. Devolver el resultado redondeado
+    return(round(prediccion))
+})
+
+# 4. Renderizar el resultado en la UI
+output$prediction_result <- renderText({
+    puntaje_predicho()
+})
+</code></pre>
+                        <div class="info-box">
+                           <h4><i class="fa-solid fa-check-circle"></i> ¡Ciclo MLOps Completado!</h4>
+                           <p>¡Felicidades! Has conectado todo el ciclo: un script de entrenamiento produce un artefacto, la app carga ese artefacto y lo usa para servir predicciones a un usuario final. Este es el corazón de un producto de datos funcional.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section navigation-section">
+                <h2>¿Qué Sigue?</h2>
+                <p class="center-p">Nuestra aplicación ahora es mucho más potente, pero también más compleja. ¿Qué pasa si el usuario ingresa texto en lugar de números? En la siguiente lección, aprenderemos a manejar errores y a hacer nuestra aplicación más robusta.</p>
+                <div class="nav-buttons">
+                    <a href="pipelines_datos.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 4.1: Pipelines</a>
+                    <a href="manejo_errores.html" class="nav-button next-button">Siguiente: Manejo de Errores <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
+

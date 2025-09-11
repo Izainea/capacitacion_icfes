@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo 3: El Corazón de una App Profesional</title>
+    <title>Módulo 4: Pipelines de Datos en Shiny</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,7 +121,12 @@
             transition: background-color 0.2s;
             align-self: flex-start;
         }
-        .lesson-link:hover {
+        .lesson-link.disabled {
+            background-color: var(--border-color);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+        .lesson-link:not(.disabled):hover {
             background-color: #ffae42;
         }
         
@@ -158,49 +163,49 @@
     <div class="container">
 
         <header>
-            <h1>Módulo 3: El Corazón de una App Profesional</h1>
-            <p class="subtitle">Dominando la Reactividad, la Estructura y la Depuración en Shiny.</p>
+            <h1>Módulo 4: Pipelines de Datos y Modelos en Producción</h1>
+            <p class="subtitle">Transformando datos crudos en insights y predicciones dentro de tu aplicación.</p>
         </header>
 
         <main>
             <div class="lesson-grid">
-                <!-- Lección 3.1: Reactividad Core -->
+                <!-- Lección 4.1: Pipelines de Datos -->
                 <div class="lesson-card">
                     <div>
-                        <span class="lesson-number">Lección 3.1</span>
-                        <h2>El Paradigma de la Reactividad</h2>
-                        <p>Sumérgete en el motor de Shiny. Aprende qué es el grafo reactivo y quiénes son los "actores" (fuentes, endpoints, conductores) que hacen posible la interactividad instantánea y eficiente.</p>
+                        <span class="lesson-number">Lección 4.1</span>
+                        <h2>Pipelines de Datos con `dplyr`</h2>
+                        <p>Aprende a construir cadenas de procesamiento de datos robustas y legibles. Transforma datos crudos en tablas listas para el análisis y la visualización directamente en tu app.</p>
                     </div>
-                    <a href="reactividad_core.html" class="lesson-link">Entender la Reactividad <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="pipelines_datos.html" class="lesson-link disabled">Iniciar Lección <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
-                <!-- Lección 3.2: Conductores Reactivos -->
+                <!-- Lección 4.2: Integración de Modelos -->
                 <div class="lesson-card">
                     <div>
-                        <span class="lesson-number">Lección 3.2</span>
-                        <h2>Controlando el Flujo con Conductores</h2>
-                        <p>Domina las herramientas para optimizar tu app. Aprende cuándo y por qué usar <code>reactive()</code>, <code>eventReactive()</code> y <code>observeEvent()</code> para crear aplicaciones rápidas y con un comportamiento predecible.</p>
+                        <span class="lesson-number">Lección 4.2</span>
+                        <h2>Integrando Modelos Predictivos</h2>
+                        <p>Descubre cómo cargar modelos pre-entrenados (como `.rds` o `.RData`) en tu aplicación para hacer predicciones en tiempo real y crear simuladores interactivos.</p>
                     </div>
-                    <a href="conductores_reactivos.html" class="lesson-link">Entender los Conductores <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="integracion_modelos.html" class="lesson-link disabled">Iniciar Lección <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
-                <!-- Lección 3.3: Modularización -->
-                <div class="lesson-card" >
-                    <div>
-                        <span class="lesson-number">Lección 3.3</span>
-                        <h2>Arquitectura y Modularización</h2>
-                        <p>Deja atrás el <code>app.R</code> monolítico. Aprende a estructurar tu proyecto de forma profesional, separando el código en <code>ui.R</code>, <code>server.R</code>, y <code>global.R</code> para facilitar el mantenimiento y la escalabilidad.</p>
-                    </div>
-                     <a href="arquitectura_modularizacion.html" class="lesson-link">Entender la Arquitectura <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-                 <!-- Lección 3.4: Depuración -->
+                <!-- Lección 4.3: Manejo de Errores -->
                 <div class="lesson-card">
                     <div>
-                        <span class="lesson-number">Lección 3.4</span>
-                        <h2>Depuración y Diagnóstico</h2>
-                        <p>Encuentra y soluciona errores como un profesional. Aprende a usar herramientas como <code>browser()</code>, <code>cat()</code> y el poderoso visualizador <code>reactlog</code> para entender qué está pasando dentro de tu aplicación.</p>
+                        <span class="lesson-number">Lección 4.3</span>
+                        <h2>Manejo de Errores y Validaciones</h2>
+                        <p>Construye aplicaciones a prueba de fallos. Aprende a usar `validate()` y `need()` para comprobar las entradas del usuario y guiarlo con mensajes claros cuando algo sale mal.</p>
                     </div>
-                     <a href="depuracion_diagnostico.html" class="lesson-link" >Entender la Depuración <i class="fa-solid fa-arrow-right"></i></a>
+                     <a href="manejo_errores.html" class="lesson-link disabled">Iniciar Lección <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                 <!-- Lección 4.4: Gestión de Dependencias -->
+                <div class="lesson-card">
+                    <div>
+                        <span class="lesson-number">Lección 4.4</span>
+                        <h2>Entornos Reproducibles con `renv`</h2>
+                        <p>Garantiza que tu aplicación funcione siempre. Aprende a usar el paquete `renv` para crear un "lockfile" que captura las versiones exactas de tus paquetes, asegurando la reproducibilidad.</p>
+                    </div>
+                     <a href="gestion_dependencias.html" class="lesson-link disabled" >Iniciar Lección <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </main>
@@ -209,9 +214,9 @@
         <section class="navigation-section">
             <h2>¿Listo para el Siguiente Reto?</h2>
             <div class="nav-buttons">
-                 <a href="sesion_2.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 2</a>
+                 <a href="sesion_3.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 3</a>
                 <a href="index.html" class="nav-button home-button"><i class="fa-solid fa-house"></i> Volver al Inicio del Curso</a>
-                <a href="sesion_4.html" class="nav-button next-button">Siguiente Módulo <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#" class="nav-button next-button disabled">Siguiente Módulo <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </section>
 

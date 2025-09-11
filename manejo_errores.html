@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 4.3: Manejo de Errores y Validaciones</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+            --danger-color: #e74c3c;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            margin-top: 40px;
+        }
+        .comparison-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 4px solid;
+        }
+        .without-validation { border-color: var(--danger-color); }
+        .with-validation { border-color: var(--success-color); }
+        .comparison-card h3 {
+            font-size: 2rem;
+            margin-top: 0;
+        }
+        .without-validation h3 { color: var(--danger-color); }
+        .with-validation h3 { color: var(--success-color); }
+        .comparison-card img {
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .next-button.disabled {
+            background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed;
+        }
+        .nav-button:hover:not(.disabled) {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Manejo de Errores y Validaciones</h1>
+            <p class="subtitle center-p">Construyendo Aplicaciones Robustas que Guían al Usuario.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>El Usuario Inesperado</h2>
+                <p>
+                    Hasta ahora, hemos asumido que el usuario siempre interactuará con nuestra aplicación de la manera correcta. Pero en el mundo real, los usuarios cometen errores: dejan campos vacíos, ingresan texto donde se esperan números, o seleccionan combinaciones de filtros que no devuelven ningún dato. Una aplicación profesional no debe "romperse" en estos casos.
+                </p>
+                <p>
+                    Un error críptico en rojo es una de las peores experiencias de usuario. Nuestro objetivo MLOps es crear productos de datos <b>confiables y robustos</b>. Esto implica anticipar posibles fallos y, en lugar de mostrar un error, guiar al usuario con un mensaje claro y útil. Aquí es donde entra en juego la <b>validación de entradas</b>.
+                </p>
+                <div class="comparison-grid">
+                    <div class="comparison-card without-validation">
+                        <h3>SIN Validación</h3>
+                        <p>La app se rompe y muestra un error técnico incomprensible.</p>
+                        <!-- Placeholder for an image of a red error message in Shiny -->
+                    </div>
+                    <div class="comparison-card with-validation">
+                        <h3>CON Validación</h3>
+                        <p>La app muestra un mensaje útil que guía al usuario.</p>
+                         <!-- Placeholder for an image of a custom validation message in Shiny -->
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section" id="validate-need">
+                <h2>La Herramienta: <code>validate()</code> y <code>need()</code></h2>
+                <p class="center-p">Shiny nos proporciona una forma elegante de manejar estas situaciones con la función <code>validate()</code> en combinación con <code>need()</code>. Funcionan de la siguiente manera:</p>
+                <div class="step-guide">
+                    <div class="step" style="border-left-color: var(--info-color);">
+                        <h3><code>validate(need(condición, "mensaje"))</code></h3>
+                        <p>Este es el patrón que usarás dentro de cualquier función <code>render...</code> (como <code>renderPlot</code>, <code>renderText</code>, etc.).</p>
+                        <ul>
+                            <li><b><code>need(condición, "mensaje")</code></b>: Esta función comprueba una <code>condición</code>. Si la condición es <code>FALSE</code> (es decir, algo está mal), detiene la ejecución y devuelve el <code>"mensaje"</code>. Si la condición es <code>TRUE</code>, no hace nada y el código continúa.</li>
+                            <li><b><code>validate(...)</code></b>: Es el contenedor. Si <code>need()</code> devuelve un mensaje de error, <code>validate()</code> se encarga de mostrarlo en el lugar del output de una forma elegante y amigable, en lugar de romper la aplicación.</li>
+                        </ul>
+                        <p>Puedes encadenar múltiples `need()` dentro de un `validate()` para comprobar varias condiciones a la vez.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="taller">
+                <h2>Guía Práctica: Blindando Nuestro Simulador</h2>
+                <p class="center-p">Vamos a aplicar estas técnicas para hacer que nuestro simulador de puntajes sea a prueba de errores del usuario.</p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: Identificar los Puntos de Falla</h3>
+                        <p>En nuestro simulador, el usuario podría:</p>
+                        <ol>
+                            <li>Dejar un campo vacío (lo que R interpreta como <code>NA</code>).</li>
+                            <li>Ingresar un valor que no es un número (ej. "abc").</li>
+                            <li>Ingresar un número fuera del rango válido (ej. -10 o 150).</li>
+                        </ol>
+                        <p>Cualquiera de estos casos haría que la función <code>predict()</code> falle. Nuestro objetivo es atraparlos antes.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 2: Implementar la Validación en el Server</h3>
+                        <p>La validación debe ocurrir justo antes de que se intente hacer el cálculo principal. Por lo tanto, el lugar perfecto es dentro de nuestro <code>eventReactive</code> que calcula la predicción.</p>
+                        <p><b>Acción:</b> Modifica el conductor reactivo `puntaje_predicho` en tu archivo `server.R`.</p>
+                        <pre><code># En server.R
+
+puntaje_predicho <- eventReactive(input$run_prediction, {
+    
+    # --- INICIO DE LA VALIDACIÓN ---
+    validate(
+      # Condición 1: Asegurarse de que el input de lectura no esté vacío y sea un número
+      need(input$sim_lectura, "Por favor, ingrese un valor para Lectura Crítica."),
+      need(is.numeric(input$sim_lectura), "El valor de Lectura Crítica debe ser un número."),
+      
+      # Condición 2: Asegurarse de que el input de sociales no esté vacío y sea un número
+      need(input$sim_sociales, "Por favor, ingrese un valor para Sociales."),
+      need(is.numeric(input$sim_sociales), "El valor de Sociales debe ser un número."),
+
+      # Condición 3: Asegurarse de que el input de ciencias no esté vacío y sea un número
+      need(input$sim_ciencias, "Por favor, ingrese un valor para Ciencias Naturales."),
+      need(is.numeric(input$sim_ciencias), "El valor de Ciencias Naturales debe ser un número.")
+    )
+
+    # Condición 4: Validar que los números estén en el rango correcto (0-100)
+    validate(
+      need(input$sim_lectura >= 0 && input$sim_lectura <= 100, "El puntaje de Lectura debe estar entre 0 y 100."),
+      need(input$sim_sociales >= 0 && input$sim_sociales <= 100, "El puntaje de Sociales debe estar entre 0 y 100."),
+      need(input$sim_ciencias >= 0 && input$sim_ciencias <= 100, "El puntaje de Ciencias debe estar entre 0 y 100.")
+    )
+    # --- FIN DE LA VALIDACIÓN ---
+
+    # El código de predicción solo se ejecutará si todas las validaciones pasan
+    nuevos_datos <- data.frame(
+        punt_lectura_critica = input$sim_lectura,
+        punt_sociales_ciudadanas = input$sim_sociales,
+        punt_ciencias_naturales = input$sim_ciencias
+    )
+    
+    prediccion <- predict(modelo_matematicas, newdata = nuevos_datos)
+    
+    return(round(prediccion))
+})
+</code></pre>
+                        <p>¡Y eso es todo! Vuelve a ejecutar tu aplicación e intenta ingresar valores incorrectos. Verás cómo ahora, en lugar de un error, aparecen mensajes amigables que guían al usuario.</p>
+                    </div>
+                     <div class="step">
+                        <h3>Paso 3: Versionar la Mejora de Robustez</h3>
+                        <p>Hacer una aplicación más robusta es una mejora funcional muy importante. Es un cambio que añade valor directo al producto de datos y debe ser registrado como tal.</p>
+                        <pre><code># Solo hemos modificado el server.R
+git add server.R
+
+# Un commit que describe la mejora en la experiencia de usuario
+git commit -m "feat(simulator): Añade validación de entradas para una experiencia de usuario robusta"
+
+git push
+</code></pre>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section navigation-section">
+                <h2>¿Qué Sigue?</h2>
+                <p class="center-p">Con una aplicación funcional, modular y robusta, el último pilar del desarrollo es asegurar su reproducibilidad a largo plazo. En la siguiente lección, aprenderemos a gestionar las dependencias del proyecto.</p>
+                <div class="nav-buttons">
+                    <a href="integracion_modelos.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 4.2: Modelos</a>
+                    <a href="gestion_dependencias.html" class="nav-button next-button">Siguiente: Gestión de Dependencias <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

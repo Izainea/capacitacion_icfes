@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 4.4: Gestión de Dependencias con renv</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+            --danger-color: #e74c3c;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        
+        code {
+            background-color: var(--secondary-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .info-box {
+            background: rgba(40, 167, 69, 0.1);
+            border-left: 5px solid var(--success-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 30px;
+        }
+        .info-box h4 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--success-color);
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .process-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--secondary-color);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 3px solid var(--info-color);
+            text-align: left;
+        }
+        .process-item .icon {
+            font-size: 2rem;
+            color: var(--info-color);
+            width: 40px;
+        }
+        .process-item p {
+            margin: 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .next-button.disabled {
+            background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed;
+        }
+        .nav-button:hover:not(.disabled) {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Gestión de Dependencias con `renv`</h1>
+            <p class="subtitle center-p">El Secreto para que tu App Funcione en Cualquier Lugar y en Cualquier Momento.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>El Problema Más Famoso: "En mi máquina sí funciona"</h2>
+                <p>
+                    Es la frase que todo desarrollador teme escuchar (y decir). Has trabajado durante semanas en tu aplicación, funciona perfectamente en tu computador, la despliegas... y se rompe. El servidor de producción no tiene los mismos paquetes que tú, o tiene versiones diferentes que son incompatibles. Un compañero de equipo clona tu repositorio y no puede ejecutar el código porque le faltan librerías.
+                </p>
+                <p>
+                    Este caos es el enemigo número uno de la reproducibilidad y el despliegue continuo (CI/CD). La solución es tratar el <b>entorno computacional</b> como parte del código fuente. Debemos ser capaces de "empaquetar" no solo nuestra app, sino también todas sus dependencias (las librerías y sus versiones exactas) para que pueda ser recreada idénticamente en cualquier lugar.
+                </p>
+            </section>
+            
+            <section class="section" id="renv">
+                <h2>La Solución: `renv` para Entornos Aislados y Reproducibles</h2>
+                <p class="center-p"><code>renv</code> es un paquete de R que resuelve este problema de manera elegante. Crea una <b>librería privada y aislada</b> para cada proyecto. En lugar de que todos tus proyectos usen la misma librería global de R en tu sistema, `renv` se asegura de que cada proyecto tenga su propio "ecosistema" de paquetes.</p>
+                 <p>El resultado de su trabajo es un archivo llamado <code>renv.lock</code>. Este archivo es una "fotografía" exacta de todas las dependencias de tu proyecto: qué paquetes usas, de dónde vinieron (CRAN, GitHub...) y qué versión específica tienes. Este archivo se versiona con Git y se convierte en el "plano" para reconstruir el entorno en cualquier otra máquina.</p>
+            </section>
+
+            <section class="section" id="taller">
+                <h2>Guía Práctica: Implementando `renv` en Nuestro Proyecto</h2>
+                <p class="center-p">Vamos a "renv-ificar" nuestro proyecto para hacerlo 100% reproducible.</p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: Instalar `renv`</h3>
+                        <p>Si aún no lo tienes, el primer paso es instalar el paquete `renv` en tu librería global de R. Solo necesitas hacer esto una vez.</p>
+                        <pre><code># En la consola de R
+install.packages("renv")
+</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 2: Inicializar `renv` en el Proyecto</h3>
+                        <p>Ahora, le pediremos a `renv` que tome el control de las dependencias de nuestro proyecto actual.</p>
+                        <p><b>Acción:</b> Asegúrate de que tu consola de R esté en el directorio raíz de tu proyecto y ejecuta:</p>
+                        <pre><code>renv::init()</code></pre>
+                        <p><code>renv</code> ejecutará un proceso automático en varios pasos:</p>
+                        <div class="process-grid">
+                            <div class="process-item">
+                                <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                                <p><b>Escanear:</b> Detecta los paquetes que tu código utiliza (<code>shiny</code>, <code>dplyr</code>, etc.).</p>
+                            </div>
+                            <div class="process-item">
+                                <div class="icon"><i class="fa-solid fa-folder-tree"></i></div>
+                                <p><b>Aislar:</b> Crea una librería de paquetes privada dentro de una nueva carpeta <code>renv/</code>.</p>
+                            </div>
+                            <div class="process-item">
+                                <div class="icon"><i class="fa-solid fa-download"></i></div>
+                                <p><b>Instalar:</b> Descarga las versiones correctas de los paquetes en la nueva librería aislada.</p>
+                            </div>
+                            <div class="process-item">
+                                <div class="icon"><i class="fa-solid fa-camera"></i></div>
+                                <p><b>Fotografiar:</b> Crea el archivo <code>renv.lock</code> con la lista exacta de dependencias.</p>
+                            </div>
+                            <div class="process-item">
+                                <div class="icon"><i class="fa-solid fa-user-gear"></i></div>
+                                <p><b>Configurar:</b> Modifica el archivo <code>.Rprofile</code> para que el proyecto siempre use su entorno aislado.</p>
+                            </div>
+                        </div>
+                        <p style="margin-top: 30px;">Cuando te pregunte si quieres proceder, escribe "y" y presiona Enter.</p>
+                    </div>
+                     <div class="step">
+                        <h3>Paso 3: Versionar el Entorno</h3>
+                        <p>Después de inicializar, verás varios archivos nuevos. Los más importantes para versionar son <code>renv.lock</code> y <code>.Rprofile</code>. La carpeta <code>renv/</code>, que contiene los paquetes descargados, <b>no debe ser versionada</b>. `renv` es lo suficientemente inteligente como para añadirla automáticamente a tu <code>.gitignore</code>.</p>
+                        <pre><code># Añade los archivos de configuración de renv
+git add renv.lock .Rprofile renv/.gitignore
+
+# Crea un commit que describa la integración de renv
+git commit -m "build(renv): Inicializa renv para gestionar dependencias del proyecto"
+
+git push
+</code></pre>
+                    </div>
+                    <div class="step">
+                        <h3>Paso 4: El Flujo de Trabajo con `renv`</h3>
+                        <p>A partir de ahora, tu flujo de trabajo cambia ligeramente:</p>
+                        <p><b>Cuando instalas un nuevo paquete:</b></p>
+                        <pre><code># 1. Instalas el paquete como siempre
+install.packages("nuevo_paquete_increible")
+
+# 2. Tomas una nueva "fotografía" del entorno para actualizar renv.lock
+renv::snapshot()
+</code></pre>
+                         <p><b>Cuando un colega (o un servidor) clona tu proyecto:</b></p>
+                         <pre><code># 1. Abre el proyecto en R.
+# 2. Ejecuta este comando para instalar todos los paquetes listados en renv.lock
+renv::restore()
+</code></pre>
+                         <div class="info-box">
+                           <h4><i class="fa-solid fa-cogs"></i> `renv` y el Despliegue (CI/CD)</h4>
+                           <p>Este es el paso que conecta todo. Plataformas de despliegue como Posit Connect, shinyapps.io o un contenedor Docker, usarán tu archivo <code>renv.lock</code> para ejecutar <code>renv::restore()</code> automáticamente. Esto garantiza que el entorno en producción sea una réplica exacta de tu entorno de desarrollo, eliminando para siempre el "en mi máquina sí funciona".</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section navigation-section">
+                <h2>¡Fin del Módulo 4 y del Bloque II!</h2>
+                <p class="center-p">¡Felicitaciones! Has completado el ciclo de vida del desarrollo de un producto de datos. Ahora sabes cómo construir un pipeline de datos, integrar un modelo, hacer la aplicación robusta y, finalmente, asegurar que sea reproducible en cualquier lugar. Estás listo para el último bloque: la profesionalización.</p>
+                <div class="nav-buttons">
+                    <a href="manejo_errores.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 4.3: Errores</a>
+                    <a href="#" class="nav-button next-button disabled">Siguiente Módulo <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
+

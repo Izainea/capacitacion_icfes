@@ -14,10 +14,10 @@ server <- function(input, output, session) {
     message("-> Reactivo 'datos_filtrados' ejecutado.")
     
     # Si la selección es "Ambas", no se filtra.
-    if (input$naturaleza_select == "Ambas") {
+    if (input$rendimiento_select == "Todos") {
       return(datos_saber)
     } else {
-      return(datos_saber %>% filter(cole_naturaleza == input$naturaleza_select))
+      return(datos_saber %>% filter(rendimiento_global == input$rendimiento_select))
     }
   })
 

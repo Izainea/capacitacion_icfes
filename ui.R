@@ -49,10 +49,10 @@ ui <- fluidPage(
       
       # FILTRO PARA LA REACTIVIDAD
       selectInput(
-        inputId = "naturaleza_select",
-        label = "Seleccione Naturaleza del Colegio:",
-        choices = c("Ambas", "OFICIAL", "NO OFICIAL"),
-        selected = "Ambas"
+        inputId = "rendimiento_select",
+        label = "Seleccione Rendimiento del Estudiante:",
+        choices = c("Todos", "Alto", "Medio", "Bajo"),
+        selected = "Todos"
       ),
       
       hr(),
@@ -95,14 +95,14 @@ ui <- fluidPage(
       padding: 20px;
       border-radius: 10px;
       text-align: center;
-      border-top: 4px solid #ff9900;
+      border-top: 4px solid #18E6F0;
       margin-bottom: 20px;
     }
     .kpi-card h3 {
       font-family: 'Teko', sans-serif;
       font-size: 3rem;
       margin-top: 0;
-      color: #ff9900;
+      color: #18E6F0;
     }
     .kpi-card p {
       text-align: center;

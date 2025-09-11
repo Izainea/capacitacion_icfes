@@ -13,10 +13,16 @@ library(ggplot2)
 library(plotly)
 library(bslib)
 
-# 2. Carga de Datos Crudos
-# Leemos y preparamos los datos una sola vez al iniciar la app
-datos_saber <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE) %>%
-  na.omit() # Asegurarnos de quitar NAs para los cálculos
+# Paso data_processing 1. Cargar el artefacto de procesamiento de datos
+source("R/data_processing.R")
+
+# Paso data_processing  2. Cargar los datos crudos
+datos_crudos <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE)
+
+#Paso data_processing  3. Ejecutar el pipeline para crear el dataframe limpio que usará la app
+datos_saber <- prepare_saber_data(datos_crudos)
+
+
 
 # 3. Creación de Objetos Globales
 # Creamos objetos que la UI o el Server puedan necesitar.

@@ -51,7 +51,7 @@ ui <- fluidPage(
       selectInput(
         inputId = "naturaleza_select",
         label = "Seleccione Naturaleza del Colegio:",
-        choices = c("Ambas", "OFICIAL", "NO OFFICIAL"),
+        choices = c("Ambas", "OFICIAL", "NO OFICIAL"),
         selected = "Ambas"
       ),
       

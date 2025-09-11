@@ -1,13 +1,27 @@
 # ==============================================================================
 # ARCHIVO SERVER: EL CEREBRO LÓGICO
 # ==============================================================================
-# Este script contiene toda la lógica reactiva de la aplicación.
-# Define CÓMO funciona la app en respuesta a las interacciones del usuario.
+# Este script contiene únicamente la función del servidor, que define
+# cómo reacciona la aplicación a las interacciones del usuario.
 # ------------------------------------------------------------------------------
 
 server <- function(input, output, session) {
 
-  # KPIs para las tarjetas (leen los objetos creados en global.R)
+  # --- Lógica del Análisis Exploratorio ---
+  
+  # Conductor Reactivo para filtrar los datos según el input del usuario
+  datos_filtrados <- reactive({
+    message("-> Reactivo 'datos_filtrados' ejecutado.")
+    
+    # Si la selección es "Ambas", no se filtra.
+    if (input$naturaleza_select == "Ambas") {
+      return(datos_saber)
+    } else {
+      return(datos_saber %>% filter(cole_naturaleza == input$naturaleza_select))
+    }
+  })
+
+  # KPIs para las tarjetas (leen los objetos estáticos creados en global.R)
   output$total_estudiantes_kpi <- renderText({ total_estudiantes })
   output$puntaje_global_kpi <- renderText({ puntaje_global_promedio })
   output$colegios_oficiales_kpi <- renderText({ colegios_oficiales })
@@ -19,24 +33,26 @@ server <- function(input, output, session) {
   })
 
   # Renderizar el gráfico de dispersión interactivo
+  # Usa el conductor reactivo 'datos_filtrados()'
   output$scatter_plot <- renderPlotly({
-    p <- ggplot(datos_saber, aes_string(x = input$var_x, y = input$var_y)) +
+    p <- ggplot(datos_filtrados(), aes_string(x = input$var_x, y = input$var_y)) +
       geom_point(aes(color = cole_naturaleza), alpha = 0.6) +
       labs(
-        x = "", # Los quitamos porque el título dinámico ya es suficiente
+        x = "",
         y = "",
         color = "Naturaleza Colegio"
       ) +
       theme_minimal() +
       theme(
-        legend.position = "bottom" # Mover leyenda abajo
+        legend.position = "bottom"
       )
     ggplotly(p)
   })
 
   # Renderizar la tabla de datos completa
+  # Usa el conductor reactivo 'datos_filtrados()'
   output$tabla_completa <- renderDataTable({
-    datos_saber
+    datos_filtrados()
   })
   
   message("==> Lógica del servidor definida.")

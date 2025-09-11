@@ -1,8 +1,8 @@
 # ==============================================================================
 # ARCHIVO UI: EL ARQUITECTO VISUAL
 # ==============================================================================
-# Este script define únicamente la interfaz de usuario (el "esqueleto").
-# Su responsabilidad es describir qué ve el usuario, pero no cómo funciona.
+# Este script contiene únicamente la definición de la Interfaz de Usuario.
+# No debe contener ninguna lógica de cálculo o procesamiento de datos.
 # ------------------------------------------------------------------------------
 
 ui <- fluidPage(
@@ -45,7 +45,19 @@ ui <- fluidPage(
 
   sidebarLayout(
     sidebarPanel(
-      h3("Filtros del Gráfico"),
+      h3("Filtros del Análisis"),
+      
+      # FILTRO PARA LA REACTIVIDAD
+      selectInput(
+        inputId = "naturaleza_select",
+        label = "Seleccione Naturaleza del Colegio:",
+        choices = c("Ambas", "OFICIAL", "NO OFFICIAL"),
+        selected = "Ambas"
+      ),
+      
+      hr(),
+      
+      h3("Variables del Gráfico"),
       selectInput(
         inputId = "var_x",
         label = "Seleccione Puntaje Eje X:",

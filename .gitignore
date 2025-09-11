@@ -15,7 +15,7 @@ data/
 # !data/
 
 # Modelos (a menudo grandes, considere usar Git LFS si necesita versionarlos)
-models/
+#models/
 
 # Archivos de caché de Knitr y RMarkdown
 *_cache/

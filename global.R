@@ -36,5 +36,10 @@ puntaje_global_promedio <- round(mean(datos_saber$punt_global, na.rm = TRUE), 1)
 colegios_oficiales <- format(sum(datos_saber$cole_naturaleza == "OFICIAL"), big.mark = ",")
 colegios_no_oficiales <- format(sum(datos_saber$cole_naturaleza == "NO OFFICIAL"), big.mark = ",")
 
+# 4. Cargar el artefacto del modelo pre-entrenado
+modelo_matematicas <- readRDS("models/modelo_puntaje_mat.rds")
+
+message("==> Modelo de predicción cargado en memoria.")
+
 message("==> Entorno global cargado exitosamente.")
 

@@ -83,6 +83,26 @@ ui <- fluidPage(
                  h3("Datos Completos"),
                  p("Explora los datos crudos en la siguiente tabla interactiva."),
                  dataTableOutput("tabla_completa")
+        ),
+        
+        tabPanel("Simulador de Puntaje",
+            sidebarLayout(
+                sidebarPanel(
+                    h3("Ingrese los puntajes:"),
+                    numericInput("sim_lectura", "Puntaje Lectura Crítica:", 100, min = 0, max = 100),
+                    numericInput("sim_sociales", "Puntaje Sociales:", 100, min = 0, max = 100),
+                    numericInput("sim_ciencias", "Puntaje Ciencias Naturales:", 100, min = 0, max = 100),
+                    actionButton("run_prediction", "Predecir Puntaje de Matemáticas", icon = icon("calculator"))
+                ),
+                mainPanel(
+                    h2("Resultado de la Predicción"),
+                    div(
+                        style = "background-color: #1e1e1e; padding: 30px; border-radius: 15px; text-align: center;",
+                        h3("El puntaje predicho en matemáticas es:"),
+                        h1(style="color: #28a745; font-size: 5rem;", textOutput("prediction_result"))
+                    )
+                )
+            )
         )
       )
     )

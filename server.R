@@ -54,6 +54,29 @@ server <- function(input, output, session) {
   output$tabla_completa <- renderDataTable({
     datos_filtrados()
   })
+
+    # Lógica para la predicción del puntaje
+  puntaje_predicho <- eventReactive(input$run_prediction, {
+      
+      # 1. Crear un dataframe con los datos de entrada del usuario
+      #    Los nombres de las columnas DEBEN COINCIDIR EXACTAMENTE con los del modelo.
+      nuevos_datos <- data.frame(
+          punt_lectura_critica = input$sim_lectura,
+          punt_sociales_ciudadanas = input$sim_sociales,
+          punt_c_naturales = input$sim_ciencias
+      )
+      
+      # 2. Usar la función predict() con el modelo cargado
+      prediccion <- predict(modelo_matematicas, newdata = nuevos_datos)
+      
+      # 3. Devolver el resultado redondeado
+      return(round(prediccion))
+  })
+
+  # 4. Renderizar el resultado en la UI
+  output$prediction_result <- renderText({
+      puntaje_predicho()
+  })
   
   message("==> Lógica del servidor definida.")
 }

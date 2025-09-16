@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 5.2: Taller - Creando un Artefacto de Inferencia</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .info-box {
+            background: rgba(93, 173, 226, 0.1);
+            border-left: 5px solid var(--info-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 30px;
+        }
+        .info-box h4 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--info-color);
+        }
+        .info-box p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+        }
+
+        .project-structure {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1.1rem;
+            border: 1px solid var(--border-color);
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        .project-structure ul { list-style-type: none; padding-left: 20px; }
+        .project-structure li { margin-bottom: 10px; }
+        .project-structure .folder { color: #5dade2; }
+        .project-structure .file { color: #e0e0e0; }
+        .project-structure .highlight { color: var(--primary-color); font-weight: bold; }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .nav-button:hover {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Taller: Creando un Artefacto de Inferencia</h1>
+            <p class="subtitle center-p">Encapsulando la Lógica del Modelo en un Componente Reutilizable.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>Más Allá del Archivo: La Función de Inferencia</h2>
+                <p>
+                    En la lección anterior, establecimos que el modelo (`.rds`) es nuestro artefacto principal. Sin embargo, en la práctica, simplemente cargar el archivo no es suficiente. El proceso de tomar nuevos datos, formatearlos correctamente, pasarlos al modelo y procesar la salida es una lógica que se repetirá.
+                </p>
+                <p>
+                    Para adherirnos al principio de "No Repetirte a Ti Mismo" (DRY), vamos a crear un segundo tipo de artefacto: un <b>script de inferencia</b>. Este script contendrá una función limpia y reutilizable que se encargará de todo el proceso de predicción. Nuestra aplicación Shiny no sabrá cómo funciona el modelo por dentro; simplemente llamará a esta función, pasándole los datos y esperando un resultado. Esto se llama <b>abstracción</b> y es fundamental para un código limpio.
+                </p>
+            </section>
+            
+            <section class="section" id="taller">
+                <h2>Guía Práctica: De un `.rds` a una Función `predict_score()`</h2>
+                <p class="center-p">Vamos a construir y versionar nuestro script de inferencia, preparándolo para ser consumido por el simulador.</p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: Crear el Script de Inferencia</h3>
+                        <p>Siguiendo nuestra arquitectura de proyecto, toda la lógica de R debe vivir en la carpeta `/R`. Aquí es donde crearemos nuestro nuevo artefacto.</p>
+                        <div class="project-structure">
+                             <ul>
+                                <li><i class="fa-solid fa-folder folder"></i> mi-proyecto/</li>
+                                <ul>
+                                     <li><i class="fa-solid fa-folder folder highlight"></i> R/</li>
+                                     <ul>
+                                        <li><i class="fa-solid fa-file-code file"></i> data_processing.R</li>
+                                        <li><i class="fa-solid fa-file-code file"></i> model_training.R</li>
+                                        <li><i class="fa-solid fa-file-code file highlight"></i> inference.R &nbsp;&nbsp;&lt;-- NUEVO</li>
+                                     </ul>
+                                     <li>...</li>
+                                </ul>
+                            </ul>
+                        </div>
+                        <p><b>Acción:</b> En tu proyecto, dentro de la carpeta `/R`, crea un nuevo archivo llamado `inference.R`.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 2: Desarrollar la Función de Predicción</h3>
+                        <p>Ahora, escribimos la función que encapsulará la lógica. Esta función cargará el modelo, tomará los datos nuevos, y devolverá la predicción. </p>
+                        <p><b>Acción:</b> Abre `R/inference.R` y añade el siguiente código.</p>
+                        <pre><code># Contenido del artefacto: R/inference.R
+
+# Cargamos el modelo una sola vez fuera de la función para eficiencia
+modelo_matematicas <- readRDS("models/modelo_puntaje_mat.rds")
+message("==> Artefacto de modelo 'modelo_puntaje_mat.rds' cargado en memoria.")
+
+predict_math_score <- function(new_data) {
+  
+  message("-> Ejecutando función de inferencia: predict_math_score()")
+  
+  # Asegurarse de que los nombres de las columnas coincidan
+  # con los que el modelo espera.
+  required_cols <- c("punt_lectura_critica", "punt_sociales_ciudadanas", "punt_c_naturales")
+  if (!all(required_cols %in% names(new_data))) {
+    stop("El dataframe de entrada no contiene las columnas requeridas.")
+  }
+  
+  # Usar la función predict() con el modelo cargado
+  prediction <- predict(modelo_matematicas, newdata = new_data)
+  
+  # Devolver el resultado redondeado
+  return(round(prediction))
+}
+</code></pre>
+                        <div class="info-box">
+                           <h4><i class="fa-solid fa-lightbulb"></i> Nota de Eficiencia</h4>
+                           <p>Observa que cargamos el modelo (`readRDS`) <b>fuera</b> de la función. Si lo pusiéramos dentro, el modelo se cargaría desde el disco cada vez que se llamara a la función, lo cual sería muy ineficiente. Al cargarlo una sola vez cuando el script es "sourced", el objeto del modelo permanece en memoria, listo para ser usado rápidamente por la función.</p>
+                        </div>
+                    </div>
+                     <div class="step">
+                        <h3>Paso 3: Integrar el Nuevo Artefacto en `global.R`</h3>
+                        <p>Para que nuestra aplicación pueda usar la nueva función `predict_math_score()`, necesitamos que el `global.R` la "conozca". Lo hacemos usando `source()`, igual que con el script de procesamiento de datos.</p>
+                        <p><b>Acción:</b> Modifica tu archivo `global.R`.</p>
+                        <pre><code># En global.R
+
+# ... (código de carga de librerías y datos_processing.R) ...
+
+# 5. Cargar el artefacto de inferencia
+# Esto cargará el modelo en memoria y hará la función predict_math_score() disponible
+source("R/inference.R")
+
+message("==> Entorno global cargado exitosamente.")
+</code></pre>
+                         <p>Nota que ya no necesitamos la línea `modelo_matematicas <- readRDS(...)` en `global.R`, porque el nuevo script `inference.R` se encarga de eso.</p>
+                    </div>
+                    <div class="step">
+                        <h3>Paso 4: Versionar el Artefacto de Inferencia</h3>
+                        <p>Has creado otro componente de software modular y reutilizable. Este es un paso fundamental para hacer tu sistema más robusto y fácil de mantener.</p>
+                        <pre><code># Añade el nuevo script de inferencia y los cambios en global.R
+git add R/inference.R global.R
+
+# Un commit que describe la nueva capacidad del sistema
+git commit -m "feat(ml): Crea artefacto de inferencia para predicción de puntajes"
+
+git push
+</code></pre>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section navigation-section">
+                <h2>¿Qué Sigue?</h2>
+                <p class="center-p">Con nuestro modelo cargado y nuestra lógica de predicción encapsulada en una función limpia, tenemos todas las piezas listas. En la siguiente lección, construiremos la interfaz de usuario y la lógica del servidor para crear el simulador interactivo.</p>
+                <div class="nav-buttons">
+                    <a href="desacoplamiento_artefactos.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 5.1: Artefactos</a>
+                    <a href="simulador_interactivo.html" class="nav-button next-button">Siguiente: El Simulador <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

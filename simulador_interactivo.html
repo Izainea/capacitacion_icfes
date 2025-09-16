@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 5.3: Construyendo el Simulador Interactivo</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 80px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        .center-p {
+             text-align: center;
+        }
+        
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .info-box {
+            background: rgba(40, 167, 69, 0.1);
+            border-left: 5px solid var(--success-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 30px;
+        }
+        .info-box h4 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--success-color);
+        }
+        .info-box p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+        }
+        
+        .navigation-section {
+            background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px;
+        }
+        .navigation-section h2 { border: none; }
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;
+        }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button {
+            background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color);
+        }
+        .next-button {
+            background-color: var(--primary-color); color: var(--secondary-color);
+        }
+        .nav-button:hover {
+            transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Construyendo el Simulador Interactivo</h1>
+            <p class="subtitle center-p">Uniendo la Interfaz de Usuario con la Lógica de Inferencia.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>El Momento de la Verdad: Conectando las Piezas</h2>
+                <p>
+                    Hemos recorrido un largo camino. Creamos un modelo y lo guardamos como un artefacto (`.rds`). Luego, encapsulamos la lógica para usar ese modelo en una función limpia dentro de un script de inferencia (`inference.R`). Ahora, es el momento de conectar todo.
+                </p>
+                <p>
+                    En esta lección final del taller, construiremos la "tienda": la interfaz de usuario donde el cliente (nuestro usuario final) puede interactuar con el "motor" (nuestro modelo) que hemos construido. Añadiremos los controles necesarios en la UI y escribiremos la lógica en el `server` para orquestar la predicción en tiempo real.
+                </p>
+            </section>
+            
+            <section class="section" id="taller">
+                <h2>Guía Práctica: Del Clic a la Predicción</h2>
+                <p class="center-p">Vamos a añadir una nueva pestaña a nuestra aplicación que funcionará como un simulador de puntajes de matemáticas.</p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: Crear la Interfaz del Simulador en `ui.R`</h3>
+                        <p>Necesitamos un lugar para que el usuario ingrese los datos para la predicción y un espacio para mostrar el resultado. Añadiremos una nueva `tabPanel` a nuestra aplicación.</p>
+                        <p><b>Acción:</b> Abre tu archivo `ui.R` y añade el siguiente bloque de código dentro del `tabsetPanel`, después de la pestaña "Tabla de Datos".</p>
+                        <pre><code># En ui.R, dentro del tabsetPanel(...)
+
+tabPanel("Simulador de Puntaje",
+    sidebarLayout(
+        sidebarPanel(
+            h3("Ingrese los puntajes:"),
+            numericInput("sim_lectura", "Puntaje Lectura Crítica:", 70, min = 0, max = 100),
+            numericInput("sim_sociales", "Puntaje Sociales:", 70, min = 0, max = 100),
+            numericInput("sim_ciencias", "Puntaje Ciencias Naturales:", 70, min = 0, max = 100),
+            actionButton("run_prediction", "Predecir Puntaje de Matemáticas", icon = icon("calculator"), class = "btn-success")
+        ),
+        mainPanel(
+            h2("Resultado de la Predicción"),
+            div(
+                style = "background-color: #1e1e1e; padding: 30px; border-radius: 15px; text-align: center; margin-top: 20px;",
+                h3("El puntaje predicho en matemáticas es:"),
+                h1(style="color: #28a745; font-size: 5rem;", textOutput("prediction_result"))
+            )
+        )
+    )
+)
+</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 2: Implementar la Lógica de Predicción en `server.R`</h3>
+                        <p>Ahora, conectamos estos nuevos controles a nuestra función de inferencia. Usaremos un `eventReactive` para que la predicción solo se ejecute cuando el usuario haga clic en el botón.</p>
+                        <p><b>Acción:</b> Añade este bloque de código completo a tu archivo `server.R`.</p>
+                        <pre><code># En server.R
+
+# --- Lógica del Simulador ---
+  
+puntaje_predicho <- eventReactive(input$run_prediction, {
+    
+    # 1. Crear un dataframe con los datos de entrada del usuario
+    nuevos_datos <- data.frame(
+        punt_lectura_critica = input$sim_lectura,
+        punt_sociales_ciudadanas = input$sim_sociales,
+        punt_c_naturales = input$sim_ciencias
+    )
+    
+    # 2. Llamar a nuestra función de inferencia encapsulada
+    prediccion <- predict_math_score(new_data = nuevos_datos)
+    
+    return(prediccion)
+})
+
+# 3. Renderizar el resultado en la UI
+output$prediction_result <- renderText({
+    # Llamamos al conductor reactivo para obtener el valor predicho
+    puntaje_predicho()
+})
+</code></pre>
+                        <div class="info-box">
+                           <h4><i class="fa-solid-_rocket"></i> ¡Ciclo MLOps Completado!</h4>
+                           <p>¡Felicidades! Has conectado todo el ciclo: un script de entrenamiento produce un artefacto, un script de inferencia lo encapsula, y la aplicación Shiny consume esa función para servir predicciones a un usuario final. <b>Este es el corazón de un producto de datos funcional.</b></p>
+                        </div>
+                    </div>
+                     <div class="step">
+                        <h3>Paso 3: Versionar el Producto de Datos</h3>
+                        <p>Has completado una de las funcionalidades más importantes de la aplicación. Es un hito que debe ser guardado en el historial del proyecto.</p>
+                        <pre><code># Añade los cambios en los archivos de la app
+git add ui.R server.R
+
+# Un commit que describe la nueva característica
+git commit -m "feat(app): Implementa simulador interactivo de puntajes"
+
+git push
+</code></pre>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section navigation-section">
+                <h2>¿Qué Sigue?</h2>
+                <p class="center-p">Has construido un producto de datos de principio a fin siguiendo buenas prácticas. Como un paso adicional, en la siguiente lección exploraremos cómo tu aplicación Shiny puede ir más allá y consumir modelos del ecosistema de Python.</p>
+                <div class="nav-buttons">
+                    <a href="artefacto_inferencia.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 5.2: Inferencia</a>
+                    <a href="consumiendo_hf.html" class="nav-button next-button">Siguiente: Consumiendo Modelos de HF <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

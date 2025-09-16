@@ -57,7 +57,20 @@ server <- function(input, output, session) {
 
     # Lógica para la predicción del puntaje
   puntaje_predicho <- eventReactive(input$run_prediction, {
-      
+      validate(
+        ## Condicion 1: Validar que los inputs sean numéricos y estén en el rango esperado
+        need(input$sim_lectura >= 0 && input$sim_lectura <= 100, "El puntaje de Lectura Crítica debe estar entre 0 y 100."),
+        need(input$sim_sociales >= 0 && input$sim_sociales <= 100, "El puntaje de Sociales debe estar entre 0 y 100."),
+        need(input$sim_ciencias >= 0 && input$sim_ciencias <= 100, "El puntaje de Ciencias Naturales debe estar entre 0 y 100."),
+
+        ## Condicion 2: Validar que los inputs no sean NA
+        need(!is.na(input$sim_lectura), "El puntaje de Lectura Crítica es obligatorio."),
+        need(!is.na(input$sim_sociales), "El puntaje de Sociales es obligatorio."),
+        need(!is.na(input$sim_ciencias), "El puntaje de Ciencias Naturales es obligatorio.")
+      )
+
+      message("-> Evento 'run_prediction' activado.")
+
       # 1. Crear un dataframe con los datos de entrada del usuario
       #    Los nombres de las columnas DEBEN COINCIDIR EXACTAMENTE con los del modelo.
       nuevos_datos <- data.frame(
@@ -65,6 +78,7 @@ server <- function(input, output, session) {
           punt_sociales_ciudadanas = input$sim_sociales,
           punt_c_naturales = input$sim_ciencias
       )
+
       
       # 2. Usar la función predict() con el modelo cargado
       prediccion <- predict(modelo_matematicas, newdata = nuevos_datos)

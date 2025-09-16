@@ -81,7 +81,7 @@ server <- function(input, output, session) {
 
       
       # 2. Usar la función predict() con el modelo cargado
-      prediccion <- predict(modelo_matematicas, newdata = nuevos_datos)
+      prediccion <- predict_math_score(nuevos_datos)
       
       # 3. Devolver el resultado redondeado
       return(round(prediccion))

@@ -426,158 +426,158 @@ server <- function(input, output, session) {
   output$dist_hist <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_global)) +
       geom_histogram(binwidth = 10, fill = "#1E90FF", color = "white", alpha = 0.8) +
-      labs(x = "Puntaje Global", y = "Frecuencia") + theme_minimal()
+      labs(x = "Puntaje Global", y = "Frecuencia") + theme_dark()
     print(p)
   }, res = 96)
-  output$dist_hist_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global)) +\n  geom_histogram(binwidth = 10, fill = '#1E90FF', color = 'white', alpha = 0.8) +\n  labs(x = 'Puntaje Global', y = 'Frecuencia') + theme_minimal()") })
+  output$dist_hist_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global)) +\n  geom_histogram(binwidth = 10, fill = '#1E90FF', color = 'white', alpha = 0.8) +\n  labs(x = 'Puntaje Global', y = 'Frecuencia') + theme_dark()") })
   
   output$dist_density <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_global)) +
       geom_density(fill = "#1E90FF", alpha = 0.8) +
-      labs(x = "Puntaje Global", y = "Densidad") + theme_minimal()
+      labs(x = "Puntaje Global", y = "Densidad") + theme_dark()
     print(p)
   }, res = 96)
-  output$dist_density_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global)) +\n  geom_density(fill = '#1E90FF', alpha = 0.8) +\n  labs(x = 'Puntaje Global', y = 'Densidad') + theme_minimal()") })
+  output$dist_density_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global)) +\n  geom_density(fill = '#1E90FF', alpha = 0.8) +\n  labs(x = 'Puntaje Global', y = 'Densidad') + theme_dark()") })
   
   output$dist_hist_density <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_global)) +
       geom_histogram(aes(y = after_stat(density)), binwidth = 10, fill = "#1E90FF", color = "white", alpha = 0.7) +
       geom_density(color = "#FFD700", linewidth = 1.2) +
-      labs(x = "Puntaje Global", y = "Densidad") + theme_minimal()
+      labs(x = "Puntaje Global", y = "Densidad") + theme_dark()
     print(p)
   }, res = 96)
-  output$dist_hist_density_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global)) +\n  geom_histogram(aes(y = after_stat(density)), binwidth = 10, fill = '#1E90FF', color = 'white', alpha = 0.7) +\n  geom_density(color = '#FFD700', linewidth = 1.2) +\n  labs(x = 'Puntaje Global', y = 'Densidad') + theme_minimal()") })
+  output$dist_hist_density_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global)) +\n  geom_histogram(aes(y = after_stat(density)), binwidth = 10, fill = '#1E90FF', color = 'white', alpha = 0.7) +\n  geom_density(color = '#FFD700', linewidth = 1.2) +\n  labs(x = 'Puntaje Global', y = 'Densidad') + theme_dark()") })
   
   output$dist_boxplot <- renderPlot({
     p <- ggplot(datos_saber, aes(x = cole_naturaleza, y = punt_global, fill = cole_naturaleza)) +
       geom_boxplot(alpha = 0.8) +
-      labs(x = "Naturaleza del Colegio", y = "Puntaje Global") + theme_minimal() + theme(legend.position = "none")
+      labs(x = "Naturaleza del Colegio", y = "Puntaje Global") + theme_dark() + theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$dist_boxplot_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = cole_naturaleza, y = punt_global, fill = cole_naturaleza)) +\n  geom_boxplot(alpha = 0.8) +\n  labs(x = 'Naturaleza del Colegio', y = 'Puntaje Global') + theme_minimal() + theme(legend.position = 'none')") })
+  output$dist_boxplot_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = cole_naturaleza, y = punt_global, fill = cole_naturaleza)) +\n  geom_boxplot(alpha = 0.8) +\n  labs(x = 'Naturaleza del Colegio', y = 'Puntaje Global') + theme_dark() + theme(legend.position = 'none')") })
   
   output$dist_violin <- renderPlot({
     p <- ggplot(datos_saber, aes(x = cole_naturaleza, y = punt_global, fill = cole_naturaleza)) +
       geom_violin(alpha = 0.8, draw_quantiles = c(0.25, 0.5, 0.75)) +
-      labs(x = "Naturaleza del Colegio", y = "Puntaje Global") + theme_minimal() + theme(legend.position = "none")
+      labs(x = "Naturaleza del Colegio", y = "Puntaje Global") + theme_dark() + theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$dist_violin_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = cole_naturaleza, y = punt_global, fill = cole_naturaleza)) +\n  geom_violin(alpha = 0.8, draw_quantiles = c(0.25, 0.5, 0.75)) +\n  labs(x = 'Naturaleza del Colegio', y = 'Puntaje Global') + theme_minimal() + theme(legend.position = 'none')") })
+  output$dist_violin_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = cole_naturaleza, y = punt_global, fill = cole_naturaleza)) +\n  geom_violin(alpha = 0.8, draw_quantiles = c(0.25, 0.5, 0.75)) +\n  labs(x = 'Naturaleza del Colegio', y = 'Puntaje Global') + theme_dark() + theme(legend.position = 'none')") })
   
   output$dist_ridge <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_global, y = rendimiento_global, fill = rendimiento_global)) +
       geom_density_ridges() +
-      labs(x = "Puntaje Global", y = "Nivel de Rendimiento") + theme_minimal() + theme(legend.position = "none")
+      labs(x = "Puntaje Global", y = "Nivel de Rendimiento") + theme_dark() + theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$dist_ridge_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global, y = rendimiento_global, fill = rendimiento_global)) +\n  geom_density_ridges() +\n  labs(x = 'Puntaje Global', y = 'Nivel de Rendimiento') + theme_minimal() + theme(legend.position = 'none')") })
+  output$dist_ridge_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global, y = rendimiento_global, fill = rendimiento_global)) +\n  geom_density_ridges() +\n  labs(x = 'Puntaje Global', y = 'Nivel de Rendimiento') + theme_dark() + theme(legend.position = 'none')") })
   
   # --- Lógica para Pestaña 2: Relaciones ---
   output$rel_scatter <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +
       geom_point(aes(color = cole_naturaleza), alpha = 0.4) +
-      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica") + theme_minimal()
+      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica") + theme_dark()
     print(p)
   }, res = 96)
-  output$rel_scatter_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(aes(color = cole_naturaleza), alpha = 0.4) +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica') + theme_minimal()") })
+  output$rel_scatter_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(aes(color = cole_naturaleza), alpha = 0.4) +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica') + theme_dark()") })
   
   output$rel_scatter_lm <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +
       geom_point(aes(color = cole_naturaleza), alpha = 0.4) +
       geom_smooth(method = "lm", color = "#FFFFFF", se = FALSE) +
-      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica") + theme_minimal()
+      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica") + theme_dark()
     print(p)
   }, res = 96)
-  output$rel_scatter_lm_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(aes(color = cole_naturaleza), alpha = 0.4) +\n  geom_smooth(method = 'lm', color = '#FFFFFF', se = FALSE) +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica') + theme_minimal()") })
+  output$rel_scatter_lm_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(aes(color = cole_naturaleza), alpha = 0.4) +\n  geom_smooth(method = 'lm', color = '#FFFFFF', se = FALSE) +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica') + theme_dark()") })
   
   output$rel_scatter_jitter <- renderPlot({
     p <- ggplot(datos_saber, aes(x = rendimiento_global, y = punt_global)) +
       geom_jitter(aes(color = rendimiento_global), width = 0.2, alpha = 0.5) +
-      labs(x = "Rendimiento", y = "Puntaje Global") + theme_minimal() + theme(legend.position = "none")
+      labs(x = "Rendimiento", y = "Puntaje Global") + theme_dark() + theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$rel_scatter_jitter_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = rendimiento_global, y = punt_global)) +\n  geom_jitter(aes(color = rendimiento_global), width = 0.2, alpha = 0.5) +\n  labs(x = 'Rendimiento', y = 'Puntaje Global') + theme_minimal() + theme(legend.position = 'none')") })
+  output$rel_scatter_jitter_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = rendimiento_global, y = punt_global)) +\n  geom_jitter(aes(color = rendimiento_global), width = 0.2, alpha = 0.5) +\n  labs(x = 'Rendimiento', y = 'Puntaje Global') + theme_dark() + theme(legend.position = 'none')") })
   
   output$rel_bubble <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +
       geom_point(aes(color = cole_naturaleza, size = punt_global), alpha = 0.6) +
       scale_size_continuous(range = c(1, 10)) +
-      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica", size = "Puntaje Global") + theme_minimal()
+      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica", size = "Puntaje Global") + theme_dark()
     print(p)
   }, res = 96)
-  output$rel_bubble_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(aes(color = cole_naturaleza, size = punt_global), alpha = 0.6) +\n  scale_size_continuous(range = c(1, 10)) +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica', size = 'Puntaje Global') + theme_minimal()") })
+  output$rel_bubble_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(aes(color = cole_naturaleza, size = punt_global), alpha = 0.6) +\n  scale_size_continuous(range = c(1, 10)) +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica', size = 'Puntaje Global') + theme_dark()") })
 
   output$rel_density2d <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +
       stat_density_2d(aes(fill = after_stat(level)), geom = "polygon") +
       scale_fill_viridis_c() +
-      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica") + theme_minimal()
+      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica") + theme_dark()
     print(p)
   }, res = 96)
-  output$rel_density2d_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  stat_density_2d(aes(fill = after_stat(level)), geom = 'polygon') +\n  scale_fill_viridis_c() +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica') + theme_minimal()") })
+  output$rel_density2d_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  stat_density_2d(aes(fill = after_stat(level)), geom = 'polygon') +\n  scale_fill_viridis_c() +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica') + theme_dark()") })
 
   output$rel_hexbin <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +
       geom_hex() +
       scale_fill_viridis_c() +
-      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica") + theme_minimal()
+      labs(x = "Puntaje Matemáticas", y = "Puntaje Lectura Crítica") + theme_dark()
     print(p)
   }, res = 96)
-  output$rel_hexbin_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_hex() +\n  scale_fill_viridis_c() +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica') + theme_minimal()") })
+  output$rel_hexbin_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_hex() +\n  scale_fill_viridis_c() +\n  labs(x = 'Puntaje Matemáticas', y = 'Puntaje Lectura Crítica') + theme_dark()") })
 
   # --- Lógica para Pestaña 3: Comparaciones ---
   output$comp_bar <- renderPlot({
     p <- ggplot(datos_promedio_naturaleza, aes(x = reorder(cole_naturaleza, -punt_global), y = punt_global, fill = cole_naturaleza)) +
       geom_col() +
-      labs(x = "Naturaleza del Colegio", y = "Puntaje Global Promedio") + theme_minimal() + theme(legend.position = "none")
+      labs(x = "Naturaleza del Colegio", y = "Puntaje Global Promedio") + theme_dark() + theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$comp_bar_code <- renderPrint({ cat("ggplot(datos_promedio_naturaleza, aes(x = reorder(cole_naturaleza, -punt_global), y = punt_global, fill = cole_naturaleza)) +\n  geom_col() +\n  labs(x = 'Naturaleza del Colegio', y = 'Puntaje Global Promedio') + theme_minimal() + theme(legend.position = 'none')") })
+  output$comp_bar_code <- renderPrint({ cat("ggplot(datos_promedio_naturaleza, aes(x = reorder(cole_naturaleza, -punt_global), y = punt_global, fill = cole_naturaleza)) +\n  geom_col() +\n  labs(x = 'Naturaleza del Colegio', y = 'Puntaje Global Promedio') + theme_dark() + theme(legend.position = 'none')") })
   
   output$comp_lollipop <- renderPlot({
      p <- ggplot(datos_promedio_naturaleza, aes(x = reorder(cole_naturaleza, punt_global), y = punt_global)) +
       geom_segment(aes(xend = reorder(cole_naturaleza, punt_global), yend = 0), color = "grey50") +
       geom_point(aes(color = cole_naturaleza), size = 5) +
-      labs(x = "Naturaleza del Colegio", y = "Puntaje Global Promedio") + theme_minimal() + theme(legend.position = "none") +
+      labs(x = "Naturaleza del Colegio", y = "Puntaje Global Promedio") + theme_dark() + theme(legend.position = "none") +
       coord_flip()
      print(p)
   }, res = 96)
-  output$comp_lollipop_code <- renderPrint({ cat("ggplot(datos_promedio_naturaleza, aes(x = reorder(cole_naturaleza, punt_global), y = punt_global)) +\n  geom_segment(aes(xend = reorder(cole_naturaleza, punt_global), yend = 0), color = 'grey50') +\n  geom_point(aes(color = cole_naturaleza), size = 5) +\n  labs(x = 'Naturaleza del Colegio', y = 'Puntaje Global Promedio') + theme_minimal() + theme(legend.position = 'none') +\n  coord_flip()") })
+  output$comp_lollipop_code <- renderPrint({ cat("ggplot(datos_promedio_naturaleza, aes(x = reorder(cole_naturaleza, punt_global), y = punt_global)) +\n  geom_segment(aes(xend = reorder(cole_naturaleza, punt_global), yend = 0), color = 'grey50') +\n  geom_point(aes(color = cole_naturaleza), size = 5) +\n  labs(x = 'Naturaleza del Colegio', y = 'Puntaje Global Promedio') + theme_dark() + theme(legend.position = 'none') +\n  coord_flip()") })
   
   output$comp_bar_grouped <- renderPlot({
     p <- ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +
       geom_col(position = "dodge") +
-      labs(x = "Naturaleza", y = "Número de Estudiantes", fill = "Rendimiento") + theme_minimal()
+      labs(x = "Naturaleza", y = "Número de Estudiantes", fill = "Rendimiento") + theme_dark()
     print(p)
   }, res = 96)
-  output$comp_bar_grouped_code <- renderPrint({ cat("ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +\n  geom_col(position = 'dodge') +\n  labs(x = 'Naturaleza', y = 'Número de Estudiantes', fill = 'Rendimiento') + theme_minimal()") })
+  output$comp_bar_grouped_code <- renderPrint({ cat("ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +\n  geom_col(position = 'dodge') +\n  labs(x = 'Naturaleza', y = 'Número de Estudiantes', fill = 'Rendimiento') + theme_dark()") })
   
   output$comp_bar_stacked <- renderPlot({
     p <- ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +
       geom_col(position = "stack") +
-      labs(x = "Naturaleza", y = "Número de Estudiantes", fill = "Rendimiento") + theme_minimal()
+      labs(x = "Naturaleza", y = "Número de Estudiantes", fill = "Rendimiento") + theme_dark()
     print(p)
   }, res = 96)
-  output$comp_bar_stacked_code <- renderPrint({ cat("ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +\n  geom_col(position = 'stack') +\n  labs(x = 'Naturaleza', y = 'Número de Estudiantes', fill = 'Rendimiento') + theme_minimal()") })
+  output$comp_bar_stacked_code <- renderPrint({ cat("ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +\n  geom_col(position = 'stack') +\n  labs(x = 'Naturaleza', y = 'Número de Estudiantes', fill = 'Rendimiento') + theme_dark()") })
   
   output$comp_bar_filled <- renderPlot({
     p <- ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +
       geom_col(position = "fill") +
       scale_y_continuous(labels = scales::percent) +
-      labs(x = "Naturaleza", y = "Proporción", fill = "Rendimiento") + theme_minimal()
+      labs(x = "Naturaleza", y = "Proporción", fill = "Rendimiento") + theme_dark()
     print(p)
   }, res = 96)
-  output$comp_bar_filled_code <- renderPrint({ cat("ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +\n  geom_col(position = 'fill') +\n  scale_y_continuous(labels = scales::percent) +\n  labs(x = 'Naturaleza', y = 'Proporción', fill = 'Rendimiento') + theme_minimal()") })
+  output$comp_bar_filled_code <- renderPrint({ cat("ggplot(datos_conteo_rendimiento, aes(x = cole_naturaleza, y = n, fill = rendimiento_global)) +\n  geom_col(position = 'fill') +\n  scale_y_continuous(labels = scales::percent) +\n  labs(x = 'Naturaleza', y = 'Proporción', fill = 'Rendimiento') + theme_dark()") })
   
   output$comp_treemap <- renderPlot({
     p <- ggplot(datos_conteo_rendimiento, aes(area = n, fill = cole_naturaleza, subgroup = cole_naturaleza, label = rendimiento_global)) +
       geom_treemap() +
       geom_treemap_subgroup_border() +
       geom_treemap_text(color = "white", place = "centre", grow = TRUE) +
-      theme_minimal() + theme(legend.position = "none")
+      theme_dark() + theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$comp_treemap_code <- renderPrint({ cat("ggplot(datos_conteo_rendimiento, aes(area = n, fill = cole_naturaleza, subgroup = cole_naturaleza, label = rendimiento_global)) +\n  geom_treemap() +\n  geom_treemap_subgroup_border() +\n  geom_treemap_text(color = 'white', place = 'centre', grow = TRUE) +\n  theme_minimal() + theme(legend.position = 'none')") })
+  output$comp_treemap_code <- renderPrint({ cat("ggplot(datos_conteo_rendimiento, aes(area = n, fill = cole_naturaleza, subgroup = cole_naturaleza, label = rendimiento_global)) +\n  geom_treemap() +\n  geom_treemap_subgroup_border() +\n  geom_treemap_text(color = 'white', place = 'centre', grow = TRUE) +\n  theme_dark() + theme(legend.position = 'none')") })
   
   # --- Lógica para Pestaña 4: Avanzadas ---
   output$adv_corrplot <- renderPlot({
@@ -586,50 +586,50 @@ server <- function(input, output, session) {
     p <- ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
       geom_tile() +
       scale_fill_gradient2(low = "#2c7bb6", high = "#d7191c", mid = "white", midpoint = 0) +
-      theme_minimal() +
+      theme_dark() +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
       labs(x = "", y = "", fill = "Correlación")
     print(p)
   }, res = 96)
-  output$adv_corrplot_code <- renderPrint({ cat("corr_matrix <- datos_saber %>% select(starts_with('punt_')) %>% cor()\nmelted_corr <- melt(corr_matrix)\nggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +\n  geom_tile() +\n  scale_fill_gradient2(low = '#2c7bb6', high = '#d7191c', mid = 'white', midpoint = 0) +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +\n  labs(x = '', y = '', fill = 'Correlación')") })
+  output$adv_corrplot_code <- renderPrint({ cat("corr_matrix <- datos_saber %>% select(starts_with('punt_')) %>% cor()\nmelted_corr <- melt(corr_matrix)\nggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +\n  geom_tile() +\n  scale_fill_gradient2(low = '#2c7bb6', high = '#d7191c', mid = 'white', midpoint = 0) +\n  theme_dark() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +\n  labs(x = '', y = '', fill = 'Correlación')") })
   
   output$adv_parallel <- renderPlot({
     p <- ggparcoord(datos_promedio_naturaleza, columns = 2:6, groupColumn = "cole_naturaleza", scale = "uniminmax") +
-      theme_minimal() +
+      theme_dark() +
       labs(title = "Perfil de Puntajes Promedio por Naturaleza de Colegio")
     print(p)
   }, res = 96)
-  output$adv_parallel_code <- renderPrint({ cat("ggparcoord(datos_promedio_naturaleza, columns = 2:6, groupColumn = 'cole_naturaleza', scale = 'uniminmax') +\n  theme_minimal() +\n  labs(title = 'Perfil de Puntajes Promedio por Naturaleza de Colegio')") })
+  output$adv_parallel_code <- renderPrint({ cat("ggparcoord(datos_promedio_naturaleza, columns = 2:6, groupColumn = 'cole_naturaleza', scale = 'uniminmax') +\n  theme_dark() +\n  labs(title = 'Perfil de Puntajes Promedio por Naturaleza de Colegio')") })
   
   adv_pairs_plot <- eventReactive(input$nav == "4. Avanzadas", {
     p <- ggpairs(datos_saber, columns = c("punt_global", "punt_matematicas", "punt_lectura_critica"),
             aes(color = cole_naturaleza, alpha = 0.5)) +
-      theme_minimal()
+      theme_dark()
     return(p)
   })
 
   output$adv_pairs <- renderPlot({
     print(adv_pairs_plot())
   }, res = 96)
-  output$adv_pairs_code <- renderPrint({ cat("p <- ggpairs(datos_saber, columns = c('punt_global', 'punt_matematicas', 'punt_lectura_critica'),\n        aes(color = cole_naturaleza, alpha = 0.5)) +\n  theme_minimal()\n# Se usa print() para asegurar el renderizado estático en Shiny.\nprint(p)") })
+  output$adv_pairs_code <- renderPrint({ cat("p <- ggpairs(datos_saber, columns = c('punt_global', 'punt_matematicas', 'punt_lectura_critica'),\n        aes(color = cole_naturaleza, alpha = 0.5)) +\n  theme_dark()\n# Se usa print() para asegurar el renderizado estático en Shiny.\nprint(p)") })
   
   output$adv_facet_wrap <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_global)) +
       geom_histogram(aes(fill = cole_naturaleza), binwidth = 15) +
       facet_wrap(~ cole_naturaleza) +
-      theme_minimal() + theme(legend.position = "none")
+      theme_dark() + theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$adv_facet_wrap_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global)) +\n  geom_histogram(aes(fill = cole_naturaleza), binwidth = 15) +\n  facet_wrap(~ cole_naturaleza) +\n  theme_minimal() + theme(legend.position = 'none')") })
+  output$adv_facet_wrap_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_global)) +\n  geom_histogram(aes(fill = cole_naturaleza), binwidth = 15) +\n  facet_wrap(~ cole_naturaleza) +\n  theme_dark() + theme(legend.position = 'none')") })
   
   output$adv_facet_grid <- renderPlot({
     p <- ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +
       geom_point(alpha = 0.2) +
       facet_grid(rendimiento_global ~ cole_naturaleza) +
-      theme_minimal()
+      theme_dark()
     print(p)
   }, res = 96)
-  output$adv_facet_grid_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(alpha = 0.2) +\n  facet_grid(rendimiento_global ~ cole_naturaleza) +\n  theme_minimal()") })
+  output$adv_facet_grid_code <- renderPrint({ cat("ggplot(datos_saber, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(alpha = 0.2) +\n  facet_grid(rendimiento_global ~ cole_naturaleza) +\n  theme_dark()") })
   
   # --- Lógica para Pestaña 5: Storytelling ---
   output$story_highlight <- renderPlot({
@@ -643,10 +643,10 @@ server <- function(input, output, session) {
         subtitle = "Puntajes en Ciencias Sociales vs. Ciencias Naturales",
         x = "Puntaje Sociales y Ciudadanas", y = "Puntaje Ciencias Naturales"
       ) +
-      theme_minimal() + theme(legend.position = "none")
+      theme_dark() + theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$story_highlight_code <- renderPrint({ cat("datos_saber %>%\n  mutate(highlight = ifelse(rendimiento_global == 'Alto', 'Sí', 'No')) %>%\n  ggplot(aes(x = punt_sociales_ciudadanas, y = punt_c_naturales)) +\n  geom_point(aes(color = highlight), alpha = 0.6) +\n  scale_color_manual(values = c('Sí' = '#ff9900', 'No' = 'grey50')) +\n  labs(\n    title = 'Estudiantes de Alto Rendimiento Muestran Excelencia en Múltiples Áreas',\n    subtitle = 'Puntajes en Ciencias Sociales vs. Ciencias Naturales',\n    x = 'Puntaje Sociales y Ciudadanas', y = 'Puntaje Ciencias Naturales'\n  ) +\n  theme_minimal() + theme(legend.position = 'none')") })
+  output$story_highlight_code <- renderPrint({ cat("datos_saber %>%\n  mutate(highlight = ifelse(rendimiento_global == 'Alto', 'Sí', 'No')) %>%\n  ggplot(aes(x = punt_sociales_ciudadanas, y = punt_c_naturales)) +\n  geom_point(aes(color = highlight), alpha = 0.6) +\n  scale_color_manual(values = c('Sí' = '#ff9900', 'No' = 'grey50')) +\n  labs(\n    title = 'Estudiantes de Alto Rendimiento Muestran Excelencia en Múltiples Áreas',\n    subtitle = 'Puntajes en Ciencias Sociales vs. Ciencias Naturales',\n    x = 'Puntaje Sociales y Ciudadanas', y = 'Puntaje Ciencias Naturales'\n  ) +\n  theme_dark() + theme(legend.position = 'none')") })
   
   output$story_annotated <- renderPlot({
     p <- ggplot(datos_promedio_naturaleza, aes(x = punt_matematicas, y = punt_lectura_critica)) +
@@ -657,31 +657,31 @@ server <- function(input, output, session) {
            x = "Promedio Matemáticas", y = "Promedio Lectura Crítica") +
       annotate("text", x = 60, y = 63, label = "Mayor rendimiento\npromedio general", color = "white", fontface="italic") +
       annotate("curve", x = 60, y = 62.5, xend = 62.5, yend = 63.8, curvature = 0.3, arrow = arrow(length = unit(2, "mm"))) +
-      theme_minimal() +
+      theme_dark() +
       theme(legend.position = "none")
     print(p)
   }, res = 96)
-  output$story_annotated_code <- renderPrint({ cat("ggplot(datos_promedio_naturaleza, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(aes(color = cole_naturaleza, size = punt_global)) +\n  geom_text(aes(label = cole_naturaleza), vjust = -1.5) +\n  scale_size_continuous(range=c(5,10)) +\n  labs(title = 'Colegios No Oficiales Lideran en Promedios de Lectura y Matemáticas',\n       x = 'Promedio Matemáticas', y = 'Promedio Lectura Crítica') +\n  annotate('text', x = 60, y = 63, label = 'Mayor rendimiento\\npromedio general', color = 'white', fontface='italic') +\n  annotate('curve', x = 60, y = 62.5, xend = 62.5, yend = 63.8, curvature = 0.3, arrow = arrow(length = unit(2, 'mm'))) +\n  theme_minimal() +\n  theme(legend.position = 'none')") })
+  output$story_annotated_code <- renderPrint({ cat("ggplot(datos_promedio_naturaleza, aes(x = punt_matematicas, y = punt_lectura_critica)) +\n  geom_point(aes(color = cole_naturaleza, size = punt_global)) +\n  geom_text(aes(label = cole_naturaleza), vjust = -1.5) +\n  scale_size_continuous(range=c(5,10)) +\n  labs(title = 'Colegios No Oficiales Lideran en Promedios de Lectura y Matemáticas',\n       x = 'Promedio Matemáticas', y = 'Promedio Lectura Crítica') +\n  annotate('text', x = 60, y = 63, label = 'Mayor rendimiento\\npromedio general', color = 'white', fontface='italic') +\n  annotate('curve', x = 60, y = 62.5, xend = 62.5, yend = 63.8, curvature = 0.3, arrow = arrow(length = unit(2, 'mm'))) +\n  theme_dark() +\n  theme(legend.position = 'none')") })
 
   # --- Lógica para Pestaña 6: Interactividad ---
   output$int_boxplotly <- renderPlotly({
     p <- ggplot(datos_saber, aes(x = rendimiento_global, y = punt_global, fill = rendimiento_global)) +
       geom_boxplot() +
       labs(title = "Puntaje Global por Nivel de Rendimiento", x = "Rendimiento", y = "Puntaje Global") +
-      theme_minimal() + theme(legend.position = "none")
+      theme_dark() + theme(legend.position = "none")
     ggplotly(p)
   })
-  output$int_boxplotly_code <- renderPrint({ cat("p <- ggplot(datos_saber, aes(x = rendimiento_global, y = punt_global, fill = rendimiento_global)) +\n  geom_boxplot() + \n  labs(...) + \n  theme_minimal()\nggplotly(p)") })
+  output$int_boxplotly_code <- renderPrint({ cat("p <- ggplot(datos_saber, aes(x = rendimiento_global, y = punt_global, fill = rendimiento_global)) +\n  geom_boxplot() + \n  labs(...) + \n  theme_dark()\nggplotly(p)") })
   
   output$int_histplotly <- renderPlotly({
     # Nota: El input$hist_bins es reactivo, por lo que este bloque se re-ejecuta
     p <- ggplot(datos_saber, aes(x = punt_global)) +
       geom_histogram(bins = input$hist_bins, fill = "#ff9900", alpha = 0.8) +
       labs(title = "Distribución del Puntaje Global (Bins Interactivos)", x = "Puntaje Global", y = "Frecuencia") +
-      theme_minimal()
+      theme_dark()
     ggplotly(p) %>% layout(bargap = 0.1) 
   })
-  output$int_histplotly_code <- renderPrint({ cat("# El `input$hist_bins` en geom_histogram() lo hace reactivo.\np <- ggplot(datos_saber, aes(x = punt_global)) +\n  geom_histogram(bins = input$hist_bins, fill = '#ff9900', alpha = 0.8) + \n  labs(...) + \n  theme_minimal()\nggplotly(p)") })
+  output$int_histplotly_code <- renderPrint({ cat("# El `input$hist_bins` en geom_histogram() lo hace reactivo.\np <- ggplot(datos_saber, aes(x = punt_global)) +\n  geom_histogram(bins = input$hist_bins, fill = '#ff9900', alpha = 0.8) + \n  labs(...) + \n  theme_dark()\nggplotly(p)") })
   
   output$int_datatable <- renderDT({
     datatable(

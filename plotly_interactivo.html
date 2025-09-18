@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 6.2: Gráficos Interactivos con plotly</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900;
+            --secondary-color: #232f3e;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --success-color: #28a745;
+            --info-color: #5dade2;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1200px; margin: auto; }
+        h1, h2, h3 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        h1 { font-size: 4.5rem; color: var(--primary-color); margin-bottom: 0; }
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+        .subtitle { font-size: 1.6rem; color: var(--text-muted); margin-top: 0; margin-bottom: 80px; }
+        .section { margin-bottom: 100px; }
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        
+        .code-block {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .code-block code { font-size: 0.95rem; }
+
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .info-box {
+            background: rgba(93, 173, 226, 0.1);
+            border-left: 5px solid var(--info-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+        .info-box h4 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--info-color);
+        }
+        .info-box p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: stretch;
+            margin: 40px auto;
+        }
+        .comparison-card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .comparison-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+        }
+        .comparison-card h3 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 40px auto;
+            text-align: left;
+        }
+        .feature-card {
+            background-color: var(--secondary-color);
+            padding: 25px;
+            border-radius: 10px;
+        }
+        .feature-card .icon { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 15px; }
+        .feature-card h3 { font-size: 1.8rem; margin: 0; padding: 0; border: none; color: var(--text-color); }
+        .feature-card p { font-size: 1rem; margin-top: 10px; }
+
+
+        .navigation-section { background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px; }
+        .navigation-section h2 { border: none; }
+        .nav-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button { background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color); }
+        .next-button { background-color: var(--primary-color); color: var(--secondary-color); }
+        .nav-button:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gráficos Interactivos con `plotly`</h1>
+            <p class="subtitle">De lo Estático a lo Dinámico: Dando Vida a tus Datos.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>El Siguiente Nivel: De Ver a Explorar</h2>
+                <p>
+                    Un gráfico estático de `ggplot2` es una herramienta poderosa para comunicar un punto. Pero en la fase de exploración, a menudo queremos más. Queremos hacer zoom en un área de interés, pasar el cursor sobre un punto para ver sus valores exactos o filtrar datos directamente desde la visualización. Queremos transformar al usuario de un observador pasivo a un explorador activo.
+                </p>
+                <p>
+                    Aquí es donde brilla el paquete `plotly`. Su función principal, `ggplotly()`, actúa como una "varita mágica" que toma casi cualquier gráfico que hayas creado con `ggplot2` y lo convierte en un widget web interactivo con muy poco esfuerzo, sirviendo como el puente perfecto entre la robustez de `ggplot2` y la interactividad de la web.
+                </p>
+            </section>
+            
+            <section class="section" id="ggplotly">
+                <h2>La Magia de `ggplotly()`</h2>
+                <p>
+                    La belleza de `plotly` radica en su simplicidad. No necesitas aprender una nueva sintaxis de gráficos desde cero. Simplemente construyes tu gráfico como siempre lo has hecho con `ggplot2` y luego pasas el objeto resultante a `ggplotly()`.
+                </p>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h3><i class="fas fa-chart-line"></i> Gráfico Estático (ggplot2)</h3>
+                        <div class="code-block">
+                            <code>
+# 1. Creamos el objeto ggplot
+p <- ggplot(datos, aes(x = var1, y = var2)) +
+  geom_point()
+
+# 2. Mostramos el gráfico estático
+p
+                            </code>
+                        </div>
+                        
+                    </div>
+                    <div class="comparison-card">
+                         <h3><i class="fas fa-hand-pointer"></i> Gráfico Interactivo (plotly)</h3>
+                        <div class="code-block">
+                             <code>
+# 1. Creamos el mismo objeto ggplot
+p <- ggplot(datos, aes(x = var1, y = var2)) +
+  geom_point()
+
+# 2. ¡Magia! Lo envolvemos en ggplotly()
+ggplotly(p)
+                            </code>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 100px;">Los Superpoderes en Detalle</h2>
+                 <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-comment-dots"></i></div>
+                        <h3>Tooltips Informativos</h3>
+                        <p>Al pasar el cursor sobre cualquier punto de datos, una pequeña caja de información aparece automáticamente, mostrando los valores exactos de las variables mapeadas.</p>
+                    </div>
+                     <div class="feature-card">
+                        <div class="icon"><i class="fas fa-search-plus"></i></div>
+                        <h3>Zoom Inteligente</h3>
+                        <p>Permite al usuario dibujar un rectángulo sobre un área de interés para hacer zoom y examinar clústeres de datos o puntos específicos en detalle.</p>
+                    </div>
+                     <div class="feature-card">
+                        <div class="icon"><i class="fas fa-arrows-alt"></i></div>
+                        <h3>Paneo (Panning)</h3>
+                        <p>Una vez que se ha hecho zoom, el usuario puede arrastrar el gráfico para moverse por el área ampliada, explorando la región sin perder el contexto.</p>
+                    </div>
+                     <div class="feature-card">
+                        <div class="icon"><i class="fas fa-filter"></i></div>
+                        <h3>Filtrado por Leyenda</h3>
+                        <p>Si el gráfico tiene una leyenda (por ejemplo, puntos coloreados por categoría), el usuario puede hacer clic en los elementos de la leyenda para ocultar o mostrar grupos de datos al instante.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section" id="tooltips">
+                <h2>Mejorando la Experiencia: Tooltips Personalizados</h2>
+                <p>
+                    Los tooltips automáticos son útiles, pero a menudo queremos mostrar más información que solo las variables de los ejes X e Y. Por ejemplo, en nuestro gráfico de dispersión, sería genial ver el puntaje global y el nivel de rendimiento del estudiante al pasar el cursor sobre su punto.
+                </p>
+                <p>
+                    La clave para personalizar los tooltips es preparar la información *dentro* de la llamada a `ggplot`. Creamos una nueva "estética" llamada `text` que contiene el texto que queremos mostrar.
+                </p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: Construir el Gráfico con la Estética `text`</h3>
+                        <p>Modificamos nuestra llamada a `ggplot` para incluir la estética `text`. Usamos `paste()` o `glue()` para construir una cadena de texto formateada con la información que deseamos.</p>
+                        <div class="code-block">
+                            <pre><code>p <- ggplot(datos_saber, aes(
+    x = punt_matematicas, 
+    y = punt_lectura_critica,
+    # AÑADIMOS LA ESTÉTICA 'text' PARA EL TOOLTIP
+    text = paste(
+      "Puntaje Global:", punt_global,
+      "&lt;br&gt;Rendimiento:", rendimiento_global
+    )
+  )) +
+  geom_point(aes(color = cole_naturaleza), alpha = 0.5) +
+  labs(...) +
+  theme_minimal()
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <h3>Paso 2: Activar el Tooltip en `ggplotly()`</h3>
+                        <p>Finalmente, le decimos a `ggplotly()` que use la estética `text` que acabamos de crear para poblar el contenido del tooltip.</p>
+                         <div class="code-block">
+                            <pre><code># Le decimos a ggplotly que busque la estética "text"
+ggplotly(p, tooltip = "text")
+                            </code></pre>
+                        </div>
+                         <div class="info-box">
+                           <h4><i class="fas fa-lightbulb"></i> ¿Qué es `&lt;br&gt;`?</h4>
+                           <p>Es la etiqueta HTML para un salto de línea. Como `plotly` genera una visualización web, podemos usar etiquetas HTML simples dentro de nuestras cadenas de texto para darles formato, como crear múltiples líneas en nuestro tooltip.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section navigation-section">
+                <h2>¿Qué Sigue?</h2>
+                <p>Hemos transformado un gráfico estático en una herramienta de exploración. Ahora estamos listos para ir un paso más allá y aprender a usar la visualización no solo para explorar, sino para contar una historia de forma deliberada y efectiva.</p>
+                <div class="nav-buttons">
+                    <a href="visualizacion_fundamentos.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 6.1: Fundamentos</a>
+                    <a href="data_storytelling.html" class="nav-button next-button">Siguiente: Data Storytelling <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+

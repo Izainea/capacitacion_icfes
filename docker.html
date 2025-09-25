@@ -168,10 +168,10 @@
             <section class="section" id="como-funciona">
                 <h2>¿Cómo Funciona Docker? (Contenedor vs. Máquina Virtual)</h2>
                 <p>
-                    Para un público técnico, es crucial entender que un contenedor **no es una máquina virtual (VM)**. Una VM emula un computador completo, incluyendo su propio sistema operativo, lo que la hace pesada y lenta.
+                    Para un público técnico, es crucial entender que un contenedor <b>no es una máquina virtual (VM)</b>. Una VM emula un computador completo, incluyendo su propio sistema operativo, lo que la hace pesada y lenta.
                 </p>
                 <p>
-                    En cambio, un contenedor es mucho más ligero. No tiene su propio sistema operativo, sino que **comparte el kernel del sistema operativo anfitrión** (en nuestro caso, el kernel de Linux que provee WSL 2 en Windows). Solo empaqueta la aplicación y sus dependencias directas.
+                    En cambio, un contenedor es mucho más ligero. No tiene su propio sistema operativo, sino que <b>comparte el kernel del sistema operativo anfitrión</b> (en nuestro caso, el kernel de Linux que provee WSL 2 en Windows). Solo empaqueta la aplicación y sus dependencias directas.
                 </p>
                 <p>Esta es la razón por la que los contenedores son tan rápidos para iniciar y tienen un rendimiento casi nativo. Para R y Shiny, esto significa que nuestra aplicación se ejecutará de forma eficiente sin el sobrecosto de una virtualización completa.</p>
             </section>

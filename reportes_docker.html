@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 7.2: Generación de Reportes con R y Docker</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff9900; /* AWS Orange */
+            --secondary-color: #232f3e; /* AWS Dark Blue */
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --info-color: #0db7ed; /* Docker Blue */
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1200px; margin: auto; }
+        h1, h2, h3, h4 {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        h1 { font-size: 4.5rem; color: var(--primary-color); margin-bottom: 0; }
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-top: 80px;
+        }
+        .subtitle { font-size: 1.6rem; color: var(--text-muted); margin-top: 0; margin-bottom: 80px; max-width: 800px; margin-left: auto; margin-right: auto;}
+        .section { margin-bottom: 100px; }
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 20px auto 40px;
+            text-align: left;
+        }
+        pre {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #c9d1d9;
+        }
+        .step-guide {
+            text-align: left;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .step {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .step h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        .docker-step {
+            border-left-color: var(--info-color);
+        }
+        .docker-step h3 {
+            color: var(--info-color);
+        }
+        .project-structure {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+        .project-structure ul { list-style-type: none; padding-left: 20px; }
+        .project-structure .highlight { color: var(--primary-color); font-weight: bold; }
+        .navigation-section { background: var(--secondary-color); padding: 60px 30px; border-radius: 15px; margin-top: 80px; }
+        .navigation-section h2 { border: none; }
+        .nav-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
+        .nav-button {
+            padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .back-button { background-color: var(--card-bg); color: var(--primary-color); border: 2px solid var(--primary-color); }
+        .next-button { background-color: var(--primary-color); color: var(--secondary-color); }
+        .nav-button:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Generación de Reportes con R y Docker</h1>
+            <p class="subtitle">Un Taller Completo: De la Plantilla R Markdown a la Ejecución en un Contenedor.</p>
+        </header>
+
+        <main>
+            <section class="section" id="introduccion">
+                <h2>El Taller Definitivo de Reportes</h2>
+                <p>
+                    En esta lección integraremos todo lo aprendido. Nuestro objetivo es implementar la funcionalidad de generación de reportes parametrizados en PDF. Pero lo haremos de la forma profesional, usando Docker para crear un entorno que garantice que el reporte se pueda generar siempre, sin importar la máquina donde se ejecute.
+                </p>
+                <p>
+                   Este taller te guiará a través de todo el proceso: primero construiremos los componentes en R (la plantilla y la lógica de Shiny) y luego crearemos el entorno de Docker para desplegar nuestra solución.
+                </p>
+            </section>
+            
+            <section class="section" id="taller-r">
+                <h2>Parte 1: Construyendo los Componentes en R</h2>
+                <p>Antes de pensar en Docker, necesitamos tener el código de R que genera el reporte.</p>
+                <div class="step-guide">
+                    <div class="step">
+                        <h3>Paso 1: La Plantilla `reporte.Rmd` (para PDF)</h3>
+                        <p>Este es el "molde" de nuestro reporte. En la raíz de tu proyecto, crea un archivo llamado `reporte.Rmd`. Su encabezado YAML define los `params` que recibirá desde la aplicación Shiny y, crucialmente, el formato de salida `pdf_document`.</p>
+                        <pre><code>---
+title: "Reporte Dinámico de Resultados ICFES"
+output: pdf_document
+params:
+  naturaleza_filtro: "OFICIAL"
+  variable_x: "punt_matematicas"
+  variable_y: "punt_lectura_critica"
+---
+
+&#96;&#96;&#96;{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2); library(dplyr); library(readr); library(knitr)
+
+datos_saber <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE) %>% na.omit()
+datos_filtrados <- datos_saber %>% filter(cole_naturaleza == params$naturaleza_filtro)
+&#96;&#96;&#96;
+
+## Análisis para Colegios de Naturaleza: `r params$naturaleza_filtro`
+Este reporte muestra el análisis para los colegios de tipo **`r params$naturaleza_filtro`**.
+
+### Gráfico de Dispersión
+&#96;&#96;&#96;{r analysis-plot}
+ggplot(datos_filtrados, aes_string(x = params$variable_x, y = params$variable_y)) +
+  geom_point(color = "darkblue", alpha = 0.5) +
+  theme_bw()
+&#96;&#96;&#96;
+
+### Tabla de Resumen Estadístico
+&#96;&#96;&#96;{r summary-table}
+datos_filtrados %>%
+  select(starts_with("punt_")) %>%
+  summary() %>%
+  kable(caption = "Resumen Estadístico", format = "latex", booktabs = TRUE)
+&#96;&#96;&#96;
+</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <h3>Paso 2: La Aplicación `app_reportes.R`</h3>
+                        <p>Ahora creamos la aplicación Shiny que servirá de interfaz. Esta app contendrá los filtros y la lógica para llamar a la plantilla Rmd. Fíjate cómo el `downloadHandler` está configurado para generar un archivo `.pdf`.</p>
+                        <pre><code>
+                            # ==============================================================================
+# APP_REPORTES.R - APLICACIÓN DEDICADA A LA GENERACIÓN DE REPORTES
+# Objetivo: Proveer una interfaz limpia para que los usuarios seleccionen
+#           filtros y generen un reporte parametrizado en PDF.
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+# SECCIÓN 1: CONFIGURACIÓN GLOBAL
+# ------------------------------------------------------------------------------
+
+# --- Carga de Librerías ---
+library(shiny)
+library(bslib)
+library(readr)
+library(dplyr)
+library(rmarkdown) # Necesaria para renderizar el reporte
+library(ggplot2)   # Necesaria para el gráfico de ejemplo
+
+# --- Carga y Procesamiento de Datos ---
+prepare_saber_data <- function(raw_data) {
+  raw_data %>%
+    na.omit()
+}
+
+datos_crudos <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE)
+datos_saber <- prepare_saber_data(datos_crudos)
+
+
+# ------------------------------------------------------------------------------
+# SECCIÓN 2: INTERFAZ DE USUARIO (UI)
+# ------------------------------------------------------------------------------
+ui <- fluidPage(
+  theme = bs_theme(bootswatch = "darkly"),
+  titlePanel("Generador de Reportes ICFES"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      h3("Parámetros del Reporte"),
+      p("Selecciona los filtros para generar tu reporte personalizado."),
+      
+      selectInput(
+        "naturaleza_select", "Naturaleza del Colegio:",
+        choices = c("OFICIAL", "NO OFICIAL"),
+        selected = "OFICIAL"
+      ),
+      selectInput(
+        "var_x", "Seleccione la Variable del Eje X:",
+        choices = names(datos_saber |> select(starts_with("punt_"))),
+        selected = "punt_matematicas"
+      ),
+      selectInput(
+        "var_y", "Seleccione la Variable del Eje Y:",
+        choices = names(datos_saber |> select(starts_with("punt_"))),
+        selected = "punt_lectura_critica"
+      ),
+      
+      hr(), 
+      
+      downloadButton(
+        outputId = "descargar_reporte",
+        label = "Generar y Descargar Reporte (PDF)",
+        icon = icon("file-pdf"),
+        class = "btn-primary btn-lg"
+      )
+    ),
+    
+    mainPanel(
+      h3("Bienvenido al Generador de Reportes"),
+      p("Usa los controles del panel izquierdo para configurar el contenido de tu reporte. Una vez que hayas hecho tus selecciones, haz clic en el botón 'Generar y Descargar'."),
+      p("El sistema tomará tus selecciones, las pasará a una plantilla de R Markdown y compilará un documento PDF listo para ser compartido."),
+      
+      h4("Vista Previa del Gráfico del Reporte"),
+      plotOutput("preview_plot")
+    )
+  )
+)
+
+
+# ------------------------------------------------------------------------------
+# SECCIÓN 3: LÓGICA DEL SERVIDOR (SERVER)
+# ------------------------------------------------------------------------------
+server <- function(input, output, session) {
+  
+  datos_filtrados_preview <- reactive({
+    req(input$naturaleza_select)
+    filter(datos_saber, cole_naturaleza == input$naturaleza_select)
+  })
+  
+  output$preview_plot <- renderPlot({
+    ggplot(datos_filtrados_preview(), aes_string(x = input$var_x, y = input$var_y)) +
+      geom_point(aes(color = cole_naturaleza), alpha = 0.6) +
+      labs(title = paste("Vista Previa: Relación entre", input$var_x, "y", input$var_y),
+           x = input$var_x, y = input$var_y,
+           color = "Naturaleza") +
+      theme_minimal()
+  }, res = 96)
+  
+  output$descargar_reporte <- downloadHandler(
+    filename = function() {
+      paste0("reporte-icfes-", Sys.Date(), "-", input$naturaleza_select, ".pdf")
+    },
+    content = function(file) {
+      showNotification("Generando reporte en PDF...", duration = 15, type = "message")
+      
+      params_list <- list(
+        naturaleza_filtro = input$naturaleza_select,
+        variable_x = input$var_x,
+        variable_y = input$var_y
+      )
+      
+      # Copiamos el reporte a un directorio temporal para evitar problemas de ruta
+      tempReport <- file.path(tempdir(), "reporte.Rmd")
+      file.copy("reporte.Rmd", tempReport, overwrite = TRUE)
+      
+      # Renderizamos el Rmd a PDF
+      rmarkdown::render(
+        tempReport,
+        output_file = file,
+        params = params_list,
+        envir = new.env(parent = globalenv())
+      )
+    }
+  )
+}
+
+
+# ------------------------------------------------------------------------------
+# SECCIÓN 4: EJECUCIÓN DE LA APLICACIÓN
+# ------------------------------------------------------------------------------
+shinyApp(ui, server)
+</code></pre>
+                    </div>
+                </div>
+            </section>
+
+             <section class="section" id="taller-docker">
+                <h2>Parte 2: Creando el Entorno con Docker</h2>
+                <p>Ahora que tenemos el código de R, lo "empaquetaremos" en un contenedor. Aquí es donde resolvemos el problema de las dependencias de `pandoc` y `LaTeX` de una vez por todas.</p>
+                <div class="step-guide">
+                    <div class="step docker-step">
+                        <h3>Paso 3: El `Dockerfile` con Dependencias para PDF</h3>
+                        <p>Este archivo le dice a Docker cómo construir el entorno. La parte más importante es la sección `RUN apt-get install`, donde instalamos explícitamente `pandoc` y una distribución de `LaTeX` (`texlive`).</p>
+                        <pre><code>FROM rocker/r-ver:4.4.1
+
+# 1. Instalar dependencias del sistema para PDF
+RUN apt-get update && apt-get install -y \
+    pandoc \
+    texlive-latex-base \
+    texlive-fonts-recommended \
+    texlive-latex-extra \
+    && rm -rf /var/lib/apt/lists/*
+
+# 2. Restaurar el entorno de R con renv
+RUN R -e "install.packages('renv')"
+COPY renv.lock renv.lock
+RUN R -e "renv::restore()"
+
+# 3. Copiar el código de la aplicación
+COPY . .
+
+# 4. Exponer el puerto y ejecutar
+EXPOSE 3838
+CMD ["R", "-e", "shiny::runApp('app_reportes.R', host = '0.0.0.0', port = 3838)"]
+</code></pre>
+                    </div>
+                    <div class="step docker-step">
+                        <h3>Paso 4: Construir y Ejecutar</h3>
+                        <p>Con el `Dockerfile` en la raíz de tu proyecto, abre una terminal y ejecuta los siguientes comandos.</p>
+                        <p><strong>1. Construir la Imagen (puede tardar por LaTeX):</strong></p>
+                        <pre><code>docker build -t shiny-icfes-app .</code></pre>
+                        <p><strong>2. Ejecutar el Contenedor:</strong></p>
+                        <pre><code>docker run -p 3838:3838 shiny-icfes-app</code></pre>
+                        <p>¡Listo! Abre tu navegador en <strong>http://localhost:3838</strong>. La aplicación se ejecutará y el botón de "Generar Reporte" funcionará a la perfección, generando un PDF sin errores.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="navigation-section">
+                <h2>El Ciclo Completo</h2>
+                <p>Ahora que tenemos un entorno robusto que garantiza la generación de reportes, podemos añadir con confianza las funcionalidades de descarga directa de otros artefactos.</p>
+                <div class="nav-buttons">
+                    <a href="docker.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 7.1: Docker</a>
+                    <a href="descargas_directas_docker.html" class="nav-button next-button">Siguiente: Descargas Directas <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+

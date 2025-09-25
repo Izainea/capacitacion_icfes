@@ -1,0 +1,51 @@
+---
+title: "Reporte Sencillo de Resultados ICFES"
+output: pdf_document
+params:
+  naturaleza_filtro: "OFICIAL"
+  variable_x: "punt_matematicas"
+  variable_y: "punt_lectura_critica"
+  datos_reporte: NULL
+---
+
+```{r setup, include=FALSE}
+# Opciones globales del chunk
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+# Librerías mínimas necesarias para el reporte
+library(ggplot2)
+library(dplyr)
+```
+
+## Análisis para Colegios de Naturaleza: `r params$naturaleza_filtro`
+
+Este reporte muestra el análisis de los puntajes para los colegios de tipo **`r params$naturaleza_filtro`**.
+El conjunto de datos contiene **`r nrow(params$datos_reporte)`** registros.
+
+### Gráfico de Dispersión
+
+```{r analysis-plot}
+# Se crea el gráfico usando el dataframe y las variables pasadas desde Shiny.
+# Se usa .data[[...]] para una evaluación segura de las variables.
+ggplot(params$datos_reporte, aes(x = .data[[params$variable_x]], y = .data[[params$variable_y]])) +
+  geom_point(alpha = 0.6, color = "steelblue") +
+  labs(
+    title = paste("Relación entre", params$variable_x, "y", params$variable_y),
+    x = params$variable_x,
+    y = params$variable_y
+  ) +
+  theme_light()
+```
+
+### Resumen Estadístico
+
+A continuación se presenta un resumen de los principales puntajes.
+
+```{r summary-table}
+# Usamos print(summary()) para una salida de texto simple que no depende de LaTeX.
+# Esta es la forma más robusta de mostrar un resumen sin añadir dependencias.
+params$datos_reporte %>%
+  select(starts_with("punt_")) %>%
+  summary() %>%
+  print()
+```

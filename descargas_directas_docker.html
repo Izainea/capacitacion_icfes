@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lección 7.2: Descargas Directas de Datos y Gráficos</title>
+    <title>Lección 7.3: Descargas Directas de Datos y Gráficos</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
             --primary-color: #ff9900; /* AWS Orange */
             --secondary-color: #232f3e; /* AWS Dark Blue */
             --text-color: #e0e0e0;
-            --text-muted: #a0a0a0; /* <-- CORREGIDO de #a0a0e0 a #a0a0a0 */
+            --text-muted: #a0a0a0; 
             --border-color: #333;
             --success-color: #28a745;
             --info-color: #5dade2;
@@ -50,7 +50,7 @@
             padding-bottom: 10px;
             margin-top: 80px;
         }
-        .subtitle { font-size: 1.6rem; color: var(--text-muted); margin-top: 0; margin-bottom: 80px; }
+        .subtitle { font-size: 1.6rem; color: var(--text-muted); margin-top: 0; margin-bottom: 80px; max-width: 800px; margin-left: auto; margin-right: auto;}
         .section { margin-bottom: 100px; }
         p {
             font-size: 1.2rem;
@@ -132,25 +132,25 @@
             <section class="section" id="introduccion">
                 <h2>Más Allá del Reporte: Descargas Instantáneas</h2>
                 <p>
-                    Los reportes parametrizados que vimos en la lección anterior son perfectos para crear documentos formales y completos. Sin embargo, a menudo los usuarios necesitan algo más simple y directo: la capacidad de descargar los datos con los que están trabajando o guardar una visualización específica como una imagen para usarla en una presentación.
+                    Los reportes parametrizados son perfectos para crear documentos formales. Sin embargo, a menudo los usuarios necesitan algo más simple y directo: la capacidad de descargar los datos con los que están trabajando o guardar una visualización específica como una imagen para usarla en una presentación.
                 </p>
                 <p>
-                    Implementar funcionalidades de descarga directa es una de las formas más efectivas de aumentar el valor y la usabilidad de tu aplicación Shiny. Transforma al usuario de un simple espectador a un participante activo que puede llevarse los resultados de su exploración para usarlos en sus propias herramientas, como Excel o PowerPoint.
+                    Implementar funcionalidades de descarga directa es una de las formas más efectivas de aumentar el valor de tu aplicación Shiny. En esta lección, trabajaremos sobre la aplicación de exploración visual (`app_artefactos.R`) para añadirle estos botones.
                 </p>
             </section>
             
             <section class="section" id="descarga-datos">
                 <h2>Taller 1: Descargar Datos Filtrados a CSV</h2>
-                <p>Añadiremos un botón que permita al usuario descargar un archivo `.csv` que contenga exactamente los datos que está viendo en la tabla, respetando cualquier filtro que haya aplicado.</p>
+                <p>Añadiremos un botón que permita al usuario descargar un archivo `.csv` que contenga exactamente los datos que está viendo, respetando cualquier filtro que haya aplicado.</p>
                 <div class="step-guide">
                     <div class="step">
                         <h3>Paso 1: Añadir el Botón de Descarga a la UI</h3>
-                        <p>Al igual que con los reportes, usamos un <code>downloadButton</code>. Lo colocaremos en el `sidebarPanel` junto al botón de generación de reportes.</p>
-                        <p><b>Acción:</b> Modifica tu archivo `ui.R`.</p>
-                        <pre><code># En ui.R, dentro del sidebarPanel(...)
-
-      # ... (botón de descargar_reporte existente) ...
+                        <p>Usamos un <code>downloadButton</code>. Lo colocaremos en el `sidebarPanel` de la aplicación de artefactos (`app_artefactos.R`).</p>
+                        <p><b>Acción:</b> Añadir a `app_artefactos.R` (UI).</p>
+                        <pre><code># En la UI de app_artefactos.R, dentro del sidebarPanel(...)
       
+      # ... selectInputs existentes ...
+      hr(),
       downloadButton(
         outputId = "descargar_datos",
         label = "Descargar Datos (CSV)",
@@ -160,30 +160,24 @@
                     </div>
                      <div class="step">
                         <h3>Paso 2: Implementar la Lógica de Descarga en el Server</h3>
-                        <p>Usamos nuevamente `downloadHandler`. La diferencia clave está en la función `content`. En lugar de renderizar un R Markdown, simplemente escribiremos el contenido de nuestro dataframe reactivo (`datos_filtrados()`) a un archivo CSV usando la función `write.csv()`.</p>
-                        <p><b>Acción:</b> Añade este bloque de código a tu `server.R`.</p>
-                        <pre><code># En server.R, dentro de la función server(...)
-
-  # --- Lógica para la descarga de datos CSV ---
+                        <p>Usamos `downloadHandler`. La diferencia clave con los reportes es que en la función `content`, simplemente escribimos nuestro dataframe reactivo (`datos_filtrados()`) a un archivo usando `write.csv()`.</p>
+                        <p><b>Acción:</b> Añadir al Server de `app_artefactos.R`.</p>
+                        <pre><code># En el Server de app_artefactos.R
+  
   output$descargar_datos <- downloadHandler(
-    
-    # 1. Definimos el nombre del archivo
     filename = function() {
       paste0("datos-filtrados-icfes-", Sys.Date(), ".csv")
     },
-    
-    # 2. Definimos el contenido a escribir en el archivo
     content = function(file) {
       # La clave: usamos el mismo conductor reactivo que alimenta
       # nuestros gráficos y tablas.
-      # Esto asegura que los datos descargados respeten los filtros.
       write.csv(datos_filtrados(), file, row.names = FALSE)
     }
   )
 </code></pre>
                         <div class="info-box">
                             <h4><i class="fas fa-link"></i> La Magia de la Reactividad</h4>
-                            <p>Observa cómo estamos reutilizando el conductor reactivo <code>datos_filtrados()</code>. Esta es la belleza de una buena arquitectura. La misma lógica que filtra los datos para el gráfico de dispersión y la tabla interactiva ahora también alimenta la función de descarga, garantizando consistencia total.</p>
+                            <p>Observa cómo estamos reutilizando el conductor reactivo <code>datos_filtrados()</code>. Esta es la belleza de una buena arquitectura. La misma lógica que filtra los datos para el gráfico de dispersión ahora también alimenta la función de descarga, garantizando consistencia total.</p>
                         </div>
                     </div>
                 </div>
@@ -196,11 +190,10 @@
                     <div class="step">
                         <h3>Paso 1: Añadir el Botón en la UI</h3>
                         <p>Colocaremos este botón directamente debajo del gráfico interactivo, en el `mainPanel`, para que esté contextualmente cerca de lo que se va a descargar.</p>
-                         <p><b>Acción:</b> Modifica tu `ui.R`.</p>
-                        <pre><code># En ui.R, dentro del tabPanel("Gráfico Interactivo")
-
-      # ... (plotlyOutput("scatter_plot") existente) ...
+                         <p><b>Acción:</b> Añadir a la UI de `app_artefactos.R`.</p>
+                        <pre><code># En la UI de app_artefactos.R, dentro del mainPanel(...)
       
+      plotlyOutput("scatter_plot"), # Gráfico existente
       hr(),
       downloadButton(
         outputId = "descargar_grafico",
@@ -211,11 +204,10 @@
                     </div>
                      <div class="step">
                         <h3>Paso 2: Implementar la Lógica de Guardado en el Server</h3>
-                        <p>El proceso es similar, pero en lugar de escribir datos, guardamos un gráfico. Para esto, usamos la función `ggsave()` de `ggplot2`. Un punto clave es que necesitamos **re-crear el objeto del gráfico** dentro del `downloadHandler` para poder pasárselo a `ggsave()`.</p>
-                         <p><b>Acción:</b> Añade este bloque de código a tu `server.R`.</p>
-                        <pre><code># En server.R, dentro de la función server(...)
+                        <p>Usamos la función `ggsave()` de `ggplot2`. Un punto clave es que necesitamos **re-crear el objeto del gráfico** dentro del `downloadHandler` para poder pasárselo a `ggsave()`. Esto nos da control total sobre la calidad de la imagen final (resolución, tamaño, etc.).</p>
+                         <p><b>Acción:</b> Añadir al Server de `app_artefactos.R`.</p>
+                        <pre><code># En el Server de app_artefactos.R
 
-  # --- Lógica para guardar el gráfico ---
   output$descargar_grafico <- downloadHandler(
     filename = function() {
       paste0("grafico-dispersion-", Sys.Date(), ".png")
@@ -227,10 +219,9 @@
         geom_point(aes(color = cole_naturaleza), alpha = 0.6) +
         labs(
           title = paste("Relación entre", input$var_x, "y", input$var_y),
-          x = input$var_x, y = input$var_y,
-          color = "Naturaleza Colegio"
+          x = input$var_x, y = input$var_y
         ) +
-        theme_minimal()
+        theme_minimal(base_size = 14)
         
       # Usamos ggsave para guardar el gráfico en el archivo
       ggsave(file, plot = plot_para_guardar, device = "png", width = 10, height = 6, dpi = 300)
@@ -243,9 +234,9 @@
             
             <section class="navigation-section">
                 <h2>¡Fin del Módulo 7!</h2>
-                <p>¡Felicitaciones! Has añadido las funcionalidades que transforman una aplicación de análisis en un verdadero producto de datos, permitiendo a los usuarios generar artefactos (reportes, datos, gráficos) para su propio trabajo. Has cerrado el ciclo de valor de la aplicación.</p>
+                <p>¡Felicitaciones! Has dominado las técnicas para hacer tu aplicación reproducible con Docker y has implementado las funcionalidades de generación de artefactos más importantes. Estás listo para el siguiente nivel de profesionalización.</p>
                 <div class="nav-buttons">
-                    <a href="reportes_parametrizados.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 7.1: Reportes</a>
+                    <a href="reportes_docker.html" class="nav-button back-button"><i class="fa-solid fa-arrow-left"></i> Lección 7.2: Reportes</a>
                     <a href="sesion_8.html" class="nav-button next-button">Siguiente Módulo <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </section>

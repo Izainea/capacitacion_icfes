@@ -144,56 +144,56 @@
                         <h3>Paso 1: La Plantilla `reporte.Rmd` (para PDF)</h3>
                         <p>Este es el "molde" de nuestro reporte. En la raíz de tu proyecto, crea un archivo llamado `reporte.Rmd`. Su encabezado YAML define los `params` que recibirá desde la aplicación Shiny y, crucialmente, el formato de salida `pdf_document`.</p>
                         <pre><code>---
-                        title: "Reporte Sencillo de Resultados ICFES"
-                        output: pdf_document
-                        params:
-                        naturaleza_filtro: "OFICIAL"
-                        variable_x: "punt_matematicas"
-                        variable_y: "punt_lectura_critica"
-                        datos_reporte: NULL
-                        ---
+title: "Reporte Sencillo de Resultados ICFES"
+output: pdf_document
+params:
+naturaleza_filtro: "OFICIAL"
+variable_x: "punt_matematicas"
+variable_y: "punt_lectura_critica"
+datos_reporte: NULL
+---
 
-                        ```{r setup, include=FALSE}
-                        # Opciones globales del chunk
-                        knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```{r setup, include=FALSE}
+# Opciones globales del chunk
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
-                        # Librerías mínimas necesarias para el reporte
-                        library(ggplot2)
-                        library(dplyr)
-                        ```
+# Librerías mínimas necesarias para el reporte
+library(ggplot2)
+library(dplyr)
+```
 
-                        ## Análisis para Colegios de Naturaleza: `r params$naturaleza_filtro`
+## Análisis para Colegios de Naturaleza: `r params$naturaleza_filtro`
 
-                        Este reporte muestra el análisis de los puntajes para los colegios de tipo **`r params$naturaleza_filtro`**.
-                        El conjunto de datos contiene **`r nrow(params$datos_reporte)`** registros.
+Este reporte muestra el análisis de los puntajes para los colegios de tipo **`r params$naturaleza_filtro`**.
+El conjunto de datos contiene **`r nrow(params$datos_reporte)`** registros.
 
-                        ### Gráfico de Dispersión
+### Gráfico de Dispersión
 
-                        ```{r analysis-plot}
-                        # Se crea el gráfico usando el dataframe y las variables pasadas desde Shiny.
-                        # Se usa .data[[...]] para una evaluación segura de las variables.
-                        ggplot(params$datos_reporte, aes(x = .data[[params$variable_x]], y = .data[[params$variable_y]])) +
-                        geom_point(alpha = 0.6, color = "steelblue") +
-                        labs(
-                            title = paste("Relación entre", params$variable_x, "y", params$variable_y),
-                            x = params$variable_x,
-                            y = params$variable_y
-                        ) +
-                        theme_light()
-                        ```
+```{r analysis-plot}
+# Se crea el gráfico usando el dataframe y las variables pasadas desde Shiny.
+# Se usa .data[[...]] para una evaluación segura de las variables.
+ggplot(params$datos_reporte, aes(x = .data[[params$variable_x]], y = .data[[params$variable_y]])) +
+geom_point(alpha = 0.6, color = "steelblue") +
+labs(
+    title = paste("Relación entre", params$variable_x, "y", params$variable_y),
+    x = params$variable_x,
+    y = params$variable_y
+) +
+theme_light()
+```
 
-                        ### Resumen Estadístico
+### Resumen Estadístico
 
-                        A continuación se presenta un resumen de los principales puntajes.
+A continuación se presenta un resumen de los principales puntajes.
 
-                        ```{r summary-table}
-                        # Usamos print(summary()) para una salida de texto simple que no depende de LaTeX.
-                        # Esta es la forma más robusta de mostrar un resumen sin añadir dependencias.
-                        params$datos_reporte %>%
-                        select(starts_with("punt_")) %>%
-                        summary() %>%
-                        print()
-                        ```
+```{r summary-table}
+# Usamos print(summary()) para una salida de texto simple que no depende de LaTeX.
+# Esta es la forma más robusta de mostrar un resumen sin añadir dependencias.
+params$datos_reporte %>%
+select(starts_with("punt_")) %>%
+summary() %>%
+print()
+```
                         </code></pre>
                     </div>
 
@@ -201,118 +201,118 @@
                         <h3>Paso 2: La Aplicación `app_reportes.R`</h3>
                         <p>Ahora creamos la aplicación Shiny que servirá de interfaz. Esta app contendrá los filtros y la lógica para llamar a la plantilla Rmd. Fíjate cómo el `downloadHandler` está configurado para generar un archivo `.pdf`.</p>
                         <pre><code>
-                        # ==============================================================================
-                        # APP_REPORTES.R - APLICACIÓN DEDICADA A LA GENERACIÓN DE REPORTES
-                        # Versión Corregida:
-                        # 1. Pasa el dataframe filtrado como parámetro al Rmd para evitar errores de ruta.
-                        # 2. Usa .data[[...]] en ggplot() para evitar la advertencia de 'aes_string()'.
-                        # 3. Mejora el manejo de notificaciones y errores.
-                        # ==============================================================================
+# ==============================================================================
+# APP_REPORTES.R - APLICACIÓN DEDICADA A LA GENERACIÓN DE REPORTES
+# Versión Corregida:
+# 1. Pasa el dataframe filtrado como parámetro al Rmd para evitar errores de ruta.
+# 2. Usa .data[[...]] en ggplot() para evitar la advertencia de 'aes_string()'.
+# 3. Mejora el manejo de notificaciones y errores.
+# ==============================================================================
 
-                        # --- Carga de Librerías ---
-                        library(shiny)
-                        library(bslib)
-                        library(readr)
-                        library(dplyr)
-                        library(rmarkdown)
-                        library(ggplot2)
+# --- Carga de Librerías ---
+library(shiny)
+library(bslib)
+library(readr)
+library(dplyr)
+library(rmarkdown)
+library(ggplot2)
 
-                        # --- Carga y Procesamiento de Datos ---
-                        # Los datos se cargan UNA SOLA VEZ al iniciar la app.
-                        datos_saber <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE) %>%
-                        na.omit()
+# --- Carga y Procesamiento de Datos ---
+# Los datos se cargan UNA SOLA VEZ al iniciar la app.
+datos_saber <- read_delim("data/raw/Examen_Saber_11_20242.txt", delim = ";", show_col_types = FALSE) %>%
+na.omit()
 
-                        # --- Interfaz de Usuario (UI) ---
-                        # (La UI no necesita cambios, se mantiene idéntica)
-                        ui <- fluidPage(
-                        theme = bs_theme(bootswatch = "darkly"),
-                        titlePanel("Generador de Reportes ICFES"),
-                        sidebarLayout(
-                            sidebarPanel(
-                            h3("Parámetros del Reporte"),
-                            p("Selecciona los filtros para generar tu reporte personalizado."),
-                            selectInput("naturaleza_select", "Naturaleza del Colegio:",
-                                        choices = c("OFICIAL", "NO OFICIAL"), selected = "OFICIAL"),
-                            selectInput("var_x", "Seleccione la Variable del Eje X:",
-                                        choices = names(datos_saber |> select(starts_with("punt_"))), selected = "punt_matematicas"),
-                            selectInput("var_y", "Seleccione la Variable del Eje Y:",
-                                        choices = names(datos_saber |> select(starts_with("punt_"))), selected = "punt_lectura_critica"),
-                            hr(),
-                            downloadButton("descargar_reporte", "Generar y Descargar Reporte (PDF)", icon = icon("file-pdf"), class = "btn-primary btn-lg")
-                            ),
-                            mainPanel(
-                            h3("Bienvenido al Generador de Reportes"),
-                            p("Usa los controles del panel izquierdo para configurar el contenido de tu reporte. Una vez que hayas hecho tus selecciones, haz clic en el botón 'Generar y Descargar'."),
-                            p("El sistema tomará tus selecciones, las pasará a una plantilla de R Markdown y compilará un documento PDF listo para ser compartido."),
-                            h4("Vista Previa del Gráfico del Reporte"),
-                            plotOutput("preview_plot")
-                            )
-                        )
-                        )
+# --- Interfaz de Usuario (UI) ---
+# (La UI no necesita cambios, se mantiene idéntica)
+ui <- fluidPage(
+theme = bs_theme(bootswatch = "darkly"),
+titlePanel("Generador de Reportes ICFES"),
+sidebarLayout(
+    sidebarPanel(
+    h3("Parámetros del Reporte"),
+    p("Selecciona los filtros para generar tu reporte personalizado."),
+    selectInput("naturaleza_select", "Naturaleza del Colegio:",
+                choices = c("OFICIAL", "NO OFICIAL"), selected = "OFICIAL"),
+    selectInput("var_x", "Seleccione la Variable del Eje X:",
+                choices = names(datos_saber |> select(starts_with("punt_"))), selected = "punt_matematicas"),
+    selectInput("var_y", "Seleccione la Variable del Eje Y:",
+                choices = names(datos_saber |> select(starts_with("punt_"))), selected = "punt_lectura_critica"),
+    hr(),
+    downloadButton("descargar_reporte", "Generar y Descargar Reporte (PDF)", icon = icon("file-pdf"), class = "btn-primary btn-lg")
+    ),
+    mainPanel(
+    h3("Bienvenido al Generador de Reportes"),
+    p("Usa los controles del panel izquierdo para configurar el contenido de tu reporte. Una vez que hayas hecho tus selecciones, haz clic en el botón 'Generar y Descargar'."),
+    p("El sistema tomará tus selecciones, las pasará a una plantilla de R Markdown y compilará un documento PDF listo para ser compartido."),
+    h4("Vista Previa del Gráfico del Reporte"),
+    plotOutput("preview_plot")
+    )
+)
+)
 
-                        # --- Lógica del Servidor (SERVER) ---
-                        server <- function(input, output, session) {
+# --- Lógica del Servidor (SERVER) ---
+server <- function(input, output, session) {
 
-                        datos_filtrados_preview <- reactive({
-                            req(input$naturaleza_select)
-                            filter(datos_saber, cole_naturaleza == input$naturaleza_select)
-                        })
+datos_filtrados_preview <- reactive({
+    req(input$naturaleza_select)
+    filter(datos_saber, cole_naturaleza == input$naturaleza_select)
+})
 
-                        output$preview_plot <- renderPlot({
-                            # Advertencia solucionada: cambiamos aes_string() por aes() con .data
-                            ggplot(datos_filtrados_preview(), aes(x = .data[[input$var_x]], y = .data[[input$var_y]])) +
-                            geom_point(aes(color = cole_naturaleza), alpha = 0.6) +
-                            labs(title = paste("Vista Previa: Relación entre", input$var_x, "y", input$var_y),
-                                x = input$var_x, y = input$var_y, color = "Naturaleza") +
-                            theme_minimal()
-                        }, res = 96)
+output$preview_plot <- renderPlot({
+    # Advertencia solucionada: cambiamos aes_string() por aes() con .data
+    ggplot(datos_filtrados_preview(), aes(x = .data[[input$var_x]], y = .data[[input$var_y]])) +
+    geom_point(aes(color = cole_naturaleza), alpha = 0.6) +
+    labs(title = paste("Vista Previa: Relación entre", input$var_x, "y", input$var_y),
+        x = input$var_x, y = input$var_y, color = "Naturaleza") +
+    theme_minimal()
+}, res = 96)
 
-                        output$descargar_reporte <- downloadHandler(
-                            filename = function() {
-                            paste0("reporte-icfes-", Sys.Date(), "-", input$naturaleza_select, ".pdf")
-                            },
-                            content = function(file) {
-                            # Usamos tryCatch para manejar errores de forma elegante
-                            tryCatch({
-                                # Mejora: La notificación persiste hasta que termina el proceso
-                                id <- showNotification("Generando reporte en PDF...", duration = NULL, closeButton = FALSE)
-                                on.exit(removeNotification(id), add = TRUE)
+output$descargar_reporte <- downloadHandler(
+    filename = function() {
+    paste0("reporte-icfes-", Sys.Date(), "-", input$naturaleza_select, ".pdf")
+    },
+    content = function(file) {
+    # Usamos tryCatch para manejar errores de forma elegante
+    tryCatch({
+        # Mejora: La notificación persiste hasta que termina el proceso
+        id <- showNotification("Generando reporte en PDF...", duration = NULL, closeButton = FALSE)
+        on.exit(removeNotification(id), add = TRUE)
 
-                                # 1. Filtramos los datos DENTRO de la app.
-                                datos_para_el_reporte <- datos_saber %>%
-                                filter(cole_naturaleza == input$naturaleza_select)
+        # 1. Filtramos los datos DENTRO de la app.
+        datos_para_el_reporte <- datos_saber %>%
+        filter(cole_naturaleza == input$naturaleza_select)
 
-                                # 2. Creamos la lista de parámetros, incluyendo el NUEVO dataframe.
-                                params_list <- list(
-                                naturaleza_filtro = input$naturaleza_select,
-                                variable_x = input$var_x,
-                                variable_y = input$var_y,
-                                datos_reporte = datos_para_el_reporte
-                                )
+        # 2. Creamos la lista de parámetros, incluyendo el NUEVO dataframe.
+        params_list <- list(
+        naturaleza_filtro = input$naturaleza_select,
+        variable_x = input$var_x,
+        variable_y = input$var_y,
+        datos_reporte = datos_para_el_reporte
+        )
 
-                                # Copiamos el reporte a un directorio temporal para evitar problemas de permisos/rutas
-                                tempReport <- file.path(tempdir(), "reporte.Rmd")
-                                file.copy("reporte.Rmd", tempReport, overwrite = TRUE)
+        # Copiamos el reporte a un directorio temporal para evitar problemas de permisos/rutas
+        tempReport <- file.path(tempdir(), "reporte.Rmd")
+        file.copy("reporte.Rmd", tempReport, overwrite = TRUE)
 
-                                # Renderizamos el Rmd a PDF
-                                rmarkdown::render(
-                                tempReport,
-                                output_file = file,
-                                params = params_list,
-                                envir = new.env(parent = globalenv())
-                                )
-                            }, error = function(e) {
-                                # Si ocurre un error, muéstralo en una notificación clara
-                                showNotification(paste("Error al generar el reporte:", e$message), duration = NULL, type = "error")
-                                # Devolvemos NULL para que no intente descargar un archivo fallido
-                                return(NULL)
-                            })
-                            }
-                        )
-                        }
+        # Renderizamos el Rmd a PDF
+        rmarkdown::render(
+        tempReport,
+        output_file = file,
+        params = params_list,
+        envir = new.env(parent = globalenv())
+        )
+    }, error = function(e) {
+        # Si ocurre un error, muéstralo en una notificación clara
+        showNotification(paste("Error al generar el reporte:", e$message), duration = NULL, type = "error")
+        # Devolvemos NULL para que no intente descargar un archivo fallido
+        return(NULL)
+    })
+    }
+)
+}
 
-                        # --- Ejecución ---
-                        shinyApp(ui, server)
+# --- Ejecución ---
+shinyApp(ui, server)
 
 
                         </code></pre>
@@ -328,59 +328,59 @@
                         <h3>Paso 3: El `Dockerfile` con Dependencias para PDF</h3>
                         <p>Este archivo le dice a Docker cómo construir el entorno. La parte más importante es la sección `RUN apt-get install`, donde instalamos explícitamente `pandoc` y una distribución de `LaTeX` (`texlive`).</p>
                         <pre><code># ==============================================================================
-                        # DOCKERFILE PARA LA APLICACIÓN SHINY ICFES
-                        # Objetivo: Crear un entorno reproducible y aislado para ejecutar la aplicación.
-                        # Cambio clave: Se añade 'texlive-latex-recommended' para soportar tablas
-                        #               complejas en los reportes PDF generados con R Markdown.
-                        # ==============================================================================
+# DOCKERFILE PARA LA APLICACIÓN SHINY ICFES
+# Objetivo: Crear un entorno reproducible y aislado para ejecutar la aplicación.
+# Cambio clave: Se añade 'texlive-latex-recommended' para soportar tablas
+#               complejas en los reportes PDF generados con R Markdown.
+# ==============================================================================
 
-                        # Usamos una imagen base oficial de R mantenida por el proyecto Rocker.
-                        # Se especifica una versión concreta (4.4.1) para asegurar la reproducibilidad.
-                        FROM rocker/r-ver:4.4.1
+# Usamos una imagen base oficial de R mantenida por el proyecto Rocker.
+# Se especifica una versión concreta (4.4.1) para asegurar la reproducibilidad.
+FROM rocker/r-ver:4.4.1
 
-                        # 1. Instalar dependencias del sistema operativo (APT)
-                        #    - pandoc: Necesario para R Markdown.
-                        #    - texlive-*: Dependencias de LaTeX para generar PDFs.
-                        #      'texlive-latex-recommended' es la adición clave que incluye el paquete
-                        #      'booktabs' necesario para las tablas con kable().
-                        #    - lib*: Librerías de desarrollo para compilar paquetes de R.
-                        RUN apt-get update && apt-get install -y \
-                            pandoc \
-                            libcurl4-openssl-dev \
-                            libssl-dev \
-                            libxml2-dev \
-                            libpng-dev \
-                            libjpeg-dev \
-                            texlive-latex-base \
-                            texlive-latex-recommended \
-                            texlive-fonts-recommended \
-                            texlive-fonts-extra \
-                            texlive-latex-extra \
-                            && rm -rf /var/lib/apt/lists/*
+# 1. Instalar dependencias del sistema operativo (APT)
+#    - pandoc: Necesario para R Markdown.
+#    - texlive-*: Dependencias de LaTeX para generar PDFs.
+#      'texlive-latex-recommended' es la adición clave que incluye el paquete
+#      'booktabs' necesario para las tablas con kable().
+#    - lib*: Librerías de desarrollo para compilar paquetes de R.
+RUN apt-get update && apt-get install -y \
+    pandoc \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    libpng-dev \
+    libjpeg-dev \
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-latex-extra \
+    && rm -rf /var/lib/apt/lists/*
 
-                        # 2. Establecer un directorio de trabajo limpio dentro del contenedor.
-                        #    Todos los comandos siguientes se ejecutarán desde /app.
-                        WORKDIR /app
+# 2. Establecer un directorio de trabajo limpio dentro del contenedor.
+#    Todos los comandos siguientes se ejecutarán desde /app.
+WORKDIR /app
 
-                        # 3. Copiar TODO el proyecto al directorio de trabajo del contenedor.
-                        #    Esto incluye app.R, reporte.Rmd, renv.lock, .Rprofile y la carpeta de datos.
-                        COPY . .
+# 3. Copiar TODO el proyecto al directorio de trabajo del contenedor.
+#    Esto incluye app.R, reporte.Rmd, renv.lock, .Rprofile y la carpeta de datos.
+COPY . .
 
-                        # 4. Instalar 'renv' y restaurar las dependencias del proyecto.
-                        #    'renv::restore()' leerá el archivo 'renv.lock' y instalará las versiones
-                        #    exactas de los paquetes de R, garantizando la reproducibilidad.
-                        RUN R -e "install.packages('renv')"
-                        RUN R -e "renv::restore()"
+# 4. Instalar 'renv' y restaurar las dependencias del proyecto.
+#    'renv::restore()' leerá el archivo 'renv.lock' y instalará las versiones
+#    exactas de los paquetes de R, garantizando la reproducibilidad.
+RUN R -e "install.packages('renv')"
+RUN R -e "renv::restore()"
 
-                        # 5. Exponer el puerto que Shiny usará.
-                        #    Esto informa a Docker que el contenedor escuchará en el puerto 3838,
-                        #    pero no lo publica automáticamente. Se debe usar 'docker run -p'.
-                        EXPOSE 3838
+# 5. Exponer el puerto que Shiny usará.
+#    Esto informa a Docker que el contenedor escuchará en el puerto 3838,
+#    pero no lo publica automáticamente. Se debe usar 'docker run -p'.
+EXPOSE 3838
 
-                        # 6. Comando para ejecutar la aplicación al iniciar el contenedor.
-                        #    - host = '0.0.0.0' permite que la app sea accesible desde fuera del contenedor.
-                        #    - port = 3838 coincide con el puerto expuesto.
-                        CMD ["R", "-e", "shiny::runApp('app_reportes.R', host = '0.0.0.0', port = 3838)"]
+# 6. Comando para ejecutar la aplicación al iniciar el contenedor.
+#    - host = '0.0.0.0' permite que la app sea accesible desde fuera del contenedor.
+#    - port = 3838 coincide con el puerto expuesto.
+CMD ["R", "-e", "shiny::runApp('app_reportes.R', host = '0.0.0.0', port = 3838)"]
 
                         </code></pre>
                     </div>

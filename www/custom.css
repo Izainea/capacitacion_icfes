@@ -1,0 +1,82 @@
+/* --- www/custom.css --- */
+/* Hoja de estilos para aplicar el branding del ICFES a un shinydashboard */
+
+/* --- Reglas Generales --- */
+/* Aplicar la tipografía oficial 'Nunito Sans' a los textos principales */
+.content-wrapper, .main-sidebar, .box-body, .box-title, .value-box-content {
+  font-family: 'Nunito Sans', sans-serif !important;
+}
+
+/* --- Personalización de la Cabecera (Header) --- */
+/* Aplicar el color azul oficial del ICFES al fondo */
+.skin-blue .main-header .navbar,
+.skin-blue .main-header .logo {
+  background-color: #004884 !important; /* Azul ICFES Oficial */
+}
+
+/* Estilos para la imagen del logo y el título en la cabecera */
+.skin-blue .main-header .logo .logo-image {
+    height: 35px; /* Ajusta la altura del logo */
+    padding-right: 15px; /* Espacio entre el logo y el texto */
+    margin-top: -8px; /* Ajuste vertical fino */
+    display: inline-block;
+}
+.skin-blue .main-header .logo {
+    font-family: 'Teko', sans-serif; /* Mantenemos Teko para un título impactante */
+}
+
+/* --- Personalización del Menú Lateral (Sidebar) --- */
+/* Aplicar el amarillo de acento a los ítems activos o al pasar el ratón */
+.skin-blue .sidebar-menu > li.active > a,
+.skin-blue .sidebar-menu > li:hover > a {
+  background-color: #F9C22E !important; /* Amarillo Acento ICFES */
+  color: #004884 !important; /* Texto azul para contraste */
+  font-weight: bold !important;
+}
+
+/* --- Personalización de los Contenedores (Boxes) --- */
+/* Aplicar el azul institucional a las cabeceras de los boxes */
+.box.box-solid.box-primary > .box-header {
+  background-color: #004884 !important;
+}
+
+/* --- Personalización de las Tarjetas de KPIs (ValueBox) --- */
+/* Cambiar el color de fondo de las ValueBox */
+.small-box {
+  background-color: #1e1e1e !important; /* Un fondo oscuro coherente */
+  border-top: 4px solid #F9C22E; /* Borde superior con el color de acento */
+}
+
+/* Estilos para el texto grande del KPI */
+.small-box h3 {
+  font-family: 'Teko', sans-serif !important;
+  font-size: 44px !important;
+  color: #FFFFFF !important;
+}
+
+/* Estilos para el icono del KPI */
+.small-box .icon-large {
+  color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* --- Estilos para el Resultado de la Predicción --- */
+.prediction-output {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    border-top: 4px solid #004884;
+}
+
+.prediction-output h3 {
+    color: #a0a0a0; /* Texto muted */
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 24px;
+}
+
+.prediction-output h1 {
+    color: #F9C22E; /* Amarillo de acento para el resultado */
+    font-family: 'Teko', sans-serif;
+    font-size: 5rem;
+    margin-top: 10px;
+}

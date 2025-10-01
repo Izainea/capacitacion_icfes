@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad Final: Planificación de Arquitectura con IA</title>
+    
+    <!-- Google Fonts: Nunito Sans (ICFES Oficial) y Teko -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --icfes-light-blue: #5dade2;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: var(--icfes-light-blue);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        h1, h2, h3, h4 { font-family: 'Teko', sans-serif; font-weight: 600; letter-spacing: 1px; color: var(--primary-color); }
+        .main-header {
+            background: var(--secondary-color);
+            padding: 60px 20px;
+            border-bottom: 4px solid var(--primary-color);
+            text-align: center;
+        }
+        .main-header h1 { font-size: 3.5rem; }
+        .main-header p { font-size: 1.3rem; color: var(--text-muted); max-width: 800px; margin: 10px auto 0; }
+        .section { padding: 40px 0; text-align: left; }
+        .section-title {
+            font-size: 2.8rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        .content-block {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--secondary-color);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        p, ul, ol { font-size: 1.1rem; color: var(--text-muted); }
+        li { margin-bottom: 10px; }
+        b, strong { color: var(--text-color); }
+        code.inline-code {
+            background-color: #2a2a2a;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            color: var(--icfes-light-blue);
+        }
+        pre[class*="language-"] {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .nav-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover { background-color: #fbd25b; }
+        .nav-button.back { background-color: #444; color: var(--text-color); }
+        .nav-button.back:hover { background-color: #555; }
+        .prompt-box {
+            background-color: #2a2a2a;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--link-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        .llm-response {
+            background-color: rgba(40, 167, 69, 0.05);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #28a745;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1>Actividad: Planificación de Arquitectura con IA</h1>
+            <p>Usando un LLM como co-piloto para diseñar un dashboard efectivo antes de escribir una línea de código.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="section">
+            <h2 class="section-title">El Cambio de Rol: De Desarrollador a Arquitecto</h2>
+            <div class="content-block">
+                <p>Hemos aprendido a construir un dashboard profesional. Ahora, aprenderemos a <strong>diseñarlo</strong>. El mayor riesgo en un proyecto de datos no es un error en el código, sino construir perfectamente la solución incorrecta.</p>
+                <p>En esta actividad, usaremos un Large Language Model (LLM) como un "socio estratégico" para planificar un dashboard desde cero, asegurando que responda a necesidades reales y sea intuitivo para el usuario final.</p>
+                
+                <h4><i class="fa-solid fa-bullseye"></i> Nuestro Caso de Estudio</h4>
+                <p><strong>El problema:</strong> El ICFES necesita crear un dashboard para que las <strong>directivas de colegios</strong> puedan comparar los resultados de sus estudiantes en las pruebas Saber 11 con los promedios nacionales y regionales.</p>
+            </div>
+
+            <h2 class="section-title">Fase 1: Ideación y Definición de KPIs (El "Qué")</h2>
+            <p>Antes de pensar en gráficos, debemos definir qué métricas son verdaderamente importantes para un director de colegio. Le pediremos al LLM que actúe como un experto en la materia.</p>
+            
+            <div class="content-block">
+                <h3><i class="fa-solid fa-keyboard"></i> Prompt para el LLM</h3>
+                <div class="prompt-box">
+                    <p>Actúa como un experto en evaluación educativa y consultor del ICFES. Para un dashboard destinado a directores de colegios sobre los resultados de Saber 11, define:</p>
+                    <ol>
+                        <li>Los 3 KPIs más importantes que deben ver de un vistazo.</li>
+                        <li>Los filtros interactivos esenciales que necesitarían (ej. por año, por género).</li>
+                        <li>Una pregunta clave que este dashboard debería ayudarles a responder.</li>
+                    </ol>
+                </div>
+                
+                <h3><i class="fa-solid fa-lightbulb"></i> Ejemplo de Respuesta del LLM</h3>
+                <div class="llm-response">
+                    <p><strong>KPIs Esenciales:</strong></p>
+                    <ol>
+                        <li><strong>Puntaje Global Promedio del Colegio:</strong> Comparado con el promedio nacional y regional.</li>
+                        <li><strong>Brecha de Desempeño:</strong> La diferencia porcentual entre el puntaje del colegio y el promedio nacional.</li>
+                        <li><strong>Distribución por Niveles de Desempeño:</strong> Porcentaje de estudiantes en los niveles Insuficiente, Mínimo, Satisfactorio y Avanzado.</li>
+                    </ol>
+                    <p><strong>Filtros Interactivos:</strong> Año de la prueba, Área de conocimiento (Matemáticas, Lectura, etc.), y Género.</p>
+                    <p><strong>Pregunta Clave a Responder:</strong> "¿En qué áreas específicas estamos por encima o por debajo del promedio nacional, y cómo ha evolucionado esta tendencia en los últimos 3 años?"</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Fase 2: Estructura y Narrativa (El "Cómo")</h2>
+            <p>Con los KPIs definidos, ahora traducimos estas ideas a la estructura de <code class="inline-code">shinydashboard</code>.</p>
+
+            <div class="content-block">
+                <h3><i class="fa-solid fa-keyboard"></i> Prompt para el LLM</h3>
+                <div class="prompt-box">
+                    <p>Excelente. Basado en los KPIs y filtros de la conversación anterior, diseña la estructura de la UI para un `shinydashboard`. Especifica:</p>
+                    <ol>
+                        <li>Qué elementos irían en el `sidebarMenu`.</li>
+                        <li>Cómo organizarías los 3 KPIs principales en la pestaña "Visión General" usando `valueBox`.</li>
+                        <li>Qué gráficos pondrías en una segunda pestaña llamada "Análisis Profundo" usando `tabBox`.</li>
+                    </ol>
+                </div>
+
+                <h3><i class="fa-solid fa-sitemap"></i> Ejemplo de Respuesta del LLM</h3>
+                <div class="llm-response">
+                    <p><strong>`sidebarMenu`:</strong></p>
+                    <ul>
+                        <li>`menuItem("Visión General", tabName = "vision_general", icon = icon("dashboard"))`</li>
+                        <li>`menuItem("Análisis Profundo", tabName = "analisis_profundo", icon = icon("chart-bar"))`</li>
+                    </ul>
+                    <p><strong>Pestaña "Visión General":</strong></p>
+                    <ul>
+                        <li>Un `fluidRow` con tres `valueBoxOutput`: uno para el Puntaje Promedio, otro para la Brecha de Desempeño (con un ícono de flecha hacia arriba o abajo), y un tercero para el porcentaje de estudiantes en nivel "Avanzado".</li>
+                    </ul>
+                    <p><strong>Pestaña "Análisis Profundo":</strong></p>
+                    <ul>
+                        <li>Un `box` con los filtros. Al lado, un `tabBox` con dos `tabPanel`:</li>
+                        <li><strong>Panel 1: "Evolución Histórica":</strong> Un gráfico de líneas mostrando el puntaje promedio del colegio vs. el nacional a lo largo de los años.</li>
+                        <li><strong>Panel 2: "Distribución por Área":</strong> Un gráfico de barras comparando el puntaje del colegio con el nacional para cada área de conocimiento.</li>
+                    </ul>
+                </div>
+            </div>
+
+             <h2 class="section-title">Fase 3: Auditoría de UX y Simulación (El "Para Quién")</h2>
+            <p>Finalmente, antes de codificar, simulamos la reacción de un usuario final para anticipar problemas de usabilidad.</p>
+            
+            <div class="content-block">
+                <h3><i class="fa-solid fa-keyboard"></i> Prompt para el LLM</h3>
+                <div class="prompt-box">
+                    <p>Último paso. Actúa como el rector de un colegio público, con poco tiempo y conocimientos estadísticos limitados. Revisa la estructura del dashboard que acabamos de diseñar.</p>
+                    <ol>
+                        <li>¿Qué es lo primero que te genera confusión o te parece demasiado complejo?</li>
+                        <li>¿Hay algún término como "Brecha de Desempeño" que necesite una explicación más simple?</li>
+                    </ol>
+                </div>
+                
+                <h3><i class="fa-solid fa-user-check"></i> Ejemplo de Respuesta del LLM</h3>
+                <div class="llm-response">
+                    <p>"Entiendo la idea general, pero 'Brecha de Desempeño' me suena muy técnico. ¿Podríamos llamarlo 'Diferencia vs. el Promedio Nacional' y mostrar un número simple como '+5 puntos' o '-3 puntos'? Sería más directo.</p>
+                    <p>Además, en el gráfico de 'Distribución por Área', me gustaría poder hacer clic en una barra (ej. Matemáticas) y que abajo aparezca una tabla simple con el listado de los estudiantes con desempeños más bajos en esa área. Eso me permitiría tomar acciones concretas."</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="layouts_avanzados.html" class="nav-button back"><i class="fa-solid fa-arrow-left"></i> Lección Anterior</a>
+                <a href="index.html" class="nav-button">Finalizar Módulo <i class="fa-solid fa-check"></i></a>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

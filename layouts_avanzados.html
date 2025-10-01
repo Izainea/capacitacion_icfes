@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 3: Layouts Avanzados y Buenas Prácticas</title>
+    
+    <!-- Google Fonts: Nunito Sans (ICFES Oficial) y Teko -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --icfes-light-blue: #5dade2;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: var(--icfes-light-blue);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        h1, h2, h3, h4 { font-family: 'Teko', sans-serif; font-weight: 600; letter-spacing: 1px; color: var(--primary-color); }
+        .main-header {
+            background: var(--secondary-color);
+            padding: 60px 20px;
+            border-bottom: 4px solid var(--primary-color);
+            text-align: center;
+        }
+        .main-header h1 { font-size: 3.5rem; }
+        .main-header p { font-size: 1.3rem; color: var(--text-muted); max-width: 800px; margin: 10px auto 0; }
+        .section { padding: 40px 0; text-align: left; }
+        .section-title {
+            font-size: 2.8rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        .content-block {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--secondary-color);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        p, ul, ol { font-size: 1.1rem; color: var(--text-muted); }
+        li { margin-bottom: 10px; }
+        b, strong { color: var(--text-color); }
+        code.inline-code {
+            background-color: #2a2a2a;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            color: var(--icfes-light-blue);
+        }
+        pre[class*="language-"] {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .nav-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover { background-color: #fbd25b; }
+        .nav-button.back { background-color: #444; color: var(--text-color); }
+        .nav-button.back:hover { background-color: #555; }
+        .alert {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            border-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1>Layouts Avanzados y Buenas Prácticas</h1>
+            <p>Cómo presentar la información de manera efectiva para crear una experiencia de usuario clara e intuitiva.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="section">
+            <div class="content-block">
+                <p>Ya tenemos una estructura sólida y un branding institucional. Ahora, el siguiente paso es la <strong>arquitectura de la información</strong>. Un buen layout no solo organiza el contenido, sino que guía la atención del usuario hacia los hallazgos más importantes.</p>
+                <p>`shinydashboard` nos proporciona componentes especializados para lograrlo, como las tarjetas de métricas (<code class="inline-code">valueBox</code> e <code class="inline-code">infoBox</code>) y los contenedores con pestañas (<code class="inline-code">tabBox</code>).</p>
+            </div>
+
+            <h2 class="section-title">1. Tarjetas de Métricas de Alto Impacto</h2>
+            <p>Los Indicadores Clave de Rendimiento (KPIs) deben ser lo primero que un usuario vea. Las funciones <code class="inline-code">valueBox</code> e <code class="inline-code">infoBox</code> están diseñadas para este propósito.</p>
+            
+            <div class="content-block">
+                <h3><i class="fa-solid fa-gauge-high"></i> Usando `valueBox` para KPIs Principales</h3>
+                <p>El <code class="inline-code">valueBox</code> es ideal para mostrar un número grande y un subtítulo. Se compone de tres argumentos principales: <code class="inline-code">value</code>, <code class="inline-code">subtitle</code>, e <code class="inline-code">icon</code>.</p>
+                
+                <h4>Implementación en la UI (`app.R`):</h4>
+<pre><code class="language-r">
+# En el dashboardBody, dentro de un fluidRow
+fluidRow(
+    # La UI define un espacio para la tarjeta
+    valueBoxOutput("puntaje_promedio_kpi", width = 4)
+)
+</code></pre>
+
+                <h4>Implementación en el Server (`app.R`):</h4>
+<pre><code class="language-r">
+# El server calcula y renderiza el contenido de la tarjeta
+output$puntaje_promedio_kpi <- renderValueBox({
+    
+    # Lógica de cálculo (ejemplo)
+    promedio <- round(mean(datos_saber$punt_global, na.rm = TRUE), 1)
+
+    valueBox(
+        value = promedio,
+        subtitle = "Puntaje Global Promedio",
+        icon = icon("star-half-alt"),
+        color = "yellow" # Corresponde al amarillo del ICFES
+    )
+})
+</code></pre>
+            </div>
+
+            <h2 class="section-title">2. Organización Eficiente del Espacio con `tabBox`</h2>
+            <p>A menudo, queremos mostrar múltiples gráficos o tablas en un mismo espacio sin abrumar al usuario. El <code class="inline-code">tabBox</code> es la solución perfecta, ya que crea un contenedor con pestañas internas.</p>
+
+            <div class="content-block">
+                <h3><i class="fa-solid fa-folder-open"></i> Agrupando Visualizaciones</h3>
+                <p>El <code class="inline-code">tabBox</code> se define en la UI y contiene múltiples <code class="inline-code">tabPanel</code>. Cada panel puede alojar un output diferente (un gráfico, una tabla, etc.).</p>
+
+                <h4>Implementación en la UI (`app.R`):</h4>
+<pre><code class="language-r">
+# Dentro de un fluidRow, usualmente al lado de los controles
+box(
+    title = "Visualización Detallada", status = "primary", solidHeader = TRUE, width = 8,
+    tabBox(
+        width = 12, # Ocupa todo el ancho del box contenedor
+        
+        # Pestaña 1
+        tabPanel(
+            title = "Dispersión de Puntajes", 
+            icon = icon("chart-scatter"),
+            plotlyOutput("grafico_dispersion")
+        ),
+        
+        # Pestaña 2
+        tabPanel(
+            title = "Distribución por Naturaleza", 
+            icon = icon("chart-pie"),
+            plotlyOutput("grafico_torta")
+        )
+    )
+)
+</code></pre>
+                <div class="alert alert-success">
+                    <strong>Nota Importante:</strong> La lógica del <code class="inline-code">server</code> no cambia. Simplemente renderizas cada gráfico a su respectivo ID (<code class="inline-code">output$grafico_dispersion</code> y <code class="inline-code">output$grafico_torta</code>). El <code class="inline-code">tabBox</code> se encarga de la navegación por sí solo.
+                </div>
+            </div>
+            
+            <h2 class="section-title">3. Buenas Prácticas de UI/UX</h2>
+            <div class="content-block">
+                <p>Un buen dashboard no solo muestra datos, sino que cuenta una historia. Sigue estos principios para asegurar que tu diseño sea efectivo:</p>
+                <ul>
+                    <li><i class="fa-solid fa-eye"></i> <strong>Jerarquía Visual:</strong> Coloca la información más importante (KPIs en <code class="inline-code">valueBox</code>) en la parte superior. Los usuarios leen de arriba a abajo y de izquierda a derecha.</li>
+                    <li><i class="fa-solid fa-palette"></i> <strong>Consistencia:</strong> Usa los mismos colores para conceptos similares. Por ejemplo, usa siempre <code class="inline-code">status = "primary"</code> para los <code class="inline-code">box</code> principales para mantener la coherencia con el azul del ICFES.</li>
+                    <li><i class="fa-solid fa-filter-circle-xmark"></i> <strong>Simplicidad (Menos es Más):</strong> No satures la pantalla. Usa <code class="inline-code">tabBox</code> para agrupar contenido y muestra solo los filtros esenciales. Si un filtro no es crucial, considera eliminarlo.</li>
+                    <li><i class="fa-solid fa-hand-pointer"></i> <strong>Intuitividad:</strong> Los títulos deben ser claros y concisos. Un usuario debe entender el propósito de cada gráfico o tabla sin necesidad de un manual.</li>
+                </ul>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="branding_institucional.html" class="nav-button back"><i class="fa-solid fa-arrow-left"></i> Lección Anterior</a>
+                <a href="diseno_asistido_ia.html" class="nav-button">Actividad Final <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

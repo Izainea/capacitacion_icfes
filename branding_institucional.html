@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 2: Branding y Estética Institucional</title>
+    
+    <!-- Google Fonts: Nunito Sans (ICFES Oficial) y Teko -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --icfes-blue-primary: #004884; /* Color secundario del CSS del ICFES */
+            --icfes-yellow-accent: #F9C22E; /* Color acento del CSS del ICFES */
+            --icfes-light-blue: #5dade2;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: var(--icfes-light-blue);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Nunito Sans', sans-serif; /* Usando la fuente correcta */
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        h1, h2, h3, h4 { font-family: 'Teko', sans-serif; font-weight: 600; letter-spacing: 1px; color: var(--primary-color); }
+        .main-header {
+            background: var(--secondary-color);
+            padding: 60px 20px;
+            border-bottom: 4px solid var(--primary-color);
+            text-align: center;
+        }
+        .main-header h1 { font-size: 3.5rem; }
+        .main-header p { font-size: 1.3rem; color: var(--text-muted); max-width: 800px; margin: 10px auto 0; }
+        .section { padding: 40px 0; text-align: left; }
+        .section-title {
+            font-size: 2.8rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        .content-block {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--secondary-color);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        p, ul, ol { font-size: 1.1rem; color: var(--text-muted); }
+        li { margin-bottom: 10px; }
+        b, strong { color: var(--text-color); }
+        code.inline-code {
+            background-color: #2a2a2a;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            color: var(--icfes-light-blue);
+        }
+        pre[class*="language-"] {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .nav-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover { background-color: #fbd25b; }
+        .nav-button.back { background-color: #444; color: var(--text-color); }
+        .nav-button.back:hover { background-color: #555; }
+        .alert {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid;
+            margin-bottom: 20px;
+        }
+        .alert-info {
+            background-color: rgba(93, 173, 226, 0.1);
+            border-color: var(--link-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1>Branding y Estética Institucional</h1>
+            <p>Cómo transformar un dashboard genérico en una herramienta con la identidad del ICFES usando CSS.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="section">
+            <h2 class="section-title">Paso 1: Ingeniería Inversa de la Identidad Visual</h2>
+            <p>Un desarrollador profesional sabe "leer" una página web para extraer sus componentes visuales. Al analizar el código de <a href="https://www.icfes.gov.co/" target="_blank">icfes.gov.co</a>, podemos identificar los activos clave de su marca:</p>
+
+            <div class="content-block">
+                <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Activos de Marca Identificados</h3>
+                <ul>
+                    <li><strong>Tipografía Principal:</strong> La fuente utilizada en todo el sitio para textos y párrafos es <strong>Nunito Sans</strong>.</li>
+                    <li><strong>Color Primario (Azul):</strong> El azul oscuro principal para fondos y cabeceras es <code class="inline-code">#004884</code>.</li>
+                    <li><strong>Color de Acento (Amarillo):</strong> El amarillo/naranja para botones y elementos destacados es <code class="inline-code">#F9C22E</code>.</li>
+                    <li><strong>Logo:</strong> El logo oficial que usaremos en nuestra cabecera.</li>
+                </ul>
+                <p>Con esta información, podemos replicar la estética de forma precisa en nuestro dashboard.</p>
+            </div>
+
+            <h2 class="section-title">Paso 2: Preparar los Recursos en `www`</h2>
+            <p>La carpeta <code class="inline-code">www</code> alojará nuestro logo y la hoja de estilos personalizada.</p>
+            
+            <div class="content-block">
+                <h3><i class="fa-solid fa-folder-tree"></i> Estructura de Archivos</h3>
+                <ol>
+                    <li>Crea la carpeta <code class="inline-code">www</code> en la raíz de tu proyecto.</li>
+                    <li>Descarga el logo del ICFES y guárdalo como <code class="inline-code">icfes_logo.png</code> dentro de la carpeta <code class="inline-code">www</code>.</li>
+                    <li>Crea un archivo vacío llamado <code class="inline-code">custom.css</code> dentro de la carpeta <code class="inline-code">www</code>.</li>
+                </ol>
+                <p>Tu estructura de proyecto ahora debería verse así:</p>
+                
+            </div>
+
+            <h2 class="section-title">Paso 3: Crear el Archivo `custom.css`</h2>
+            <p>Ahora, poblaremos nuestro archivo <code class="inline-code">www/custom.css</code> con las reglas de estilo que hemos identificado.</p>
+
+            <div class="content-block">
+                <h3><i class="fa-solid fa-palette"></i> Código de Estilos para el ICFES</h3>
+                <p>Este código utiliza la tipografía y la paleta de colores exactas del sitio web para un acabado profesional.</p>
+<pre><code class="language-css">
+/* --- www/custom.css --- */
+
+/* Regla General: Aplicar la tipografía oficial 'Nunito Sans' */
+.content-wrapper, .main-sidebar, .box-body, .box-title {
+  font-family: 'Nunito Sans', sans-serif !important;
+}
+
+/* --- Personalización de la Cabecera (Header) --- */
+.skin-blue .main-header .navbar,
+.skin-blue .main-header .logo {
+  background-color: #004884 !important; /* Azul ICFES Oficial */
+}
+
+/* Estilos para la imagen del logo y el título en la cabecera */
+.skin-blue .main-header .logo .logo-image {
+    height: 35px; /* Ajusta la altura del logo */
+    padding-right: 15px; /* Espacio entre el logo y el texto */
+    margin-top: -8px; /* Ajuste vertical fino */
+    display: inline-block;
+}
+.skin-blue .main-header .logo {
+    font-family: 'Teko', sans-serif; /* Mantenemos Teko para un título impactante */
+}
+
+/* --- Personalización del Menú Lateral (Sidebar) --- */
+.skin-blue .sidebar-menu > li.active > a,
+.skin-blue .sidebar-menu > li:hover > a {
+  background-color: #F9C22E !important; /* Amarillo Acento ICFES */
+  color: #004884 !important; /* Texto azul para contraste */
+  font-weight: bold !important;
+}
+
+/* --- Personalización de los Contenedores (Boxes) --- */
+.box.box-solid.box-primary > .box-header {
+  background-color: #004884 !important;
+}
+</code></pre>
+            </div>
+
+            <h2 class="section-title">Paso 4: Integrar Todo en la UI (`app.R`)</h2>
+            <p>El paso final es modificar nuestro <code class="inline-code">app.R</code> para que cargue la nueva fuente de Google, el archivo CSS y muestre el logo.</p>
+
+            <div class="content-block">
+                <h3><i class="fa-solid fa-rocket"></i> Implementación Final en `app.R`</h3>
+                <p>La clave es añadir dos elementos al <code class="inline-code">tags$head()</code>: uno para la fuente de Google y otro para nuestro CSS personalizado.</p>
+<pre><code class="language-r">
+# Dentro de tu archivo app.R
+
+ui <- dashboardPage(
+    dashboardHeader(
+        title = tags$a(href='https://www.icfes.gov.co', target='_blank',
+           tags$img(src='icfes_logo.png', class='logo-image'),
+           'Portal de Resultados'
+        )
+    ),
+    dashboardSidebar(
+        # ... tu sidebarMenu ...
+    ),
+    dashboardBody(
+        tags$head(
+            # 1. Importar la fuente 'Nunito Sans' desde Google Fonts
+            tags$link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap"),
+            
+            # 2. Vincular nuestro archivo CSS personalizado
+            tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+        ),
+        
+        tabItems(
+            # ... tus tabItem ...
+        )
+    )
+)
+</code></pre>
+                <div class="alert alert-info">
+                    <strong>¡El resultado es un dashboard auténtico!</strong> Al ejecutar la aplicación, la apariencia será notablemente similar a la del sitio web oficial del ICFES, utilizando su misma tipografía y colores. Esto demuestra un alto nivel de atención al detalle y profesionalismo.
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="dashboard_estructura.html" class="nav-button back"><i class="fa-solid fa-arrow-left"></i> Lección Anterior</a>
+                <a href="layouts_avanzados.html" class="nav-button">Siguiente Lección <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
+

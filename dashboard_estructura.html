@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 1: La Estructura de shinydashboard</title>
+    
+    <!-- Google Fonts: Raleway y Teko -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --icfes-blue: #1c3055;
+            --icfes-orange: #f18415;
+            --icfes-light-blue: #5dade2;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-orange);
+            --secondary-color: var(--icfes-blue);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: var(--icfes-light-blue);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        h1, h2, h3, h4 { font-family: 'Teko', sans-serif; font-weight: 600; letter-spacing: 1px; color: var(--primary-color); }
+        .main-header {
+            background: var(--secondary-color);
+            padding: 60px 20px;
+            border-bottom: 4px solid var(--primary-color);
+            text-align: center;
+        }
+        .main-header h1 { font-size: 3.5rem; }
+        .main-header p { font-size: 1.3rem; color: var(--text-muted); max-width: 800px; margin: 10px auto 0; }
+        .section { padding: 40px 0; text-align: left; }
+        .section-title {
+            font-size: 2.8rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        .content-block {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--secondary-color);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        p, ul, ol { font-size: 1.1rem; color: var(--text-muted); }
+        li { margin-bottom: 10px; }
+        b, strong { color: var(--text-color); }
+        a { color: var(--link-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code.inline-code {
+            background-color: #2a2a2a;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            color: var(--icfes-light-blue);
+        }
+        pre[class*="language-"] {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .nav-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover { background-color: #ffae42; }
+        .nav-button.back { background-color: #444; color: var(--text-color); }
+        .nav-button.back:hover { background-color: #555; }
+        .diagram { text-align: center; padding: 20px; }
+        .diagram img { max-width: 100%; height: auto; border-radius: 8px; background: #fff; padding: 10px; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1>La Estructura de `shinydashboard`</h1>
+            <p>Construyendo el esqueleto de una aplicación profesional, pieza por pieza.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="section">
+            <div class="content-block">
+                <p>Bienvenido a la primera lección del Módulo 8. Aquí dejaremos atrás la estructura básica de <code class="inline-code">fluidPage()</code> para adoptar <code class="inline-code">shinydashboard</code>, el estándar de la industria para crear tableros de control robustos y con una apariencia profesional desde el primer momento.</p>
+                <p>La principal ventaja de <code class="inline-code">shinydashboard</code> es su <strong>estructura predefinida y organizada</strong>. Nos "obliga" a pensar de manera modular, separando la navegación del contenido, lo cual resulta en aplicaciones más limpias, escalables y fáciles de usar.</p>
+            </div>
+
+            <h2 class="section-title">Anatomía de un Dashboard</h2>
+            <p>Toda aplicación creada con este paquete se compone de tres funciones principales que definen su layout. Pensemos en ellas como el esqueleto de nuestro proyecto.</p>
+            
+            
+            <div class="content-block">
+                <h3><i class="fa-solid fa-window-maximize"></i> 1. El Encabezado: `dashboardHeader()`</h3>
+                <p>Es la barra superior de la aplicación. Su función principal es mostrar el <strong>título del dashboard</strong> y, opcionalmente, notificaciones, mensajes o menús desplegables. Es el primer punto de anclaje visual para el usuario.</p>
+<pre><code class="language-r">
+# Define el encabezado de la aplicación
+dashboardHeader(title = "Tablero ICFES")
+</code></pre>
+            </div>
+
+            <div class="content-block">
+                <h3><i class="fa-solid fa-bars-staggered"></i> 2. La Barra Lateral: `dashboardSidebar()`</h3>
+                <p>Es el centro de navegación principal. Aquí se define el <strong>menú que el usuario utilizará para moverse entre las diferentes secciones</strong> o vistas del tablero. Cada entrada del menú se crea con <code class="inline-code">menuItem()</code>.</p>
+                <ul>
+                    <li><code class="inline-code">menuItem()</code>: Define una entrada de menú. Sus argumentos clave son:
+                        <ul>
+                            <li><strong>text</strong>: El texto que verá el usuario (ej. "Visión General").</li>
+                            <li><strong>tabName</strong>: Un identificador único y crucial que conecta el botón del menú con su contenido en el cuerpo.</li>
+                            <li><strong>icon</strong>: Un ícono de Font Awesome para dar un apoyo visual, se invoca con <code class="inline-code">icon()</code>.</li>
+                        </ul>
+                    </li>
+                </ul>
+<pre><code class="language-r">
+# Define el menú de navegación lateral
+dashboardSidebar(
+    sidebarMenu(
+        # Primer botón del menú, enlaza al contenido con id "dashboard"
+        menuItem("Visión General", tabName = "dashboard", icon = icon("dashboard")),
+        
+        # Segundo botón, enlaza al contenido con id "analisis"
+        menuItem("Análisis Detallado", tabName = "analisis", icon = icon("chart-bar"))
+    )
+)
+</code></pre>
+            </div>
+
+            <div class="content-block">
+                <h3><i class="fa-solid fa-table-cells-large"></i> 3. El Cuerpo del Contenido: `dashboardBody()`</h3>
+                <p>Es el área principal donde se mostrará todo el contenido: gráficos, tablas, mapas y controles interactivos. El contenido se organiza en "pestañas" usando <code class="inline-code">tabItems()</code>, donde cada <code class="inline-code">tabItem()</code> corresponde a un <code class="inline-code">menuItem()</code> de la barra lateral.</p>
+                <p>La conexión se hace a través del argumento <code class="inline-code">tabName</code>. <strong>¡Debe ser idéntico en el <code class="inline-code">menuItem</code> y en el <code class="inline-code">tabItem</code> correspondiente para que el enlace funcione!</strong></p>
+<pre><code class="language-r">
+# Define el área de contenido principal
+dashboardBody(
+    tabItems(
+        # Contenido para el primer menuItem (tabName = "dashboard")
+        tabItem(tabName = "dashboard",
+            h2("Contenido de la Visión General"),
+            fluidRow(
+                box(title = "Métricas Clave", "Aquí irían los valueBox..."),
+                box(title = "Gráfico Principal", "Aquí iría un plotOutput...")
+            )
+        ),
+        
+        # Contenido para el segundo menuItem (tabName = "analisis")
+        tabItem(tabName = "analisis",
+            h2("Contenido del Análisis Detallado")
+        )
+    )
+)
+</code></pre>
+            </div>
+
+            <h2 class="section-title">El Esqueleto Completo: `ui.R`</h2>
+            <p>Ahora, unimos las tres piezas dentro de la función principal <code class="inline-code">dashboardPage()</code> para formar nuestra UI completa. Este es el código que debes usar como plantilla base para cualquier nuevo proyecto con `shinydashboard`.</p>
+
+            <div class="content-block">
+<pre><code class="language-r">
+library(shiny)
+library(shinydashboard)
+
+# --- Definición de la Interfaz de Usuario (UI) ---
+ui &lt;- dashboardPage(
+
+    # 1. Encabezado
+    dashboardHeader(title = "Proyecto ICFES"),
+
+    # 2. Barra Lateral de Navegación
+    dashboardSidebar(
+        sidebarMenu(
+            menuItem("Visión General", tabName = "dashboard", icon = icon("tachometer-alt")),
+            menuItem("Análisis por Filtros", tabName = "filtros", icon = icon("filter"))
+        )
+    ),
+
+    # 3. Cuerpo del Dashboard
+    dashboardBody(
+        tabItems(
+            # Contenido de la primera pestaña ("dashboard")
+            tabItem(tabName = "dashboard",
+                fluidRow(
+                    # Un "box" es un contenedor para tus outputs
+                    box(
+                        title = "Gráfico de Distribución",
+                        status = "primary", # Color del encabezado
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
+                        width = 8, # El ancho total es 12
+                        "Aquí puedes poner un plotOutput('miGrafico')"
+                    ),
+                    box(
+                        title = "Controles",
+                        status = "warning",
+                        solidHeader = TRUE,
+                        width = 4,
+                        "Aquí puedes poner tus selectInputs, sliders, etc."
+                    )
+                )
+            ),
+
+            # Contenido de la segunda pestaña ("filtros")
+            tabItem(tabName = "filtros",
+                h2("Página para análisis con filtros detallados")
+            )
+        )
+    )
+)
+
+# --- Lógica del Servidor ---
+server &lt;- function(input, output) {
+    # La lógica reactiva y los outputs se definen aquí.
+    # Por ejemplo:
+    # output$miGrafico <- renderPlot({ ... })
+}
+
+# --- Ejecutar la Aplicación ---
+shinyApp(ui, server)
+
+</code></pre>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="sesion_8.html" class="nav-button back"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 8</a>
+                <a href="branding_institucional.html" class="nav-button">Siguiente Lección <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

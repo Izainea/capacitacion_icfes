@@ -3,7 +3,7 @@
 .RData
 .Rproj.user/
 .Ruserdata/
-
+.Renviron
 # Archivos de paquetes (usar renv o similar en su lugar)
 *.so
 *.dll

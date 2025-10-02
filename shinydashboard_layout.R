@@ -53,7 +53,7 @@ puntajes_choices <- datos_saber %>%
 # 2. INTERFAZ DE USUARIO (UI)
 # ==============================================================================
 ui <- dashboardPage(
-    skin = "blue",
+    skin = "black",
     dashboardHeader(
         title = tags$a(href = 'https://www.icfes.gov.co', target = '_blank',
            tags$img(src = 'icfes_logo.svg', class = 'logo-image'),

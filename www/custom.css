@@ -6,31 +6,29 @@
 .content-wrapper, .main-sidebar, .box-body, .box-title, .value-box-content {
   font-family: 'Nunito Sans', sans-serif !important;
 }
-
-/* --- Personalización de la Cabecera (Header) --- */
-/* Aplicar el color azul oficial del ICFES al fondo */
-.skin-blue .main-header .navbar,
-.skin-blue .main-header .logo {
-  background-color: #004884 !important; /* Azul ICFES Oficial */
+.skin-black .main-header .navbar {
+    color: #D40027; /* Rojo institucional ICFES */
+    background-color: #FFFFFF; /* Fondo blanco para la barra de navegación */
+    border-bottom: 2px solid #004884; /* Línea inferior azul institucional */
 }
-
 /* Estilos para la imagen del logo y el título en la cabecera */
-.skin-blue .main-header .logo .logo-image {
+.skin-black .main-header .logo .logo-image {
     height: 35px; /* Ajusta la altura del logo */
     padding-right: 15px; /* Espacio entre el logo y el texto */
     margin-top: -8px; /* Ajuste vertical fino */
     display: inline-block;
 }
-.skin-blue .main-header .logo {
+.skin-black .main-header .logo {
     font-family: 'Teko', sans-serif; /* Mantenemos Teko para un título impactante */
+    
 }
 
 /* --- Personalización del Menú Lateral (Sidebar) --- */
 /* Aplicar el amarillo de acento a los ítems activos o al pasar el ratón */
-.skin-blue .sidebar-menu > li.active > a,
-.skin-blue .sidebar-menu > li:hover > a {
+.skin-black .sidebar-menu > li.active > a,
+.skin-black .sidebar-menu > li:hover > a {
   background-color: #F9C22E !important; /* Amarillo Acento ICFES */
-  color: #004884 !important; /* Texto azul para contraste */
+  color: #D40027!important; /* Texto rojo para contraste */
   font-weight: bold !important;
 }
 

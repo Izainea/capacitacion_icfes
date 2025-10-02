@@ -37,7 +37,7 @@ colegios_no_oficiales <- format(sum(datos_saber$cole_naturaleza == "NO OFICIAL")
 # 2. INTERFAZ DE USUARIO (Anteriormente ui.R)
 # ==============================================================================
 ui <- dashboardPage(
-    skin = "blue",
+    skin = "black",
     dashboardHeader(
         title = tags$a(href = 'https://www.icfes.gov.co', target = '_blank',
            tags$img(src = 'icfes_logo.svg', class = 'logo-image'),

@@ -45,7 +45,7 @@ colegios_no_oficiales <- format(sum(datos_saber$cole_naturaleza == "NO OFICIAL")
 # ==============================================================================
 
 ui <- dashboardPage(
-  skin = "blue", # Tema de color base
+  skin = "black", # Tema de color base
   
   # --- Cabecera ---
   dashboardHeader(title = "Dashboard ICFES"),

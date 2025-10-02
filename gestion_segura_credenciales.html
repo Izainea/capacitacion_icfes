@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-widh, initial-scale=1.0">
+    <title>Lección 3: Gestión Segura de Credenciales</title>
+    
+    <!-- Google Fonts y Estilos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0e0;
+            --border-color: #333;
+            --link-color: #5dade2;
+        }
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            margin: 0; padding: 0;
+        }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        h1, h2, h3 { font-family: 'Teko', sans-serif; color: var(--primary-color); letter-spacing: 1px; }
+        .main-header {
+            background: var(--secondary-color);
+            padding: 60px 20px;
+            border-bottom: 4px solid var(--primary-color);
+            text-align: center;
+        }
+        .main-header h1 { font-size: 3.5rem; }
+        .main-header p { font-size: 1.3rem; color: var(--text-muted); }
+        .section { padding: 40px 0; }
+        .section-title { font-size: 2.8rem; border-bottom: 2px solid var(--primary-color); display: inline-block; padding-bottom: 10px; margin-bottom: 40px; }
+        .content-block { background-color: var(--card-bg); border-left: 4px solid var(--secondary-color); padding: 2rem; border-radius: 8px; margin-bottom: 40px; }
+        code.inline-code { background-color: #2a2a2a; padding: 0.2em 0.4em; border-radius: 3px; font-family: 'Courier New', Courier, monospace; color: var(--link-color); }
+        pre[class*="language-"] { border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 50px; }
+        .nav-button { display: inline-block; background-color: var(--primary-color); color: var(--secondary-color); padding: 12px 25px; border-radius: 5px; font-weight: bold; font-family: 'Teko', sans-serif; font-size: 1.5rem; text-decoration: none; transition: background-color 0.3s ease; }
+        .nav-button:hover { background-color: #fbd25b; }
+        .nav-button.back { background-color: #444; color: var(--text-color); }
+        .nav-button.back:hover { background-color: #555; }
+        .alert { padding: 1.5rem; border-radius: 8px; border-left: 4px solid; margin-bottom: 20px; }
+        .alert-danger { background-color: rgba(220, 53, 69, 0.1); border-color: #dc3545; }
+        .alert-success { background-color: rgba(40, 167, 69, 0.1); border-color: #28a745; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1>Gestión Segura de Credenciales</h1>
+            <p>La práctica de seguridad más importante en el desarrollo de aplicaciones.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="section">
+            <h2 class="section-title">El Anti-Patrón: "Hardcodear" Secretos</h2>
+            <div class="content-block">
+                <p>El error de seguridad más común y peligroso es escribir credenciales (usuarios, contraseñas, tokens) directamente en el código. Esto se conoce como "hardcodear".</p>
+                
+                <div class="alert alert-danger">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> ¡NUNCA HAGAS ESTO!</h4>
+                    <p>El siguiente código es un ejemplo de una vulnerabilidad de seguridad crítica.</p>
+<pre><code class="language-r">
+# ¡MALO! ¡INSEGURO! NO HACER.
+con <- dbConnect(
+    RPostgres::Postgres(),
+    dbname = "icfes_prod",
+    host = "123.45.67.89",
+    port = 5432,
+    user = "admin_icfes",
+    password = "PasswordSeguro123!" # <-- ¡Credenciales expuestas!
+)
+</code></pre>
+                </div>
+
+                <h4>¿Por qué es tan grave?</h4>
+                <ul>
+                    <li><b>Visibilidad Total:</b> Cualquiera con acceso al código puede ver las credenciales en texto plano.</li>
+                    <li><b>Control de Versiones (Git):</b> Si subes este código a un repositorio (incluso uno privado), las credenciales quedan registradas en el historial para siempre. ¡Un desastre de seguridad!</li>
+                    <li><b>Gestión Imposible:</b> Si la contraseña cambia, tienes que editar el código, hacer pruebas y volver a desplegar toda la aplicación.</li>
+                    <li><b>Diferencia de Entornos:</b> Es muy difícil manejar credenciales distintas para desarrollo, pruebas y producción.</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">La Solución Profesional: Variables de Entorno</h2>
+            <div class="content-block">
+                <p>La práctica estándar de la industria es <b>separar la configuración del código</b>. Las credenciales y otros "secretos" deben vivir fuera de tus scripts, en un lugar seguro que no se comparta en el control de versiones. En R, la mejor manera de lograr esto es usando el archivo <code class="inline-code">.Renviron</code>.</p>
+                <p>Este es un archivo especial que R lee automáticamente al iniciar, cargando las variables que contiene en el "entorno" del sistema.</p>
+            </div>
+
+            <h2 class="section-title">Implementación en 3 Pasos</h2>
+            <div class="content-block">
+                <h3>Paso 1: Crear y Editar el archivo `.Renviron`</h3>
+                <p>La forma más fácil y segura de editar este archivo es usando el paquete <code class="inline-code">usethis</code>.</p>
+<pre><code class="language-r">
+# Instala usethis si no lo tienes
+# install.packages("usethis")
+
+# Este comando abre el archivo .Renviron para que lo edites
+usethis::edit_r_environ()
+</code></pre>
+                <p>Se abrirá un archivo de texto. Aquí, define tus secretos con la sintaxis <code class="inline-code">NOMBRE_VARIABLE="VALOR"</code>. No uses espacios alrededor del <code class="inline-code">=</code>.</p>
+                <p><b>Ejemplo de contenido para `.Renviron`:</b></p>
+<pre><code class="language-bash">
+# Credenciales para la Base de Datos de Producción
+DB_HOST="123.45.67.89"
+DB_USER="admin_icfes"
+DB_PASS="PasswordSeguro123!"
+
+# App Token para la API de Socrata (Datos Abiertos)
+SOCRATA_APP_TOKEN="TU_TOKEN_AQUI_DE_DATOS_ABIERTOS"
+</code></pre>
+                <p>Guarda el archivo. <b>IMPORTANTE:</b> Deberás reiniciar tu sesión de R (En RStudio: `Session > Restart R`) para que los cambios surtan efecto.</p>
+
+                <h3>Paso 2: Asegurar el archivo en `.gitignore`</h3>
+                <p>Este es el paso más crítico. Debemos decirle a Git que <b>ignore</b> el archivo `.Renviron` para que nunca se suba al repositorio.</p>
+                <p>Abre (o crea) el archivo <code class="inline-code">.gitignore</code> en la raíz de tu proyecto y añade la siguiente línea al final:</p>
+<pre><code class="language-bash">
+# Ignorar archivos de entorno que contienen secretos
+.Renviron
+</code></pre>
+
+                <h3>Paso 3: Leer las Variables en el Código con `Sys.getenv()`</h3>
+                <p>Ahora, en tu código R, puedes acceder a estas variables de forma segura usando la función <code class="inline-code">Sys.getenv()</code>.</p>
+                
+                <div class="alert alert-success">
+                    <h4><i class="fa-solid fa-lock"></i> ¡ESTE ES EL CÓDIGO SEGURO!</h4>
+<pre><code class="language-r">
+# ¡BUENO! ¡SEGURO!
+con <- dbConnect(
+    RPostgres::Postgres(),
+    dbname = "icfes_prod",
+    host = Sys.getenv("DB_HOST"),      # Lee el host del entorno
+    port = 5432,
+    user = Sys.getenv("DB_USER"),      # Lee el usuario del entorno
+    password = Sys.getenv("DB_PASS")   # Lee la contraseña del entorno
+)
+
+# Para la API de Socrata
+app_token <- Sys.getenv("SOCRATA_APP_TOKEN")
+
+req <- request(api_base_url) %>%
+    req_headers("X-App-Token" = app_token) # Añade el token a la cabecera
+</code></pre>
+                </div>
+                <p>Este código es seguro para compartir y subir a Git. No contiene ninguna información sensible. Las credenciales reales solo existen en el archivo <code class="inline-code">.Renviron</code> local de la máquina donde se ejecuta la aplicación (tu computador de desarrollo, el servidor de producción, etc.).</p>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="consumo_apis.html" class="nav-button back"><i class="fa-solid fa-arrow-left"></i> Lección Anterior</a>
+                <a href="index.html" class="nav-button">Finalizar Módulo <i class="fa-solid fa-check"></i></a>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
+

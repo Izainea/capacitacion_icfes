@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 2: Consumo de Datos vía APIs (Versión Avanzada)</title>
+    
+    <!-- Google Fonts y Estilos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0e0;
+            --border-color: #333;
+            --link-color: #5dade2;
+        }
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            margin: 0; padding: 0;
+        }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        h1, h2, h3 { font-family: 'Teko', sans-serif; color: var(--primary-color); letter-spacing: 1px; }
+        .main-header {
+            background: var(--secondary-color);
+            padding: 60px 20px;
+            border-bottom: 4px solid var(--primary-color);
+            text-align: center;
+        }
+        .main-header h1 { font-size: 3.5rem; }
+        .main-header p { font-size: 1.3rem; color: var(--text-muted); }
+        .section { padding: 40px 0; }
+        .section-title { font-size: 2.8rem; border-bottom: 2px solid var(--primary-color); display: inline-block; padding-bottom: 10px; margin-bottom: 40px; }
+        .content-block { background-color: var(--card-bg); border-left: 4px solid var(--secondary-color); padding: 2rem; border-radius: 8px; margin-bottom: 40px; }
+        code.inline-code { background-color: #2a2a2a; padding: 0.2em 0.4em; border-radius: 3px; font-family: 'Courier New', Courier, monospace; color: var(--link-color); }
+        pre[class*="language-"] { border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 50px; }
+        .nav-button { display: inline-block; background-color: var(--primary-color); color: var(--secondary-color); padding: 12px 25px; border-radius: 5px; font-weight: bold; font-family: 'Teko', sans-serif; font-size: 1.5rem; text-decoration: none; transition: background-color 0.3s ease; }
+        .nav-button:hover { background-color: #fbd25b; }
+        .nav-button.back { background-color: #444; color: var(--text-color); }
+        .nav-button.back:hover { background-color: #555; }
+        .alert { padding: 1.5rem; border-radius: 8px; border-left: 4px solid; margin-bottom: 20px; }
+        .alert-info { background-color: rgba(93, 173, 226, 0.1); border-color: var(--link-color); }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1>Consumo de Datos vía APIs con `httr2`</h1>
+            <p>Construyendo un dashboard de monitoreo y análisis con datos en tiempo real.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="section">
+            <h2 class="section-title">El Siguiente Nivel: Datos Vivos</h2>
+            <div class="content-block">
+                <p>Ya hemos demostrado que una base de datos local supera a un archivo plano. Pero, ¿qué pasa si los datos se actualizan constantemente en una fuente externa? Aquí es donde las APIs brillan. Una API nos permite consultar datos "vivos" directamente desde su origen.</p>
+                <p>En esta lección, diseñaremos una aplicación `shinydashboard` que no solo consume datos de la API de <b>Datos Abiertos de Colombia</b>, sino que también compara su rendimiento con nuestros métodos locales, dándonos una visión completa de las estrategias de acceso a datos.</p>
+            </div>
+
+            <h2 class="section-title">El Poder de SoQL: SQL en la URL</h2>
+            <div class="content-block">
+                <p>El portal de Datos Abiertos de Colombia está construido sobre Socrata, una plataforma que ofrece un potente lenguaje de consulta llamado <b>SoQL</b> (Socrata Open Data API Query Language). SoQL nos permite escribir cláusulas similares a SQL directamente en los parámetros de la URL.</p>
+                <p>Esto es revolucionario porque significa que podemos delegar el trabajo pesado (filtrar, ordenar, agregar) al servidor de la API, y recibir solo los datos precisos que necesitamos. Es el equivalente a que el mesero no solo te traiga el plato, sino que le pida al chef que lo prepare exactamente como lo quieres.</p>
+                <p><strong>El Dataset:</strong> Usaremos el conjunto de datos unificado <a href="https://www.datos.gov.co/Educaci-n/Resultados-nicos-Saber-11/kgxf-xxbe/about_data" target="_blank">"Resultados únicos Saber 11"</a>.</p>
+            </div>
+
+            <h2 class="section-title">Blueprint del Dashboard Avanzado</h2>
+            <p>Nuestra aplicación tendrá dos pestañas:</p>
+
+            <div class="content-block">
+                <h3>Pestaña 1: Monitoreo de Rendimiento (3 Vías)</h3>
+                <p>Esta pestaña ejecutará la misma consulta lógica a través de tres métodos y medirá el tiempo de cada uno:</p>
+                <ol>
+                    <li><strong>Archivo Plano:</strong> Carga el `.txt` completo en memoria y filtra con `dplyr`.</li>
+                    <li><strong>Base de Datos SQLite:</strong> Envía una consulta SQL a nuestra base de datos local.</li>
+                    <li><strong>API de Datos Abiertos:</strong> Envía una consulta SoQL al servidor de Socrata.</li>
+                </ol>
+                <p>El código en el servidor para el nuevo método de API se vería así:</p>
+<pre><code class="language-r">
+# Dentro del observeEvent(input$run_benchmark, { ... })
+
+# --- Método 3: API de Datos Abiertos (SoQL) ---
+start_time_api <- Sys.time()
+
+base_url <- "https://www.datos.gov.co/resource/kgxf-xxbe.json"
+query_soql <- "
+    SELECT avg(puntaje_global)
+    WHERE naturaleza_colegio = 'OFICIAL' AND municipio_ubicacion = 'BOGOTA D.C.' AND periodo = '20234'
+"
+req_api <- request(base_url) %>%
+    req_url_query(`$query` = query_soql)
+
+resp_api <- req_perform(req_api)
+resultado_api <- resp_body_json(resp_api, simplifyVector = TRUE)
+
+end_time_api <- Sys.time()
+benchmark_results$time_api <- as.numeric(difftime(end_time_api, start_time_api, units = "secs"))
+</code></pre>
+            </div>
+
+            <div class="content-block">
+                <h3>Pestaña 2: Dashboard de Análisis con Datos en Vivo</h3>
+                <p>Esta pestaña será un explorador de datos completamente funcional que obtiene su información <strong>directamente de la API</strong>. Los `selectInput` del usuario (para periodo y departamento) construirán dinámicamente una consulta SoQL.</p>
+
+                <h4>Construcción Dinámica de la Consulta</h4>
+                <p>El núcleo de esta pestaña es un conductor reactivo que crea la consulta SoQL basándose en los inputs del usuario.</p>
+<pre><code class="language-r">
+# En el server de la app
+
+datos_api_reactivos <- reactive({
+    req(input$periodo_select, input$depto_select) # Asegura que los inputs no estén vacíos
+
+    # Construye la cláusula WHERE dinámicamente
+    where_clause <- sprintf(
+        "departamento_ubicacion = '%s' AND periodo = '%s'",
+        toupper(input$depto_select),
+        input$periodo_select
+    )
+
+    # Construye la consulta SoQL completa
+    query_soql <- sprintf(
+        "SELECT puntaje_global, puntaje_matematicas, naturaleza_colegio, nombre_colegio
+         WHERE %s
+         ORDER BY puntaje_global DESC
+         LIMIT 100",
+        where_clause
+    )
+
+    # Realiza la llamada a la API con esta consulta
+    base_url <- "https://www.datos.gov.co/resource/kgxf-xxbe.json"
+    req <- request(base_url) %>% req_url_query(`$query` = query_soql)
+    resp <- req_perform(req)
+    
+    # Procesa y devuelve los datos como un tibble limpio
+    resultados <- as_tibble(resp_body_json(resp, simplifyVector = TRUE)) %>%
+        mutate(across(starts_with("puntaje"), as.numeric))
+    
+    return(resultados)
+})
+
+# Ahora, los outputs (gráficos, tablas) simplemente leen de `datos_api_reactivos()`
+output$grafico_api <- renderPlotly({
+    plot_ly(datos_api_reactivos(), x = ~puntaje_matematicas, y = ~puntaje_global, ...)
+})
+</code></pre>
+
+                <div class="alert alert-info">
+                    <h4>La Verdadera Ventaja</h4>
+                    <p>Con este diseño, si el ICFES publica los datos de un nuevo periodo en el portal, nuestro dashboard lo reflejará automáticamente (una vez que se añada el nuevo periodo a las opciones del `selectInput`). No necesitamos ejecutar pipelines ETL ni gestionar archivos locales. La aplicación está siempre sincronizada con la fuente de verdad oficial.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="conexion_bd.html" class="nav-button back"><i class="fa-solid fa-arrow-left"></i> Lección Anterior</a>
+                <a href="gestion_segura_credenciales.html" class="nav-button">Siguiente Lección <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
+

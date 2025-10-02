@@ -34,7 +34,7 @@ if (!file.exists(flat_file_path)) {
 # 2. INTERFAZ DE USUARIO (UI)
 # ==============================================================================
 ui <- dashboardPage(
-    skin = "blue",
+    skin = "black",
     dashboardHeader(title = "ICFES: Conectividad DB"),
     dashboardSidebar(
         sidebarMenu(

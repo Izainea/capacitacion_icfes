@@ -37,7 +37,7 @@ if (!file.exists(flat_file_path)) {
 # 2. INTERFAZ DE USUARIO (UI)
 # ==============================================================================
 ui <- dashboardPage(
-    skin = "blue",
+    skin = "black",
     dashboardHeader(title = "ICFES: Datos Vivos"),
     dashboardSidebar(
         sidebarMenu(
@@ -145,8 +145,10 @@ server <- function(input, output, session) {
                 req_api <- request(api_base_url) %>%
                     req_url_query(
                         `$limit` = 10000,
-                        `cole_mcpio_ubicacion` = "BOGOTA D.C.",
-                        `$select` = "punt_global"
+                        `cole_mcpio_ubicacion` = "BOGOTÁ D.C.",
+                        `$select` = "punt_global",
+                        `$where` = "punt_global IS NOT NULL"
+                        
                     )
                 resp_api <- req_perform(req_api)
                 datos_api <- resp_body_json(resp_api, simplifyVector = TRUE)

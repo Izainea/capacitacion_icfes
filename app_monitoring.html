@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lección: Monitoreo de Aplicaciones</title>
+    <title>Guía Interactiva de Monitoreo de Aplicaciones</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;900&family=Teko:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -21,26 +21,64 @@
             --border-color: #333;
             --link-color: #5dade2;
             --code-bg: #2d2d2d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
         }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.7; }
         .container { max-width: 900px; margin: auto; padding: 20px; }
-        .main-header { background: var(--secondary-color); padding: 50px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
-        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--primary-color); margin: 0; }
+        .main-header { background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://placehold.co/1200x400/17a2b8/e0e0e0?text=Monitoring'); background-size: cover; background-position: center; padding: 60px 20px; border-bottom: 4px solid var(--info-color); text-align: center; }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3.8rem; color: var(--info-color); margin: 0; text-shadow: 2px 2px 4px #000; }
         .lesson-content { padding: 40px 0; }
-        .lesson-section { margin-bottom: 40px; }
-        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.2rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        .lesson-section p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
-        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; }
+        .lesson-section { margin-bottom: 50px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .lesson-section:last-child { border-bottom: none; }
+        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.8rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .lesson-section h3 { font-family: 'Teko', sans-serif; font-size: 2rem; color: var(--text-color); margin-top: 30px; }
+        .lesson-section p, .lesson-section li { font-size: 1.1rem; color: var(--text-muted); }
+        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; font-size: 1.1rem; }
         .button-back:hover { background-color: #555; }
-        .monitoring-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .highlight { color: var(--primary-color); font-weight: bold; font-family: 'Teko', sans-serif; font-size: 1.2em; }
+        .concept-cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .concept-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 25px; text-align: center; }
+        .concept-card i { font-size: 3rem; margin-bottom: 15px; }
+        .concept-card h4 { font-family: 'Teko', sans-serif; font-size: 1.8rem; margin: 0; }
+        .concept-metrics h4, .concept-metrics i { color: var(--success-color); }
+        .concept-logs h4, .concept-logs i { color: var(--warning-color); }
+        .concept-tracing h4, .concept-tracing i { color: var(--info-color); }
+        .concept-card p { font-size: 0.95rem; }
+
+        /* Dashboard Styles */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .metric-card { background-color: var(--card-bg); padding: 20px; border-radius: 8px; border-top: 4px solid; }
+        .metric-card-cpu { border-color: var(--success-color); }
+        .metric-card-mem { border-color: var(--warning-color); }
+        .metric-card-net { border-color: var(--info-color); }
+        .metric-card h4 { margin: 0 0 10px; font-family: 'Teko', sans-serif; font-size: 1.5rem; }
+        .metric-value { font-size: 2.5rem; font-weight: bold; font-family: 'Teko'; }
+        .metric-chart { height: 100px; background-color: #2d2d2d; border-radius: 4px; position: relative; overflow: hidden; }
+        .chart-line { fill: none; stroke-width: 2; }
+        .cpu-line { stroke: var(--success-color); }
+        .mem-line { stroke: var(--warning-color); }
+        .net-line { stroke: var(--info-color); }
+
+        /* Log Viewer */
+        .log-viewer { background-color: #111; color: #eee; font-family: 'Courier New', Courier, monospace; height: 300px; overflow-y: scroll; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9em; }
+        .log-line { display: flex; align-items: baseline; margin-bottom: 5px; white-space: pre-wrap; }
+        .log-timestamp { color: #888; margin-right: 15px; flex-shrink: 0; }
+        .log-level { font-weight: bold; margin-right: 15px; flex-shrink: 0; }
+        .log-level-info { color: var(--success-color); }
+        .log-level-warn { color: var(--warning-color); }
+        .log-level-error { color: var(--danger-color); }
+        .log-message { flex-grow: 1; }
     </style>
 </head>
 <body>
 
     <header class="main-header">
         <div class="container">
-            <h1><i class="fa-solid fa-chart-line"></i> Monitoreo de Aplicaciones</h1>
+            <h1><i class="fa-solid fa-chart-line"></i> Guía Interactiva de Monitoreo de Aplicaciones</h1>
         </div>
     </header>
 
@@ -48,42 +86,209 @@
         <div class="lesson-content">
 
             <section class="lesson-section">
-                <h2>¿Por qué monitorear?</h2>
-                <p>Desplegar una aplicación es solo el comienzo. El monitoreo es el proceso de observar continuamente el rendimiento y la salud de una aplicación en producción. Nos permite ser proactivos, detectar problemas antes de que afecten a los usuarios y entender cómo se utiliza nuestro producto.</p>
-                
+                <h2>El Pulso de tu Aplicación</h2>
+                <p>Desplegar una aplicación es como lanzar un cohete. El trabajo no termina en el lanzamiento; de hecho, ahí es donde comienza la fase más crítica: <span class="highlight">el monitoreo</span>. Una aplicación sin monitoreo es una caja negra; puede que funcione perfectamente o que esté a segundos de fallar catastróficamente, y no tendrías idea.</p>
+                <p>El monitoreo nos da los instrumentos para ver dentro de esa caja negra. Es el tablero de un carro, el monitor de signos vitales de un hospital. Nos dice si la aplicación está sana, si los usuarios están teniendo una buena experiencia y nos alerta cuando algo va mal.</p>
+            </section>
+            
+            <section class="lesson-section">
+                <h2>Los Tres Pilares del Monitoreo (Observabilidad)</h2>
+                <div class="concept-cards-container">
+                    <div class="concept-card concept-metrics">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <h4>Métricas</h4>
+                        <p><strong>La Pregunta:</strong> ¿Cómo está el rendimiento?
+                        <br><strong>La Respuesta:</strong> Datos numéricos agregados a lo largo del tiempo. Son como los signos vitales: pulso, temperatura, presión.
+                        <br><strong>Ejemplos:</strong> Uso de CPU, consumo de memoria, número de usuarios activos, latencia de respuesta.</p>
+                    </div>
+                    <div class="concept-card concept-logs">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <h4>Logs (Registros)</h4>
+                        <p><strong>La Pregunta:</strong> ¿Qué ha sucedido?
+                        <br><strong>La Respuesta:</strong> Registros de eventos discretos y con marca de tiempo. Son el diario de la aplicación.
+                        <br><strong>Ejemplos:</strong> "Usuario X inició sesión", "Error al conectar con la base de datos", "Cálculo de reporte completado".</p>
+                    </div>
+                    <div class="concept-card concept-tracing">
+                        <i class="fa-solid fa-network-wired"></i>
+                        <h4>Tracing (Trazas)</h4>
+                        <p><strong>La Pregunta:</strong> ¿Dónde está el problema?
+                        <br><strong>La Respuesta:</strong> Sigue el viaje de una solicitud a través de todos los componentes del sistema. Es el GPS para encontrar cuellos de botella.
+                        <br><strong>Ejemplos:</strong> Una solicitud tardó 500ms: 50ms en la app, 400ms en la base de datos, 50ms en la API externa.</p>
+                    </div>
+                </div>
             </section>
 
             <section class="lesson-section">
-                <h2>Componentes Clave del Monitoreo</h2>
-                <p>Las plataformas de despliegue modernas (como Railway, Vercel, AWS, etc.) suelen ofrecer un dashboard centralizado para supervisar estos elementos:</p>
-
-                <div class="monitoring-card">
-                    <h3><i class="fa-solid fa-terminal"></i> Logs (Registros)</h3>
-                    <p>Los logs son el "diario" de tu aplicación. Cada evento, error, o petición del usuario puede generar una entrada. Son la primera herramienta que debes consultar cuando algo sale mal. Un error en tu código R/Shiny aparecerá aquí, dándote pistas para depurarlo.</p>
-                </div>
-
-                <div class="monitoring-card">
-                    <h3><i class="fa-solid fa-microchip"></i> Métricas de Recursos</h3>
-                    <p>Estos gráficos te muestran en tiempo real cómo tu aplicación está utilizando los recursos del servidor:</p>
-                    <ul>
-                        <li><strong>CPU:</strong> Un pico sostenido puede indicar un cálculo ineficiente o una carga de usuarios muy alta.</li>
-                        <li><strong>Memoria RAM:</strong> Un crecimiento constante que nunca disminuye (conocido como "memory leak") puede hacer que tu aplicación se caiga.</li>
-                        <li><strong>Red:</strong> Muestra el tráfico de datos que entra y sale de tu aplicación.</li>
-                    </ul>
-                </div>
+                <h2>El Dashboard de Métricas en Acción</h2>
+                <p>Plataformas como Railway te ofrecen dashboards de métricas listos para usar. Te permiten ver el consumo de recursos de tu aplicación en tiempo real. Aquí tienes una simulación de cómo se vería:</p>
                 
-                <div class="monitoring-card">
-                    <h3><i class="fa-solid fa-circle-check"></i> Estado de los Despliegues</h3>
-                    <p>El dashboard también muestra un historial de tus despliegues. Esto te permite ver rápidamente si el último cambio que subiste (`git push`) se desplegó correctamente o si falló. En caso de un fallo, puedes "revertir" (rollback) a una versión anterior estable con un solo clic.</p>
+                <div class="dashboard-grid">
+                    <div class="metric-card metric-card-cpu">
+                        <h4><i class="fa-solid fa-microchip"></i> Uso de CPU</h4>
+                        <div class="metric-value" id="cpu-value">... %</div>
+                        <div class="metric-chart"><svg id="cpu-chart" width="100%" height="100%"></svg></div>
+                    </div>
+                    <div class="metric-card metric-card-mem">
+                        <h4><i class="fa-solid fa-memory"></i> Uso de Memoria</h4>
+                        <div class="metric-value" id="mem-value">... MB</div>
+                        <div class="metric-chart"><svg id="mem-chart" width="100%" height="100%"></svg></div>
+                    </div>
+                    <div class="metric-card metric-card-net">
+                        <h4><i class="fa-solid fa-wifi"></i> Tráfico de Red</h4>
+                        <div class="metric-value" id="net-value">... KB/s</div>
+                        <div class="metric-chart"><svg id="net-chart" width="100%" height="100%"></svg></div>
+                    </div>
                 </div>
+                <h3>¿Qué Métricas son Clave para una App Shiny?</h3>
+                <ul>
+                    <li><strong>Uso de Memoria:</strong> ¡La más importante! R es conocido por su alto consumo de memoria. Picos inesperados pueden indicar cálculos ineficientes o fugas de memoria en el código reactivo.</li>
+                    <li><strong>Uso de CPU:</strong> Un uso de CPU constantemente alto puede significar que tu aplicación está realizando cálculos muy pesados y podría necesitar optimización o más recursos.</li>
+                    <li><strong>Número de Conexiones Activas:</strong> Te dice cuántos usuarios están usando tu dashboard simultáneamente. Es clave para planificar la capacidad del servidor.</li>
+                </ul>
             </section>
             
+            <section class="lesson-section">
+                <h2>Descifrando los Logs</h2>
+                <p>Los logs son tu primera línea de defensa cuando ocurre un error. Te dan el contexto exacto de lo que la aplicación estaba haciendo en el momento del fallo. Las plataformas modernas agregan los logs de despliegue y de la aplicación en un solo lugar.</p>
+                <div class="log-viewer" id="log-viewer">
+                    <!-- Logs will be dynamically inserted here -->
+                </div>
+                <h3>Tipos de Logs y Cómo Leerlos</h3>
+                <ul>
+                    <li><strong>Logs de Despliegue:</strong> Muestran el proceso de construcción de tu `Dockerfile`. Si un despliegue falla, aquí encontrarás la razón (ej. un paquete de R no se pudo instalar, un comando falló).</li>
+                    <li><strong>Logs de la Aplicación:</strong> Muestran la salida de tu aplicación una vez que está en ejecución. Aquí verás los errores de R, mensajes que imprimas con `print()` o `cat()`, y advertencias.</li>
+                </ul>
+            </section>
+
+             <section class="lesson-section">
+                <h2>Alertas: El Guardián Automatizado</h2>
+                <p>Mirar un dashboard todo el día no es práctico. El monitoreo proactivo se logra con <span class="highlight">alertas</span>. Una alerta es una regla que tú configuras y que te notifica automáticamente (por email, Slack, etc.) cuando una métrica cruza un umbral crítico.</p>
+                <p><strong>Ejemplos de Alertas Esenciales:</strong></p>
+                <ul>
+                    <li>Si el uso de memoria supera el 90% durante más de 5 minutos &rarr; ¡ALERTA!</li>
+                    <li>Si la aplicación se reinicia más de 3 veces en 10 minutos &rarr; ¡ALERTA!</li>
+                    <li>Si se detectan más de 10 errores fatales en los logs en 1 minuto &rarr; ¡ALERTA!</li>
+                </ul>
+            </section>
+
             <div style="text-align: center;">
                  <a href="sesion_10.html" class="button-back"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 10</a>
             </div>
         </div>
     </main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Chart Simulation ---
+    function createChart(svgId, lineClass) {
+        const svg = document.getElementById(svgId);
+        if (!svg) return { data: [], update: () => {} };
 
+        const width = svg.clientWidth;
+        const height = svg.clientHeight;
+        const data = Array(20).fill(height / 2);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+        line.setAttribute('class', `chart-line ${lineClass}`);
+        svg.appendChild(line);
+
+        function update(newValue) {
+            data.shift();
+            data.push(newValue);
+            const points = data.map((d, i) => `${(i / (data.length - 1)) * width},${height - d}`).join(' ');
+            line.setAttribute('points', points);
+        }
+
+        return { data, update };
+    }
+
+    function generateMetricData(base, range, max) {
+        let value = base + (Math.random() - 0.5) * range;
+        return Math.max(0, Math.min(max, value));
+    }
+
+    const cpuChart = createChart('cpu-chart', 'cpu-line');
+    const memChart = createChart('mem-chart', 'mem-line');
+    const netChart = createChart('net-chart', 'net-line');
+
+    const cpuValueEl = document.getElementById('cpu-value');
+    const memValueEl = document.getElementById('mem-value');
+    const netValueEl = document.getElementById('net-value');
+
+    setInterval(() => {
+        const cpuUsage = generateMetricData(25, 20, 100);
+        const memUsage = generateMetricData(256, 50, 512);
+        const netUsage = generateMetricData(150, 100, 500);
+
+        if (cpuValueEl) cpuValueEl.textContent = `${cpuUsage.toFixed(1)} %`;
+        if (memValueEl) memValueEl.textContent = `${memUsage.toFixed(0)} MB`;
+        if (netValueEl) netValueEl.textContent = `${netUsage.toFixed(0)} KB/s`;
+
+        cpuChart.update(cpuUsage / 100 * 100);
+        memChart.update(memUsage / 512 * 100);
+        netChart.update(netUsage / 500 * 100);
+    }, 1500);
+
+    // --- Log Simulation ---
+    const logViewer = document.getElementById('log-viewer');
+    if(logViewer) {
+        const deployLogs = [
+            { level: 'INFO', msg: 'Build started...' },
+            { level: 'INFO', msg: 'Cloning repository...' },
+            { level: 'INFO', msg: 'Step 1/6 : FROM rocker/r-ver:4.3.1' },
+            { level: 'INFO', msg: 'Step 2/6 : RUN apt-get update && apt-get install...' },
+            { level: 'INFO', msg: 'Step 3/6 : COPY . .' },
+            { level: 'INFO', msg: 'Step 4/6 : RUN R -e "renv::restore()" '},
+            { level: 'INFO', msg: 'Successfully installed 35 packages.'},
+            { level: 'INFO', msg: 'Step 5/6 : EXPOSE 8080' },
+            { level: 'INFO', msg: 'Step 6/6 : CMD ["R", "-e", "..."]' },
+            { level: 'INFO', msg: 'Build successful!' },
+            { level: 'INFO', msg: 'Deploying container...'}
+        ];
+
+        const appLogs = [
+            { level: 'INFO', msg: 'Listening on http://0.0.0.0:8080' },
+            { level: 'INFO', msg: 'New session started from IP 192.168.1.10' },
+            { level: 'INFO', msg: 'User selected input A, value: 5' },
+            { level: 'WARN', msg: 'Calculation took 3.5s, longer than threshold of 2s' },
+            { level: 'INFO', msg: 'Report generated successfully for user.' },
+            { level: 'ERROR', msg: 'Error in reactive element `plot_data`: object \'input_b\' not found' },
+            { level: 'INFO', msg: 'New session started from IP 192.168.1.12' },
+        ];
+
+        let logIndex = 0;
+        
+        function addLogLine() {
+            const logs = (logIndex < deployLogs.length) ? deployLogs : appLogs;
+            const currentLogIndex = (logIndex < deployLogs.length) ? logIndex : (logIndex - deployLogs.length) % appLogs.length;
+            const log = logs[currentLogIndex];
+            
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            
+            const timestamp = document.createElement('span');
+            timestamp.className = 'log-timestamp';
+            timestamp.textContent = new Date().toISOString();
+
+            const level = document.createElement('span');
+            level.className = `log-level log-level-${log.level.toLowerCase()}`;
+            level.textContent = `[${log.level}]`;
+
+            const message = document.createElement('span');
+            message.className = 'log-message';
+            message.textContent = log.msg;
+
+            line.appendChild(timestamp);
+            line.appendChild(level);
+            line.appendChild(message);
+            
+            logViewer.appendChild(line);
+            logViewer.scrollTop = logViewer.scrollHeight; // Auto-scroll
+            
+            logIndex++;
+        }
+        setInterval(addLogLine, 2000);
+    }
+});
+</script>
 </body>
 </html>
 

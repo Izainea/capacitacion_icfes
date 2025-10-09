@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lección: Trazabilidad y Auditoría con Git</title>
-    <!-- Incluir los mismos estilos y fuentes que sesion_10.html -->
+    <title>Guía Forense: Trazabilidad y Auditoría en Git</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;900&family=Teko:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -22,26 +21,56 @@
             --border-color: #333;
             --link-color: #5dade2;
             --code-bg: #2d2d2d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
         }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.7; }
         .container { max-width: 900px; margin: auto; padding: 20px; }
-        .main-header { background: var(--secondary-color); padding: 50px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
-        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--primary-color); margin: 0; }
+        .main-header { background: linear-gradient(rgba(29, 38, 51, 0.8), rgba(29, 38, 51, 0.8)), url('https://placehold.co/1200x400/1d2633/e0e0e0?text=History'); background-size: cover; background-position: center; padding: 60px 20px; border-bottom: 4px solid var(--link-color); text-align: center; }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3.8rem; color: var(--link-color); margin: 0; text-shadow: 2px 2px 4px #000; }
         .lesson-content { padding: 40px 0; }
-        .lesson-section { margin-bottom: 40px; }
-        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.2rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        .lesson-section p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
-        .code-block { background-color: var(--code-bg); color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 20px 0; font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; }
-        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; }
+        .lesson-section { margin-bottom: 50px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .lesson-section:last-child { border-bottom: none; }
+        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.8rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .lesson-section h3 { font-family: 'Teko', sans-serif; font-size: 2rem; color: var(--text-color); margin-top: 30px; }
+        .lesson-section p, .lesson-section li { font-size: 1.1rem; color: var(--text-muted); }
+        .code-block { background-color: var(--code-bg); color: #f8f8f2; padding: 1.2em; border-radius: 8px; overflow-x: auto; margin: 25px 0; font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.95em; border-left: 4px solid var(--link-color); }
+        .code-block .comment { color: #888; }
+        .code-block .output { color: #a0a0a0; font-style: italic; }
+        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; font-size: 1.1rem; }
         .button-back:hover { background-color: #555; }
+        .highlight { color: var(--primary-color); font-weight: bold; font-family: 'Teko', sans-serif; font-size: 1.2em; }
+
+        /* Detective Tool Card */
+        .tool-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; margin-top: 30px; overflow: hidden; }
+        .tool-header { padding: 20px; background-color: #2a2a2a; border-bottom: 3px solid; }
+        .tool-header h3 { margin: 0; font-family: 'Teko', sans-serif; font-size: 2.2rem; display: flex; align-items: center; }
+        .tool-header i { margin-right: 15px; }
+        .tool-body { padding: 20px; }
+        .tool-log .tool-header { border-color: var(--info-color); color: var(--info-color); }
+        .tool-blame .tool-header { border-color: var(--primary-color); color: var(--primary-color); }
+        .tool-bisect .tool-header { border-color: var(--danger-color); color: var(--danger-color); }
+
+        /* Flowchart */
+        .diagram-container { text-align: center; margin: 40px 0; padding: 20px; background-color: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color); }
+        .diagram-container svg { max-width: 100%; height: auto; }
+        
+        /* Commit Message Best Practices */
+        .commit-example { background: var(--code-bg); padding: 15px; border-radius: 5px; border-left: 4px solid var(--success-color); }
+        .commit-example .type { color: #c39ac9; }
+        .commit-example .scope { color: #5dade2; }
+        .commit-example .subject { color: #e0e0e0; }
+        .commit-example .body { color: #a0a0a0; }
+
     </style>
 </head>
 <body>
 
     <header class="main-header">
         <div class="container">
-            <h1><i class="fa-solid fa-magnifying-glass-chart"></i> Trazabilidad y Auditoría</h1>
+            <h1><i class="fa-solid fa-user-secret"></i> Guía Forense de Trazabilidad en Git</h1>
         </div>
     </header>
 
@@ -49,75 +78,175 @@
         <div class="lesson-content">
 
             <section class="lesson-section">
-                <h2>La importancia de un historial limpio</h2>
-                <p>Un historial de commits no es solo un registro, es la documentación viva del proyecto. Un historial claro permite entender por qué se tomó una decisión, rastrear el origen de un error y colaborar de forma más efectiva. La trazabilidad es fundamental para la gobernanza y la calidad del software.</p>
+                <h2>¿Por Qué Ser un Detective de Código?</h2>
+                <p>Un historial de Git no es solo un backup, es el <span class="highlight">diario de vida de tu proyecto</span>. Contiene cada decisión, cada cambio y cada error. La trazabilidad es la habilidad de navegar este diario para responder preguntas cruciales:</p>
+                <ul>
+                    <li><strong>Auditoría:</strong> ¿Quién y cuándo implementó un requerimiento específico?</li>
+                    <li><strong>Depuración (Debugging):</strong> ¿Qué cambio exacto introdujo este bug que nos está volviendo locos?</li>
+                    <li><strong>Comprensión:</strong> ¿Por qué se escribió este código de esta manera tan particular?</li>
+                </ul>
+                <p>Dominar estas herramientas te transforma de un simple "guardador" de código a un verdadero arquitecto y guardián del proyecto.</p>
             </section>
-
+            
             <section class="lesson-section">
-                <h2>`git log`: El Historial del Proyecto</h2>
-                <p>El comando `git log` es la herramienta principal para explorar el historial. Se puede personalizar con muchas opciones para obtener la información exacta que necesitas.</p>
-                <div class="code-block">
-# Log básico
+                <div class="tool-card tool-log">
+                    <div class="tool-header"><h3><i class="fa-solid fa-book-journal-whills"></i>Herramienta #1: `git log` - La Bitácora del Proyecto</h3></div>
+                    <div class="tool-body">
+                        <p>Es tu ventana al pasado. El comando `git log` te muestra el historial de commits, pero su verdadero poder reside en sus opciones para filtrar y formatear la salida.</p>
+                        
+                        <h3>Recetas para un `log` Útil</h3>
+                        <div class="code-block">
+<span class="comment"># La vista estándar: completa pero verbosa.</span>
 git log
 
-# Log en una sola línea por commit
+<span class="comment"># Vista compacta: un commit por línea. Ideal para una visión general.</span>
 git log --oneline
+<span class="output">
+> a1b2c3d (HEAD -> develop) feat: Add user authentication
+> e4f5g6h (origin/main, main) fix: Correct report PDF generation
+> i7j8k9l Merge pull request #42 from icfes/feature/new-charts
+</span>
 
-# Log con un gráfico de las ramas
+<span class="comment"># La vista gráfica: muestra las ramas y fusiones. ¡Esencial!</span>
 git log --graph --oneline --decorate
+<span class="output">
+> * a1b2c3d (HEAD -> develop) feat: Add user authentication
+> |\
+> | * i7j8k9l Merge pull request #42 from icfes/feature/new-charts
+> | |\
+> | | * l2m3n4o (origin/feature/new-charts) feat: Implement Plotly charts
+> | |/
+> |/|
+> * | e4f5g6h (origin/main, main) fix: Correct report PDF generation
+</span>
 
-# Log de un autor específico
-git log --author="Nombre Apellido"
-
-# Log que muestra los cambios introducidos en cada commit
-git log -p
+<span class="comment"># Filtrando el historial: encuentra exactamente lo que buscas.</span>
+git log --author="Carlos" <span class="comment"># Commits de un autor específico.</span>
+git log --since="2 weeks ago" <span class="comment"># Commits de las últimas 2 semanas.</span>
+git log -- R/utils.R <span class="comment"># Commits que afectaron a un archivo específico.</span>
+git log -S "nombre_de_funcion" <span class="comment"># Commits que añadieron o quitaron la palabra "nombre_de_funcion".</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <section class="lesson-section">
-                <h2>`git blame`: ¿Quién escribió esta línea?</h2>
-                <p>Cuando te encuentras con una línea de código y necesitas entender su contexto, `git blame` es tu mejor aliado. Te muestra, para cada línea de un archivo, qué commit la modificó por última vez y quién fue el autor.</p>
-                 <div class="code-block">
-# Muestra el autor de cada línea del archivo especificado
-git blame R/app_logic.R
+                <div class="tool-card tool-blame">
+                    <div class="tool-header"><h3><i class="fa-solid fa-fingerprint"></i>Herramienta #2: `git blame` - El Análisis de Huellas Digitales</h3></div>
+                    <div class="tool-body">
+                        <p>Cuando te encuentras una línea de código misteriosa y te preguntas "¿Quién escribió esto y por qué?", `git blame` es tu lupa. Te muestra, línea por línea, quién fue la última persona en modificarla y en qué commit lo hizo.</p>
+                        
+                        <h3>Caso de Estudio: Una Constante Mágica</h3>
+                        <p>Imaginas que en el archivo `config.R` encuentras la línea `MAX_USERS <- 15` y no tienes idea de por qué el límite es 15. Es hora de investigar.</p>
+                        <div class="code-block">
+<span class="comment"># Ejecutas blame sobre el archivo para encontrar al "culpable".</span>
+git blame config.R
+<span class="output">
+> ...
+> ^a9d8c7b (Carlos Perez 2025-09-15 10:30:15 -0500 12) MAX_USERS <- 15
+> e4f5g6h (Ana Garcia 2025-08-01 14:00:00 -0500 13) TIMEOUT_MS <- 5000
+> ...
+</span>
+                        <p><strong>Análisis de la Evidencia:</strong> La línea 12 fue modificada por última vez por "Carlos Perez" en el commit `^a9d8c7b`. El `^` indica que fue la primera vez que esa línea apareció en ese commit.</p>
 
-# Puedes usar la opción -L para acotar a un rango de líneas
-git blame -L 10,25 R/app_logic.R
-                </div>
-            </section>
-
-            <section class="lesson-section">
-                <h2>`git bisect`: Encontrando el commit que introdujo un error</h2>
-                <p>Este es uno de los comandos más potentes y menos conocidos. Cuando sabes que algo funcionaba en el pasado pero ahora está roto, `git bisect` te ayuda a encontrar el commit exacto que introdujo el error mediante una búsqueda binaria.</p>
-                <p>El proceso es:</p>
-                <div class="code-block">
-# 1. Iniciar el proceso de búsqueda
-git bisect start
-
-# 2. Marcar el commit actual como "malo" (donde el error existe)
-git bisect bad
-
-# 3. Marcar un commit antiguo donde sabes que todo funcionaba como "bueno"
-#    Puedes usar el hash del commit o una etiqueta (tag)
-git bisect good v1.2.0
-
-# 4. Git te moverá a un commit intermedio. Prueba el código.
-#    Si el error sigue ahí, ejecuta `git bisect bad`.
-#    Si el error no está, ejecuta `git bisect good`.
-
-# 5. Repite el paso 4. Git continuará acotando la búsqueda hasta
-#    identificar y mostrarte el primer commit defectuoso.
-
-# 6. Para terminar, vuelve a tu rama original
-git bisect reset
+                        <p>Ahora que tienes el commit, puedes ver el contexto completo del cambio.</p>
+                        <div class="code-block">
+<span class="comment"># Usa `git show` para ver el commit completo y su mensaje.</span>
+git show a9d8c7b
+<span class="output">
+> commit a9d8c7b1e2f3g4h5i6j7k8l9m0n1o2p3q4r5s6t
+> Author: Carlos Perez <carlos.perez@icfes.gov.co>
+> Date:   Thu Sep 15 10:30:15 2025 -0500
+>
+> perf: Limit concurrent users to 15
+>
+> Based on performance tests from yesterday, the server becomes unstable
+> with more than 15 concurrent users. This limit is temporary until
+> the infrastructure is upgraded next quarter.
+</span>
+                        </div>
+                        <p><strong>Caso Cerrado:</strong> El mensaje del commit lo explica todo. Fue una medida temporal por rendimiento. ¡Misterio resuelto!</p>
+                    </div>
                 </div>
             </section>
             
+            <section class="lesson-section">
+                <div class="tool-card tool-bisect">
+                    <div class="tool-header"><h3><i class="fa-solid fa-crosshairs"></i>Herramienta #3: `git bisect` - El Cazador de Bugs Binario</h3></div>
+                    <div class="tool-body">
+                        <p>Esta es tu arma secreta. Cuando un bug aparece y solo sabes que "hace una semana funcionaba", `git bisect` automatiza la búsqueda del commit exacto que lo introdujo. Funciona como un juego de "frío o caliente", dividiendo el historial por la mitad en cada paso.</p>
+
+                        <h3>El Flujo de la Cacería</h3>
+                        <div class="diagram-container">
+                             <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+                                <defs><marker id="arrow-bisect" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#fff"/></marker></defs>
+                                <!-- Nodes -->
+                                <rect x="10" y="80" width="100" height="40" rx="5" fill="#28a745"/><text x="25" y="105" fill="#fff" font-size="12">Commit Bueno</text>
+                                <rect x="390" y="80" width="100" height="40" rx="5" fill="#dc3545"/><text x="405" y="105" fill="#fff" font-size="12">Commit Malo</text>
+                                <circle cx="250" cy="100" r="20" fill="#5dade2"/><text x="235" y="105" fill="#fff" font-size="12">Test</text>
+                                <!-- Lines -->
+                                <line x1="110" y1="100" x2="230" y2="100" stroke="#fff" stroke-width="2" marker-end="url(#arrow-bisect)"/>
+                                <line x1="270" y1="100" x2="390" y2="100" stroke="#fff" stroke-width="2" marker-end="url(#arrow-bisect)"/>
+                                <path d="M 250 120 Q 250 160 370 110" stroke="#fff" stroke-width="1" stroke-dasharray="5,5" fill="none" marker-end="url(#arrow-bisect)"/><text x="280" y="150" fill="#fff" font-size="10">Si es MALO</text>
+                                <path d="M 250 80 Q 250 40 130 90" stroke="#fff" stroke-width="1" stroke-dasharray="5,5" fill="none" marker-end="url(#arrow-bisect)"/><text x="160" y="60" fill="#fff" font-size="10">Si es BUENO</text>
+                             </svg>
+                        </div>
+
+                        <h3>Misión: Encontrar el Origen de un Gráfico Roto</h3>
+                        <div class="code-block">
+<span class="comment"># 1. Iniciar la sesión de 'bisect'.</span>
+git bisect start
+
+<span class="comment"># 2. Marcar el commit actual (donde el gráfico está roto) como 'malo'.</span>
+git bisect bad
+
+<span class="comment"># 3. Marcar un commit antiguo donde recuerdas que funcionaba como 'bueno'.</span>
+<span class="comment"># Puedes usar un hash o una etiqueta (tag).</span>
+git bisect good v1.2.0
+
+<span class="output">
+> Bisecting: 67 revisions left to test after this (roughly 6 steps)
+> [a1b2c3d...] feat: Refactor data processing logic
+</span>
+
+<span class="comment"># 4. Git te ha movido a un commit intermedio. Ahora, refresca tu app y prueba el gráfico.</span>
+<span class="comment">#    CASO A: El gráfico sigue roto. Le dices a Git que este commit también es 'malo'.</span>
+git bisect bad
+<span class="comment">#    CASO B: El gráfico funciona. Le dices a Git que este commit es 'bueno'.</span>
+git bisect good
+
+<span class="comment"># 5. Repite el paso 4. Git continuará dividiendo el rango de búsqueda.</span>
+<span class="comment">#    Después de unos pocos pasos, Git te dará la respuesta:</span>
+<span class="output">
+> a1b2c3d... is the first bad commit
+> ... (muestra los detalles del commit culpable)
+</span>
+
+<span class="comment"># 6. ¡Misión cumplida! Ahora sal del modo 'bisect' para volver a tu rama original.</span>
+git bisect reset
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="lesson-section">
+                <h2>Buenas Prácticas: Dejar un Rastro Limpio</h2>
+                <p>Las herramientas son poderosas, pero su efectividad depende de la calidad del historial. Un historial limpio es un regalo para tu futuro yo y para tus compañeros.</p>
+                <h3>Escribe Mensajes de Commit Significativos</h3>
+                <p>Un mensaje como "arreglos" no ayuda a nadie. Sigue un estándar como <a href="https://www.conventionalcommits.org/" target="_blank" style="color: var(--link-color);">Conventional Commits</a> para que tus mensajes sean predecibles y claros.</p>
+                <div class="commit-example">
+                    <span class="type">feat</span><span class="scope">(auth)</span><span class="subject">: Implementar login con roles de usuario</span><br><br>
+                    <span class="body">- Se añade la lógica del servidor para verificar roles (admin, user).</span><br>
+                    <span class="body">- La UI ahora redirige al usuario a su dashboard correspondiente.</span><br>
+                    <span class="body">- Cierra el ticket JIRA-123.</span>
+                </div>
+            </section>
+
             <div style="text-align: center;">
                  <a href="sesion_10.html" class="button-back"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 10</a>
             </div>
         </div>
     </main>
-
 </body>
 </html>
+

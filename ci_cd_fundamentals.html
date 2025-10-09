@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lección: Fundamentos de CI/CD</title>
+    <title>Guía Maestra de CI/CD: De la Teoría a la Práctica</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;900&family=Teko:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -21,27 +21,57 @@
             --border-color: #333;
             --link-color: #5dade2;
             --code-bg: #2d2d2d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
         }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.7; }
         .container { max-width: 900px; margin: auto; padding: 20px; }
-        .main-header { background: var(--secondary-color); padding: 50px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
-        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--primary-color); margin: 0; }
+        .main-header { background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://placehold.co/1200x400/28a745/e0e0e0?text=Automation'); background-size: cover; background-position: center; padding: 60px 20px; border-bottom: 4px solid var(--success-color); text-align: center; }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3.8rem; color: var(--success-color); margin: 0; text-shadow: 2px 2px 4px #000; }
         .lesson-content { padding: 40px 0; }
-        .lesson-section { margin-bottom: 40px; }
-        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.2rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        .lesson-section p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
-        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; }
+        .lesson-section { margin-bottom: 50px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .lesson-section:last-child { border-bottom: none; }
+        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.8rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .lesson-section h3 { font-family: 'Teko', sans-serif; font-size: 2rem; color: var(--text-color); margin-top: 30px; }
+        .lesson-section p, .lesson-section li { font-size: 1.1rem; color: var(--text-muted); }
+        .code-block { background-color: var(--code-bg); color: #f8f8f2; padding: 1.2em; border-radius: 8px; overflow-x: auto; margin: 25px 0; font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.95em; border-left: 4px solid var(--success-color); }
+        .code-block .comment { color: #888; }
+        .code-block .keyword { color: #f92672; }
+        .code-block .string { color: #a6e22e; }
+        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; font-size: 1.1rem; }
         .button-back:hover { background-color: #555; }
-        .ci-cd-flow { text-align: center; margin: 30px 0; }
-        .ci-cd-flow i { font-size: 2rem; }
+        .highlight { color: var(--primary-color); font-weight: bold; font-family: 'Teko', sans-serif; font-size: 1.2em; }
+
+        /* Concept Cards */
+        .concept-cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .concept-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 25px; text-align: center; }
+        .concept-card i { font-size: 3rem; margin-bottom: 15px; }
+        .concept-card h4 { font-family: 'Teko', sans-serif; font-size: 1.8rem; margin: 0; }
+        .concept-ci h4, .concept-ci i { color: var(--info-color); }
+        .concept-cd-delivery h4, .concept-cd-delivery i { color: var(--warning-color); }
+        .concept-cd-deployment h4, .concept-cd-deployment i { color: var(--success-color); }
+        .concept-card p { font-size: 0.95rem; }
+
+        /* Pipeline Visualization */
+        .pipeline-container { background: var(--card-bg); padding: 30px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .pipeline { display: flex; justify-content: space-around; align-items: center; }
+        .pipeline-stage { text-align: center; color: var(--text-muted); }
+        .pipeline-icon { width: 60px; height: 60px; background: #333; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; margin: 0 auto 10px; border: 3px solid #555; transition: all 0.3s ease; }
+        .pipeline-stage.active .pipeline-icon { border-color: var(--success-color); color: var(--success-color); transform: scale(1.1); box-shadow: 0 0 15px var(--success-color); }
+        .pipeline-arrow { font-size: 2rem; color: #555; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .pipeline-stage.running .pipeline-icon { animation: pulse 1.5s infinite; }
+        
     </style>
 </head>
 <body>
 
     <header class="main-header">
         <div class="container">
-            <h1><i class="fa-solid fa-gears"></i> Fundamentos de CI/CD</h1>
+            <h1><i class="fa-solid fa-industry"></i> Guía Maestra de CI/CD: La Fábrica de Software Automatizada</h1>
         </div>
     </header>
 
@@ -49,44 +79,222 @@
         <div class="lesson-content">
 
             <section class="lesson-section">
-                <h2>El Puente entre el Desarrollo y las Operaciones</h2>
-                <p>CI/CD son las siglas de <strong>Integración Continua</strong> y <strong>Entrega/Despliegue Continuo</strong>. Juntas, forman una filosofía y un conjunto de prácticas que automatizan las fases del ciclo de vida del software, permitiendo a los equipos entregar código de manera más frecuente y fiable.</p>
+                <h2>El Salto: De Artesanos a Ingenieros</h2>
+                <p>Imagina el proceso de despliegue tradicional: un desarrollador termina su código, lo comprime, lo sube manualmente a un servidor, cruza los dedos y reza para que todo funcione. Este proceso manual es lento, propenso a errores y genera una enorme ansiedad. Es un trabajo de artesanos.</p>
+                <p>CI/CD (Integración Continua / Entrega Continua / Despliegue Continuo) es el salto a la ingeniería. Es crear una <span class="highlight">línea de ensamblaje automatizada</span> para nuestro software. Cada vez que un desarrollador aporta un cambio, esta fábrica se pone en marcha, ensamblando, probando y preparando el producto final de forma automática, predecible y segura.</p>
             </section>
-
+            
             <section class="lesson-section">
-                <h2><i class="fa-solid fa-puzzle-piece"></i> Integración Continua (CI)</h2>
-                <p>La Integración Continua es la práctica de fusionar (integrar) de forma automática y frecuente los cambios de código de múltiples desarrolladores en un repositorio central. Cada integración dispara un proceso automático de construcción y prueba.</p>
-                <p><strong>Objetivos de la CI:</strong></p>
-                <ul>
-                    <li>Detectar errores de integración de forma temprana.</li>
-                    <li>Evitar que el código defectuoso llegue a ramas principales.</li>
-                    <li>Reducir los conflictos de fusión.</li>
-                    <li>Asegurar que la aplicación siempre esté en un estado "construible".</li>
-                </ul>
-                <div class="ci-cd-flow">
-                    <i class="fa-solid fa-code"></i> &rarr; 
-                    <i class="fa-solid fa-code-commit"></i> (Push a Git) &rarr;
-                    <i class="fa-solid fa-cogs"></i> (Build) &rarr;
-                    <i class="fa-solid fa-vial"></i> (Test) &rarr;
-                    <i class="fa-solid fa-check-circle"></i> (OK)
+                <h2>Los Tres Pilares de la Automatización</h2>
+                <div class="concept-cards-container">
+                    <div class="concept-card concept-ci">
+                        <i class="fa-solid fa-hammer"></i>
+                        <h4>Integración Continua (CI)</h4>
+                        <p><strong>El Quoi:</strong> Fusionar el código de todos los desarrolladores en una rama principal de forma frecuente.
+                        <br><strong>El Porqué:</strong> Detectar conflictos y errores de inmediato.
+                        <br><strong>La Práctica:</strong> Cada `push` dispara una construcción y pruebas automáticas.</p>
+                    </div>
+                    <div class="concept-card concept-cd-delivery">
+                        <i class="fa-solid fa-box-archive"></i>
+                        <h4>Entrega Continua (Delivery)</h4>
+                        <p><strong>El Quoi:</strong> Extender la CI para empaquetar y preparar automáticamente cada cambio para ser desplegado.
+                        <br><strong>El Porqué:</strong> Tener siempre una versión lista para producción.
+                        <br><strong>La Práctica:</strong> El despliegue a producción es un "clic de botón" manual.</p>
+                    </div>
+                    <div class="concept-card concept-cd-deployment">
+                        <i class="fa-solid fa-rocket"></i>
+                        <h4>Despliegue Continuo (Deployment)</h4>
+                        <p><strong>El Quoi:</strong> El paso final. Cada cambio que pasa las pruebas se despliega automáticamente a producción.
+                        <br><strong>El Porqué:</strong> Acelerar al máximo la entrega de valor a los usuarios.
+                        <br><strong>La Práctica:</strong> No hay intervención humana en el despliegue. ¡El pipeline lo hace todo!</p>
+                    </div>
                 </div>
             </section>
 
             <section class="lesson-section">
-                <h2><i class="fa-solid fa-truck-fast"></i> Entrega y Despliegue Continuo (CD)</h2>
-                <p>El CD lleva la automatización un paso más allá. Se refiere a dos prácticas relacionadas:</p>
-                <ul>
-                    <li><strong>Entrega Continua (Continuous Delivery):</strong> Después de la fase de CI, el código se empaqueta y se despliega automáticamente en un entorno de "pre-producción" o "staging". El despliegue a producción final requiere una aprobación manual.</li>
-                    <li><strong>Despliegue Continuo (Continuous Deployment):</strong> Es el paso más avanzado. Cada cambio que pasa todas las pruebas se despliega automáticamente a producción, sin intervención humana.</li>
-                </ul>
-                <p>Plataformas como <strong>Railway</strong>, Heroku o Netlify, y herramientas como <strong>GitHub Actions</strong> o Jenkins, son fundamentales para implementar pipelines de CI/CD.</p>
+                <h2>Visualizando el Pipeline: La Línea de Ensamblaje</h2>
+                <p>Un pipeline de CI/CD es una serie de etapas por las que pasa nuestro código. Si una etapa falla, el proceso se detiene y se notifica al equipo. Esto garantiza que solo el código de alta calidad llegue al final de la línea.</p>
+                <div class="pipeline-container">
+                    <div id="pipeline-visual" class="pipeline">
+                        <div class="pipeline-stage" id="stage-commit">
+                            <div class="pipeline-icon"><i class="fa-solid fa-code-commit"></i></div>
+                            <span>Commit</span>
+                        </div>
+                        <div class="pipeline-arrow">&rarr;</div>
+                        <div class="pipeline-stage" id="stage-build">
+                            <div class="pipeline-icon"><i class="fa-solid fa-box"></i></div>
+                            <span>Build</span>
+                        </div>
+                        <div class="pipeline-arrow">&rarr;</div>
+                        <div class="pipeline-stage" id="stage-test">
+                            <div class="pipeline-icon"><i class="fa-solid fa-vial-circle-check"></i></div>
+                            <span>Test</span>
+                        </div>
+                        <div class="pipeline-arrow">&rarr;</div>
+                        <div class="pipeline-stage" id="stage-deploy">
+                            <div class="pipeline-icon"><i class="fa-solid fa-server"></i></div>
+                            <span>Deploy</span>
+                        </div>
+                    </div>
+                </div>
             </section>
             
+            <section class="lesson-section">
+                <h2>Caso Práctico: Tu App de Reportes en Railway</h2>
+                <p>Vamos a dejar la teoría y analizar cómo estos conceptos se aplican directamente a tu proyecto desplegado. Tu repositorio contiene los elementos clave que permiten la automatización.</p>
+                
+                <h3>El Corazón de la Reproducibilidad: Tu `Dockerfile`</h3>
+                <p>Un `Dockerfile` es la receta para construir una imagen de contenedor. Es un entorno aislado y portátil que contiene tu aplicación y todas sus dependencias. Esto garantiza que la app se ejecute de la misma manera en la máquina de un desarrollador, en el pipeline de CI y en producción.</p>
+                <p>Analicemos tu `Dockerfile` paso a paso:</p>
+                <div class="code-block">
+<span class="keyword">FROM</span><span class="string"> rocker/r-ver:4.3.1</span>
+<span class="comment"># 1. Punto de Partida: Define la imagen base. Estás usando una imagen oficial de R,
+#    lo que te da un entorno de R limpio y preconfigurado.</span>
+
+<span class="keyword">RUN</span><span class="string"> apt-get update && apt-get install -y --no-install-recommends libcurl4-openssl-dev libssl-dev libxml2-dev</span>
+<span class="comment"># 2. Dependencias del Sistema: Instala librerías a nivel de sistema operativo
+#    que algunos paquetes de R necesitan para compilarse y funcionar correctamente.</span>
+
+<span class="keyword">COPY</span><span class="string"> . .</span>
+<span class="comment"># 3. Copia de Código: Copia todos los archivos de tu repositorio (app_reportes.R, renv.lock, etc.)
+#    dentro de la imagen del contenedor.</span>
+
+<span class="keyword">RUN</span><span class="string"> R -e "install.packages('renv')"</span>
+<span class="keyword">RUN</span><span class="string"> R -e "renv::restore()"</span>
+<span class="comment"># 4. Instalación de Paquetes de R: ¡Paso CRÍTICO! Aquí es donde `renv` brilla.
+#    - Primero instala `renv`.
+#    - Luego, `renv::restore()` lee tu archivo `renv.lock` e instala las versiones
+#      EXACTAS de los paquetes de R que usaste en desarrollo. Esto garantiza
+#      una reproducibilidad perfecta.</span>
+
+<span class="keyword">EXPOSE</span><span class="string"> 8080</span>
+<span class="comment"># 5. Exponer Puerto: Informa a Docker que la aplicación dentro del contenedor
+#    escuchará en el puerto 8080.</span>
+
+<span class="keyword">CMD</span><span class="string"> ["R", "-e", "options('shiny.port'=8080, 'shiny.host'='0.0.0.0'); rmarkdown::run('app_reportes.R')"]</span>
+<span class="comment"># 6. Comando de Ejecución: La instrucción final. Le dice al contenedor qué comando
+#    ejecutar cuando se inicie. En este caso, inicia tu aplicación Shiny en el host y puerto correctos
+#    para que sea accesible desde el exterior.</span>
+                </div>
+            </section>
+            
+            <section class="lesson-section">
+                 <h2>Diseñando un Pipeline de CI para tu App Shiny</h2>
+                 <p>Ahora, imaginemos que queremos configurar un pipeline de **Integración Continua (CI)** en GitHub Actions para tu proyecto. Este pipeline se ejecutaría en cada `push` o `Pull Request` para asegurar la calidad del código antes de que se fusione.</p>
+                 <p>El objetivo no es desplegar, sino **validar**. El despliegue lo hará Railway automáticamente (CD).</p>
+                 <div class="code-block">
+<span class="comment"># .github/workflows/R-shiny-ci.yml</span>
+
+name: CI para App de R Shiny
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  validate-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.3.1'
+
+      <span class="comment"># El caché es clave para acelerar los pipelines. Guarda los paquetes de `renv`</span>
+      <span class="comment"># para no tener que descargarlos desde cero cada vez.</span>
+      - name: Cache Renv packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-${{ hashFiles('renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      <span class="comment"># Restaura las dependencias exactas como en el Dockerfile</span>
+      - name: Restore Renv packages
+        run: |
+          R -e "install.packages('renv')"
+          R -e "renv::restore()"
+
+      <span class="comment"># ETAPA DE VALIDACIÓN 1: Estilo de Código</span>
+      <span class="comment"># Verifica que el código R sigue las mejores prácticas.</span>
+      - name: Lint R code
+        run: |
+          install.packages("lintr")
+          lintr::lint_dir(linters = lintr::linters_with_defaults(line_length_linter = lintr::line_length_linter(120)))
+        shell: Rscript {0}
+
+      <span class="comment"># ETAPA DE VALIDACIÓN 2: Pruebas Unitarias</span>
+      <span class="comment"># (Asumiendo que tienes un directorio 'tests' con pruebas de testthat)</span>
+      <span class="comment"># - name: Run unit tests</span>
+      <span class="comment">#   run: |</span>
+      <span class="comment">#     install.packages("testthat")</span>
+      <span class="comment">#     testthat::test_dir("tests/")</span>
+      <span class="comment">#   shell: Rscript {0}</span>
+                 </div>
+                 
+                 <h3>El Puente hacia el Despliegue Continuo (CD)</h3>
+                 <p>Una vez que este pipeline de CI se completa con éxito en la rama `main`, sabemos que el código es de alta calidad. Aquí es donde entra Railway:</p>
+                 <ol>
+                    <li>Railway está conectado a tu repositorio de GitHub.</li>
+                    <li>Detecta el `push` a la rama `main`.</li>
+                    <li>Automáticamente, toma tu código, lee el `Dockerfile`, construye la imagen y despliega la nueva versión.</li>
+                 </ol>
+                 <p>¡Eso es **Despliegue Continuo** en acción! La CI (GitHub Actions) valida, y la plataforma de CD (Railway) despliega. Tú solo te preocupas de hacer `git push`.</p>
+            </section>
+
             <div style="text-align: center;">
                  <a href="sesion_10.html" class="button-back"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 10</a>
             </div>
         </div>
     </main>
+    <script>
+        // Simple script to simulate pipeline progress
+        document.addEventListener('DOMContentLoaded', () => {
+            const stages = ['commit', 'build', 'test', 'deploy'];
+            let currentStage = 0;
 
+            function runPipeline() {
+                // Check for previous stage and remove 'running' class
+                if (currentStage > 0) {
+                    const prevStageEl = document.getElementById(`stage-${stages[currentStage - 1]}`);
+                    if (prevStageEl) {
+                        prevStageEl.classList.remove('running');
+                        prevStageEl.classList.add('active');
+                    }
+                }
+
+                if (currentStage < stages.length) {
+                    const stageEl = document.getElementById(`stage-${stages[currentStage]}`);
+                    if (stageEl) { // <-- FIX: Check if element exists
+                        stageEl.classList.add('running');
+                    }
+                    currentStage++;
+                } else {
+                    // All stages complete
+                    const lastStageEl = document.getElementById(`stage-${stages[stages.length - 1]}`);
+                    if (lastStageEl) {
+                        lastStageEl.classList.remove('running');
+                        lastStageEl.classList.add('active');
+                    }
+                    // Reset after a delay
+                    setTimeout(() => {
+                        currentStage = 0;
+                        document.querySelectorAll('.pipeline-stage').forEach(el => el.classList.remove('active', 'running'));
+                    }, 3000);
+                }
+            }
+            // Only run the animation if the container exists
+            if (document.getElementById('pipeline-visual')) {
+                setInterval(runPipeline, 1500);
+            }
+        });
+    </script>
 </body>
 </html>
+

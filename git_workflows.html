@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lección: Flujos de Trabajo Colaborativos con Git</title>
-    <!-- Incluir los mismos estilos y fuentes que sesion_10.html -->
+    <title>Guía Definitiva: Flujos de Trabajo Colaborativos con Git</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;900&family=Teko:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -22,26 +21,64 @@
             --border-color: #333;
             --link-color: #5dade2;
             --code-bg: #2d2d2d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
         }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.7; }
         .container { max-width: 900px; margin: auto; padding: 20px; }
-        .main-header { background: var(--secondary-color); padding: 50px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
-        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--primary-color); margin: 0; }
+        .main-header { background: linear-gradient(rgba(0, 72, 132, 0.8), rgba(0, 72, 132, 0.8)), url('https://placehold.co/1200x400/004884/F9C22E?text=Code'); background-size: cover; background-position: center; padding: 60px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3.8rem; color: var(--primary-color); margin: 0; text-shadow: 2px 2px 4px #000; }
         .lesson-content { padding: 40px 0; }
-        .lesson-section { margin-bottom: 40px; }
-        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.2rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        .lesson-section p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
-        .code-block { background-color: var(--code-bg); color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 20px 0; font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; }
-        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; }
+        .lesson-section { margin-bottom: 50px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .lesson-section:last-child { border-bottom: none; }
+        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.8rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .lesson-section h3 { font-family: 'Teko', sans-serif; font-size: 2rem; color: var(--text-color); margin-top: 30px; }
+        .lesson-section p, .lesson-section li { font-size: 1.1rem; color: var(--text-muted); }
+        .code-block { background-color: var(--code-bg); color: #f8f8f2; padding: 1.2em; border-radius: 8px; overflow-x: auto; margin: 25px 0; font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.95em; border-left: 4px solid var(--primary-color); }
+        .code-block .comment { color: #888; }
+        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; font-size: 1.1rem; }
         .button-back:hover { background-color: #555; }
+        .highlight { color: var(--primary-color); font-weight: bold; font-family: 'Teko', sans-serif; font-size: 1.2em; }
+        
+        /* Diagram/Flowchart Styles */
+        .diagram-container { text-align: center; margin: 40px 0; padding: 20px; background-color: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color); }
+        .diagram-container svg { max-width: 100%; height: auto; }
+        
+        /* Timeline Styles */
+        .timeline { list-style: none; padding: 0; position: relative; }
+        .timeline:before { content: ''; position: absolute; top: 0; bottom: 0; width: 4px; background: var(--border-color); left: 20px; }
+        .timeline-item { margin-bottom: 30px; position: relative; padding-left: 60px; }
+        .timeline-icon { position: absolute; left: 0; top: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--secondary-color); color: var(--primary-color); border: 3px solid var(--primary-color); text-align: center; line-height: 40px; font-size: 1.5rem; z-index: 1; }
+        .timeline-content { background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 4px solid var(--link-color); }
+        .timeline-content h4 { font-family: 'Teko', sans-serif; font-size: 1.5rem; margin: 0 0 10px 0; color: var(--link-color); }
+
+        /* Branch Cards */
+        .branch-cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
+        .branch-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .branch-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .branch-card .card-header { display: flex; align-items: center; margin-bottom: 15px; border-bottom: 2px solid; padding-bottom: 10px; }
+        .branch-card .card-header i { font-size: 2rem; margin-right: 15px; }
+        .branch-card .card-header h4 { font-family: 'Teko', sans-serif; font-size: 1.8rem; margin: 0; }
+        .branch-card-main .card-header { border-color: var(--primary-color); color: var(--primary-color); }
+        .branch-card-develop .card-header { border-color: var(--link-color); color: var(--link-color); }
+        .branch-card-feature .card-header { border-color: var(--info-color); color: var(--info-color); }
+        .branch-card-release .card-header { border-color: var(--success-color); color: var(--success-color); }
+        .branch-card-hotfix .card-header { border-color: var(--danger-color); color: var(--danger-color); }
+
+        /* Conflict Resolution Section */
+        .conflict-example { background-color: #222; border: 1px solid var(--border-color); padding: 15px; border-radius: 5px; font-family: monospace; white-space: pre; }
+        .conflict-head { color: #d73a49; }
+        .conflict-separator { color: #6f42c1; }
+        .conflict-incoming { color: #22863a; }
     </style>
 </head>
 <body>
 
     <header class="main-header">
         <div class="container">
-            <h1><i class="fa-solid fa-code-branch"></i> Flujos de Trabajo Colaborativos</h1>
+            <h1><i class="fa-solid fa-sitemap"></i> Guía Definitiva de Flujos de Trabajo en Git</h1>
         </div>
     </header>
 
@@ -49,54 +86,169 @@
         <div class="lesson-content">
 
             <section class="lesson-section">
-                <h2>El Problema: Caos en la Rama Principal</h2>
-                <p>Cuando varias personas trabajan directamente sobre la misma rama (ej. `main` o `master`), es fácil que se generen conflictos, se introduzcan errores sin revisión y el historial se vuelva un caos. Los flujos de trabajo establecen un conjunto de reglas para evitar estos problemas.</p>
-            </section>
-
-            <section class="lesson-section">
-                <h2>Estrategia de Ramificación: GitFlow</h2>
-                <p>GitFlow es un modelo popular que define roles específicos para distintas ramas, organizando el ciclo de vida del desarrollo:</p>
-                <ul>
-                    <li><strong>main:</strong> Contiene el código de producción. Solo se fusiona desde `develop` al preparar un nuevo lanzamiento.</li>
-                    <li><strong>develop:</strong> Es la rama de integración principal. Contiene los últimos cambios de desarrollo listos para el próximo lanzamiento.</li>
-                    <li><strong>feature/<code>&lt;nombre-feature&gt;</code>:</strong> Se crean a partir de `develop` para trabajar en una nueva funcionalidad (ej. `feature/nuevo-grafico-interactivo`). Una vez terminadas, se fusionan de vuelta a `develop`.</li>
-                    <li><strong>release/<code>&lt;version&gt;</code>:</strong> Se crea desde `develop` cuando se prepara un lanzamiento. Permite hacer ajustes finales sin detener el desarrollo de nuevas funcionalidades en `develop`.</li>
-                    <li><strong>hotfix/<code>&lt;issue&gt;</code>:</strong> Se crea desde `main` para corregir errores críticos en producción. Se fusiona tanto a `main` como a `develop`.</li>
+                <h2>El Flujo de Ramas por Funcionalidad: La Base de Todo</h2>
+                <p>Este es el flujo de trabajo más fundamental. La regla de oro es simple pero poderosa: <span class="highlight">la rama `main` es sagrada</span>. Cualquier trabajo nuevo se realiza en una rama separada y aislada para garantizar que `main` siempre sea estable y desplegable.</p>
+                
+                <div class="diagram-container">
+                    <h3>Diagrama de Flujo: Feature Branch</h3>
+                    <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+                        <defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" /></marker></defs>
+                        <line x1="20" y1="50" x2="380" y2="50" stroke="#F9C22E" stroke-width="2"/><text x="350" y="45" fill="#F9C22E" font-family="Teko" font-size="12">main</text>
+                        <path d="M 80 50 C 120 10, 160 10, 200 50" stroke="#5dade2" stroke-width="2" fill="none" /><path d="M 200 50 C 240 90, 280 90, 320 50" stroke="#5dade2" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+                        <text x="180" y="20" fill="#5dade2" font-family="Teko" font-size="12">feature/task</text>
+                        <circle cx="80" cy="50" r="4" fill="#fff" /><text x="60" y="70" fill="#fff" font-size="10">1. Crear Rama</text>
+                        <circle cx="200" cy="50" r="4" fill="#fff" /><text x="180" y="70" fill="#fff" font-size="10">2. Commits</text>
+                        <circle cx="320" cy="50" r="4" fill="#fff" /><text x="290" y="70" fill="#fff" font-size="10">3. Merge (PR)</text>
+                    </svg>
+                </div>
+                
+                <h3>El Ciclo de Vida de una Funcionalidad (Línea de Tiempo)</h3>
+                <ul class="timeline">
+                    <li class="timeline-item"><div class="timeline-icon"><i class="fa-solid fa-cloud-download-alt"></i></div><div class="timeline-content"><h4>Paso 1: Sincronizar</h4><p>Antes de escribir una sola línea de código, asegúrate de tener la versión más reciente del proyecto. Esto previene conflictos futuros.</p></div></li>
+                    <li class="timeline-item"><div class="timeline-icon"><i class="fa-solid fa-code-branch"></i></div><div class="timeline-content"><h4>Paso 2: Ramificar</h4><p>Crea una nueva rama a partir de `main`. El nombre debe ser descriptivo, por ejemplo: `feature/login-form` o `fix/bug-report-pdf`.</p></div></li>
+                    <li class="timeline-item"><div class="timeline-icon"><i class="fa-solid fa-laptop-code"></i></div><div class="timeline-content"><h4>Paso 3: Desarrollar</h4><p>Trabaja en tu rama. Haz commits pequeños y atómicos. Tu trabajo está completamente aislado y no interfiere con el de los demás.</p></div></li>
+                    <li class="timeline-item"><div class="timeline-icon"><i class="fa-solid fa-code-pull-request"></i></div><div class="timeline-content"><h4>Paso 4: Pull Request (PR)</h4><p>Cuando tu trabajo esté listo, sube tu rama y abre un Pull Request. Esta es tu solicitud formal para integrar tus cambios en `main`.</p></div></li>
+                    <li class="timeline-item"><div class="timeline-icon"><i class="fa-solid fa-users-viewfinder"></i></div><div class="timeline-content"><h4>Paso 5: Revisión de Código</h4><p>Tu equipo revisa el código, sugiere mejoras y aprueba los cambios. Este es el control de calidad más importante.</p></div></li>
+                    <li class="timeline-item"><div class="timeline-icon"><i class="fa-solid fa-check-double"></i></div><div class="timeline-content"><h4>Paso 6: Fusionar y Limpiar</h4><p>Una vez aprobado, el PR se fusiona. ¡Tu código ya es parte de la rama principal! Se procede a limpiar las ramas ya fusionadas.</p></div></li>
                 </ul>
-            </section>
 
-            <section class="lesson-section">
-                <h2>Pull Requests: La Clave de la Calidad</h2>
-                <p>Un <strong>Pull Request (PR)</strong> o <strong>Merge Request (MR)</strong> es una solicitud formal para fusionar una rama en otra. Es el corazón del trabajo colaborativo en plataformas como GitHub, GitLab o Bitbucket.</p>
-                <p>El proceso es el siguiente:</p>
-                <ol>
-                    <li>Un desarrollador termina su trabajo en una rama `feature`.</li>
-                    <li>Crea un PR para fusionar `feature` en `develop`.</li>
-                    <li>Otros miembros del equipo revisan el código, dejan comentarios y sugieren cambios.</li>
-                    <li>Se pueden ejecutar pruebas automatizadas para verificar que el nuevo código no rompe nada.</li>
-                    <li>Una vez aprobado, el PR se fusiona (merge), integrando los cambios de forma segura.</li>
-                </ol>
-            </section>
-
-            <section class="lesson-section">
-                <h2>Manejando Conflictos de Fusión</h2>
-                <p>Un conflicto ocurre cuando dos ramas han modificado la misma parte de un mismo archivo. Git no puede decidir qué cambio conservar y te pide que lo resuelvas manually.</p>
-                <p>Para resolverlo:</p>
+                <h3>Ejemplo Práctico con Comandos</h3>
+                <p>Veamos cómo un desarrollador llamado "Carlos" implementaría este flujo para añadir un nuevo módulo de reportes.</p>
                 <div class="code-block">
-# 1. Asegúrate de tener los últimos cambios de la rama destino
+<span class="comment"># 1. Carlos sincroniza su 'main' local con el remoto</span>
+git checkout main
+git pull origin main
+
+<span class="comment"># 2. Crea su rama de funcionalidad</span>
+git checkout -b feature/module-reports
+
+<span class="comment"># 3. Trabaja en su módulo, haciendo commits descriptivos</span>
+<span class="comment"># ... escribe código para 'reports.R' ...</span>
+git add R/reports.R
+git commit -m "feat: Create initial structure for reports module"
+<span class="comment"># ... añade la UI en 'ui.R' ...</span>
+git add ui.R
+git commit -m "feat: Add UI elements for report generation"
+
+<span class="comment"># 4. Sube su rama al repositorio remoto para iniciar la colaboración</span>
+git push -u origin feature/module-reports
+
+<span class="comment"># 5. Carlos va a la interfaz web (GitHub, GitLab) y abre un Pull Request.</span>
+<span class="comment">#    El equipo lo revisa. Una vez aprobado, se fusiona.</span>
+
+<span class="comment"># 6. Después de la fusión, Carlos actualiza su 'main' y limpia las ramas</span>
+git checkout main
+git pull origin main
+git branch -d feature/module-reports <span class="comment"># Borra la rama local</span>
+git push origin --delete feature/module-reports <span class="comment"># Borra la rama remota</span>
+                </div>
+            </section>
+            
+            <section class="lesson-section">
+                <h2>Nivel Profesional: El Flujo de Trabajo GitFlow</h2>
+                <p>Para proyectos más grandes con un ciclo de vida definido (versiones, lanzamientos, parches urgentes), GitFlow proporciona una estructura robusta y predecible. Introduce ramas adicionales con responsabilidades muy específicas.</p>
+                
+                <div class="diagram-container">
+                    <h3>Diagrama de Flujo: GitFlow</h3>
+                    <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+                        <defs><marker id="arrow-svg" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e0e0e0"/></marker></defs>
+                        <!-- Main & Develop Lines -->
+                        <line x1="10" y1="250" x2="590" y2="250" stroke="#F9C22E" stroke-width="2"/><text x="540" y="245" fill="#F9C22E" font-family="Teko">main</text>
+                        <line x1="10" y1="150" x2="590" y2="150" stroke="#5dade2" stroke-width="2"/><text x="540" y="145" fill="#5dade2" font-family="Teko">develop</text>
+                        <!-- Feature Branch -->
+                        <path d="M 100 150 C 120 100, 180 100, 200 150" stroke="#17a2b8" stroke-width="2" fill="none" marker-end="url(#arrow-svg)"/><text x="120" y="95" fill="#17a2b8" font-family="Teko">feature</text>
+                        <!-- Release Branch -->
+                        <path d="M 300 150 C 320 200, 380 200, 400 250" stroke="#28a745" stroke-width="2" fill="none" marker-end="url(#arrow-svg)"/><path d="M 300 150 C 350 180, 380 180, 400 150" stroke="#28a745" stroke-width="2" fill="none" marker-end="url(#arrow-svg)"/><text x="320" y="220" fill="#28a745" font-family="Teko">release</text>
+                        <!-- Hotfix Branch -->
+                        <path d="M 450 250 C 470 200, 500 200, 520 150" stroke="#dc3545" stroke-width="2" fill="none" marker-end="url(#arrow-svg)"/><path d="M 450 250 C 480 280, 500 280, 520 250" stroke="#dc3545" stroke-width="2" fill="none" marker-end="url(#arrow-svg)"/><text x="460" y="220" fill="#dc3545" font-family="Teko">hotfix</text>
+                    </svg>
+                </div>
+                
+                <h3>Las Ramas de GitFlow y sus Roles</h3>
+                <div class="branch-cards-container">
+                    <div class="branch-card branch-card-main"><div class="card-header"><i class="fa-solid fa-star"></i><h4>Main</h4></div><p><strong>Propósito:</strong> Refleja el estado exacto de producción. Siempre debe ser estable y desplegable. <strong>Regla:</strong> Nadie hace push directamente aquí. Solo recibe fusiones de ramas `release` y `hotfix`.</p></div>
+                    <div class="branch-card branch-card-develop"><div class="card-header"><i class="fa-solid fa-flask"></i><h4>Develop</h4></div><p><strong>Propósito:</strong> Rama principal de integración. Contiene todas las funcionalidades completadas que se incluirán en el próximo lanzamiento. <strong>Regla:</strong> Es la rama "madre" de todas las `feature` y la "base" de las `release`.</p></div>
+                    <div class="branch-card branch-card-feature"><div class="card-header"><i class="fa-solid fa-cogs"></i><h4>Feature</h4></div><p><strong>Propósito:</strong> Desarrollar nuevas funcionalidades de forma aislada. <strong>Flujo:</strong> Nace de `develop` y se fusiona de vuelta a `develop` a través de un PR.</p></div>
+                    <div class="branch-card branch-card-release"><div class="card-header"><i class="fa-solid fa-rocket"></i><h4>Release</h4></div><p><strong>Propósito:</strong> Preparar un nuevo lanzamiento (pruebas finales, ajustes). <strong>Flujo:</strong> Nace de `develop`. Al finalizar, se fusiona a `main` (para el tag) y a `develop` (para incorporar ajustes).</p></div>
+                    <div class="branch-card branch-card-hotfix"><div class="card-header"><i class="fa-solid fa-fire-extinguisher"></i><h4>Hotfix</h4></div><p><strong>Propósito:</strong> Solucionar un bug crítico en producción de forma urgente. <strong>Flujo:</strong> Nace de `main`. Al finalizar, se fusiona tanto a `main` como a `develop`.</p></div>
+                </div>
+
+                <h3>Simulación Práctica: Lanzamiento de la Versión 2.0</h3>
+                 <div class="code-block">
+<span class="comment"># FASE 1: Se ha completado el desarrollo para la v2.0 en la rama 'develop'.</span>
+<span class="comment"># El líder de equipo inicia la preparación del lanzamiento.</span>
 git checkout develop
-git pull origin develop
+git checkout -b release/v2.0
+git push -u origin release/v2.0
 
-# 2. Vuelve a tu rama y intenta fusionar los cambios
-git checkout feature/mi-feature
+<span class="comment"># FASE 2: El equipo de QA prueba en la rama 'release/v2.0'.</span>
+<span class="comment"># Se encuentran pequeños bugs y se corrigen DIRECTAMENTE en esta rama.</span>
+<span class="comment"># ... se hacen commits de corrección ...</span>
+git commit -m "fix: Correct alignment on main dashboard"
+git push
+
+<span class="comment"># FASE 3: El lanzamiento está listo. Es hora de fusionar y etiquetar.</span>
+<span class="comment"># Se fusiona en 'main' para oficializar la versión de producción.</span>
+git checkout main
+git pull
+git merge --no-ff release/v2.0
+git tag -a v2.0 -m "Lanzamiento de la versión 2.0 con nuevo dashboard"
+git push origin main --tags
+
+<span class="comment"># FASE 4: Se fusionan los cambios de la release de vuelta a 'develop'.</span>
+<span class="comment"># ¡CRÍTICO! Esto asegura que las correcciones hechas en la release no se pierdan.</span>
+git checkout develop
+git pull
+git merge --no-ff release/v2.0
+git push origin develop
+
+<span class="comment"># FASE 5: Limpieza. La rama de release ha cumplido su propósito.</span>
+git push origin --delete release/v2.0
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>El Arte de Resolver Conflictos de Fusión</h2>
+                <p>Un conflicto no es un error, es una señal de que Git necesita ayuda humana. Ocurre cuando dos ramas han modificado la misma línea de un archivo de formas diferentes. ¡Es una parte normal del trabajo en equipo!</p>
+                
+                <h3>Anatomía de un Conflicto</h3>
+                <p>Al intentar fusionar, Git te avisará. El archivo en conflicto contendrá marcadores visuales:</p>
+                <div class="conflict-example">
+<span class="conflict-head">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD (Tus cambios en la rama actual)</span>
+<br>
+  app_title <- "Dashboard de Monitoreo ICFES"
+<br>
+<span class="conflict-separator">=======</span>
+<br>
+  app_title <- "Tablero de Seguimiento de Pruebas"
+<br>
+<span class="conflict-incoming">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/new-title (Los cambios de la rama que intentas fusionar)</span>
+</div>
+                <h3>Proceso de Resolución Paso a Paso</h3>
+                <div class="code-block">
+<span class="comment"># 1. Intentas fusionar 'develop' en tu rama de 'feature' y Git te avisa del conflicto.</span>
+git checkout feature/module-reports
 git merge develop
+<span class="comment">> Auto-merging ui.R</span>
+<span class="comment">> CONFLICT (content): Merge conflict in ui.R</span>
+<span class="comment">> Automatic merge failed; fix conflicts and then commit the result.</span>
 
-# 3. Git te avisará del conflicto. Abre el archivo en conflicto,
-#    verás marcadores como &lt;&lt;&lt;&lt;&lt;&lt;&lt;, =======, &gt;&gt;&gt;&gt;&gt;&gt;&gt;.
-#    Edita el archivo para dejar la versión final que deseas.
+<span class="comment"># 2. Revisa el estado para ver los archivos en conflicto.</span>
+git status
+<span class="comment">> Unmerged paths:</span>
+<span class="comment">>   (use "git add <file>..." to mark resolution)</span>
+<span class="comment">>         both modified:   ui.R</span>
 
-# 4. Una vez resuelto, añade el archivo y completa el merge.
-git add &lt;archivo-en-conflicto&gt;
+<span class="comment"># 3. Abre 'ui.R' en tu editor. Verás los marcadores.</span>
+<span class="comment">#    Edita el archivo, elimina los marcadores y deja el código final deseado.</span>
+<span class="comment">#    Por ejemplo, decides quedarte con una de las opciones o combinarlas.</span>
+<span class="comment">#    CÓDIGO FINAL: app_title <- "Dashboard Oficial de Monitoreo ICFES"</span>
+
+<span class="comment"># 4. Una vez que el archivo está limpio y guardado, márcalo como resuelto.</span>
+git add ui.R
+
+<span class="comment"># 5. Completa la fusión. Git abrirá un editor para un mensaje de commit.</span>
+<span class="comment">#    Normalmente, el mensaje por defecto ("Merge branch 'develop' into...") es suficiente.</span>
 git commit
                 </div>
             </section>
@@ -106,6 +258,6 @@ git commit
             </div>
         </div>
     </main>
-
 </body>
 </html>
+

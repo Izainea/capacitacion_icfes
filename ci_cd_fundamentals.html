@@ -29,8 +29,13 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.7; }
         .container { max-width: 900px; margin: auto; padding: 20px; }
-        .main-header { background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://placehold.co/1200x400/28a745/e0e0e0?text=Automation'); background-size: cover; background-position: center; padding: 60px 20px; border-bottom: 4px solid var(--success-color); text-align: center; }
-        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3.8rem; color: var(--success-color); margin: 0; text-shadow: 2px 2px 4px #000; }
+        .main-header {
+            background: var(--secondary-color);
+            padding: 50px 20px;
+            border-bottom: 4px solid var(--primary-color);
+            text-align: center;
+        }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3.8rem;color: var(--primary-color); margin: 0; text-shadow: 2px 2px 4px #000; }
         .lesson-content { padding: 40px 0; }
         .lesson-section { margin-bottom: 50px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
         .lesson-section:last-child { border-bottom: none; }

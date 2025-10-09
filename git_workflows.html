@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección: Flujos de Trabajo Colaborativos con Git</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: #5dade2;
+            --code-bg: #2d2d2d;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+        .container { max-width: 900px; margin: auto; padding: 20px; }
+        .main-header { background: var(--secondary-color); padding: 50px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--primary-color); margin: 0; }
+        .lesson-content { padding: 40px 0; }
+        .lesson-section { margin-bottom: 40px; }
+        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.2rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .lesson-section p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
+        .code-block { background-color: var(--code-bg); color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 20px 0; font-family: 'Courier New', Courier, monospace; }
+        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; }
+        .button-back:hover { background-color: #555; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1><i class="fa-solid fa-code-branch"></i> Flujos de Trabajo Colaborativos</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-content">
+
+            <section class="lesson-section">
+                <h2>El Problema: Caos en la Rama Principal</h2>
+                <p>Cuando varias personas trabajan directamente sobre la misma rama (ej. `main` o `master`), es fácil que se generen conflictos, se introduzcan errores sin revisión y el historial se vuelva un caos. Los flujos de trabajo establecen un conjunto de reglas para evitar estos problemas.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Estrategia de Ramificación: GitFlow</h2>
+                <p>GitFlow es un modelo popular que define roles específicos para distintas ramas, organizando el ciclo de vida del desarrollo:</p>
+                <ul>
+                    <li><strong>main:</strong> Contiene el código de producción. Solo se fusiona desde `develop` al preparar un nuevo lanzamiento.</li>
+                    <li><strong>develop:</strong> Es la rama de integración principal. Contiene los últimos cambios de desarrollo listos para el próximo lanzamiento.</li>
+                    <li><strong>feature/<code>&lt;nombre-feature&gt;</code>:</strong> Se crean a partir de `develop` para trabajar en una nueva funcionalidad (ej. `feature/nuevo-grafico-interactivo`). Una vez terminadas, se fusionan de vuelta a `develop`.</li>
+                    <li><strong>release/<code>&lt;version&gt;</code>:</strong> Se crea desde `develop` cuando se prepara un lanzamiento. Permite hacer ajustes finales sin detener el desarrollo de nuevas funcionalidades en `develop`.</li>
+                    <li><strong>hotfix/<code>&lt;issue&gt;</code>:</strong> Se crea desde `main` para corregir errores críticos en producción. Se fusiona tanto a `main` como a `develop`.</li>
+                </ul>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Pull Requests: La Clave de la Calidad</h2>
+                <p>Un <strong>Pull Request (PR)</strong> o <strong>Merge Request (MR)</strong> es una solicitud formal para fusionar una rama en otra. Es el corazón del trabajo colaborativo en plataformas como GitHub, GitLab o Bitbucket.</p>
+                <p>El proceso es el siguiente:</p>
+                <ol>
+                    <li>Un desarrollador termina su trabajo en una rama `feature`.</li>
+                    <li>Crea un PR para fusionar `feature` en `develop`.</li>
+                    <li>Otros miembros del equipo revisan el código, dejan comentarios y sugieren cambios.</li>
+                    <li>Se pueden ejecutar pruebas automatizadas para verificar que el nuevo código no rompe nada.</li>
+                    <li>Una vez aprobado, el PR se fusiona (merge), integrando los cambios de forma segura.</li>
+                </ol>
+            </section>
+
+            <section class="lesson-section">
+                <h2>Manejando Conflictos de Fusión</h2>
+                <p>Un conflicto ocurre cuando dos ramas han modificado la misma parte de un mismo archivo. Git no puede decidir qué cambio conservar y te pide que lo resuelvas manualmente.</p>
+                <p>Para resolverlo:</p>
+                <div class="code-block">
+# 1. Asegúrate de tener los últimos cambios de la rama destino
+git checkout develop
+git pull origin develop
+
+# 2. Vuelve a tu rama y intenta fusionar los cambios
+git checkout feature/mi-feature
+git merge develop
+
+# 3. Git te avisará del conflicto. Abre el archivo en conflicto,
+#    verás marcadores como <<<<<<<, =======, >>>>>>>.
+#    Edita el archivo para dejar la versión final que deseas.
+
+# 4. Una vez resuelto, añade el archivo y completa el merge.
+git add &lt;archivo-en-conflicto&gt;
+git commit
+                </div>
+            </section>
+            
+            <div style="text-align: center;">
+                 <a href="sesion_10.html" class="button-back"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 10</a>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 10: Control de Versiones Avanzado</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: #5dade2;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        .main-header {
+            background: var(--secondary-color);
+            padding: 60px 20px;
+            border-bottom: 4px solid var(--primary-color);
+            text-align: center;
+        }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3.5rem; color: var(--primary-color); }
+        .main-header p { font-size: 1.3rem; color: var(--text-muted); }
+        .section { padding: 40px 0; }
+        .section-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 2.8rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .module-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        .module-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-left-color: var(--link-color);
+        }
+        .module-item h4 {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin: 0 0 10px 0;
+        }
+        .module-item p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .module-item-footer {
+            margin-top: auto;
+        }
+        .module-item-link {
+            font-weight: bold;
+            color: var(--link-color);
+        }
+        .button-home {
+            display: inline-block;
+            margin-top: 40px;
+            background-color: #444;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .button-home:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1>Módulo 10: Control de Versiones Avanzado</h1>
+            <p>Estrategias y herramientas para una colaboración robusta y un seguimiento de cambios impecable.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <h2 class="section-title">De Contribuidor Individual a Orquestador de Equipos</h2>
+            <p style="font-size: 1.2rem; color: var(--text-muted);">
+                Ya dominamos los comandos básicos de Git, pero el verdadero poder del control de versiones se revela en el trabajo en equipo. Un proyecto de datos en una entidad como el ICFES no es una tarea solitaria; es un esfuerzo colaborativo donde múltiples personas desarrollan, revisan y despliegan código.
+            </p>
+            <p style="font-size: 1.2rem; color: var(--text-muted);">
+                Este módulo se enfoca en las estrategias y flujos de trabajo que permiten a los equipos colaborar de manera eficiente. Aprenderemos a gestionar ramas de desarrollo, a integrar cambios de forma segura y a mantener un historial de proyecto limpio y auditable, garantizando la calidad y la trazabilidad de cada línea de código.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Contenido del Módulo</h2>
+            <div class="module-grid">
+                
+                <a href="git_workflows.html" class="module-item">
+                    <div>
+                        <h4><i class="fa-solid fa-code-branch"></i> Lección 1: Flujos de Trabajo Colaborativos</h4>
+                        <p>Explora estrategias de ramificación como GitFlow. Aprende a usar Pull Requests para la revisión de código y a gestionar conflictos de fusión (merge conflicts) como un profesional.</p>
+                    </div>
+                    <div class="module-item-footer">
+                        <span class="module-item-link">Explorar Lección &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="git_traceability.html" class="module-item">
+                    <div>
+                        <h4><i class="fa-solid fa-magnifying-glass-chart"></i> Lección 2: Trazabilidad y Auditoría</h4>
+                        <p>Domina comandos como `git blame`, `git log` y `git bisect` para rastrear el origen de cada cambio, identificar la introducción de errores y mantener un historial limpio y significativo.</p>
+                    </div>
+                    <div class="module-item-footer">
+                        <span class="module-item-link">Explorar Lección &rarr;</span>
+                    </div>
+                </a>
+
+            </div>
+            <div style="text-align: center;">
+                 <a href="index.html" class="button-home"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

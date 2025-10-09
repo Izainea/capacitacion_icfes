@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección: Simulación de un Producto de Datos Completo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: #5dade2;
+            --code-bg: #2d2d2d;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+        .container { max-width: 900px; margin: auto; padding: 20px; }
+        .main-header { background: var(--secondary-color); padding: 50px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--primary-color); margin: 0; }
+        .lesson-content { padding: 40px 0; }
+        .lesson-section { margin-bottom: 40px; }
+        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.2rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .lesson-section p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
+        .timeline { list-style: none; padding: 0; position: relative; }
+        .timeline:before { content: ''; position: absolute; top: 0; bottom: 0; width: 4px; background: var(--border-color); left: 30px; margin-left: -2px; }
+        .timeline-item { margin-bottom: 30px; position: relative; padding-left: 60px; }
+        .timeline-icon { position: absolute; left: 18px; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--primary-color); color: var(--secondary-color); text-align: center; line-height: 24px; font-weight: bold; }
+        .timeline-content h3 { font-family: 'Teko', sans-serif; margin-top: 0; color: var(--text-color); }
+        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; }
+        .button-back:hover { background-color: #555; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1><i class="fa-solid fa-rocket"></i> Simulación de un Producto de Datos Completo</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-content">
+
+            <section class="lesson-section">
+                <h2>El Desafío: Un Dashboard de Monitoreo</h2>
+                <p>Nuestro proyecto final será construir un "Dashboard de Monitoreo de Resultados de Pruebas". Este dashboard deberá:</p>
+                <ul>
+                    <li>Conectarse a una fuente de datos (simulada).</li>
+                    <li>Mostrar estadísticas descriptivas interactivas.</li>
+                    <li>Integrar un modelo pre-entrenado para predecir el rendimiento de un estudiante.</li>
+                    <li>Generar un reporte en PDF con los resultados de un grupo seleccionado.</li>
+                    <li>Tener una apariencia profesional con el branding del ICFES.</li>
+                    <li>Estar versionado con Git siguiendo un flujo de trabajo colaborativo.</li>
+                </ul>
+            </section>
+
+            <section class="lesson-section">
+                <h2>El Ciclo MLOps en Acción</h2>
+                <p>Seguiremos el ciclo de vida completo, aplicando los conocimientos de cada módulo:</p>
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+                        <div class="timeline-content">
+                            <h3>Fase 1: Planificación y Prototipado (Módulos 1-3)</h3>
+                            <p>Definiremos los requerimientos, configuraremos el repositorio en GitHub y crearemos un prototipo inicial con layouts básicos y visualizaciones interactivas usando `ggplot2` y `plotly`.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fa-solid fa-cogs"></i></div>
+                        <div class="timeline-content">
+                            <h3>Fase 2: Desarrollo del Producto (Módulos 4-7)</h3>
+                            <p>Implementaremos el pipeline de datos con `dplyr`, integraremos el modelo predictivo (`.rds`), añadiremos tablas con `DT` y la funcionalidad de descarga de reportes con `rmarkdown`.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fa-solid fa-paint-roller"></i></div>
+                        <div class="timeline-content">
+                            <h3>Fase 3: Profesionalización (Módulo 8)</h3>
+                            <p>Refactorizaremos la UI usando `shinydashboard`, aplicaremos los colores y logos del ICFES y organizaremos el código en una estructura modular para facilitar el mantenimiento.</p>
+                        </div>
+                    </li>
+                     <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="timeline-content">
+                            <h3>Fase 4: Conectividad y Gobernanza (Módulo 9)</h3>
+                            <p>Reemplazaremos los datos locales con una conexión a una base de datos simulada y gestionaremos las credenciales de forma segura usando un archivo `.Renviron`.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fa-solid fa-code-pull-request"></i></div>
+                        <div class="timeline-content">
+                            <h3>Fase 5: Colaboración y Despliegue (Módulo 10)</h3>
+                            <p>Simularemos un flujo de trabajo con Pull Requests para revisar e integrar los cambios. Finalmente, prepararemos la aplicación para su despliegue, por ejemplo, usando un `Dockerfile` para Railway.</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            
+            <div style="text-align: center;">
+                 <a href="sesion_11.html" class="button-back"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 11</a>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

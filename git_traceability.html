@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección: Trazabilidad y Auditoría con Git</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: #5dade2;
+            --code-bg: #2d2d2d;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+        .container { max-width: 900px; margin: auto; padding: 20px; }
+        .main-header { background: var(--secondary-color); padding: 50px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--primary-color); margin: 0; }
+        .lesson-content { padding: 40px 0; }
+        .lesson-section { margin-bottom: 40px; }
+        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.2rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .lesson-section p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
+        .code-block { background-color: var(--code-bg); color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 20px 0; font-family: 'Courier New', Courier, monospace; }
+        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; }
+        .button-back:hover { background-color: #555; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1><i class="fa-solid fa-magnifying-glass-chart"></i> Trazabilidad y Auditoría</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-content">
+
+            <section class="lesson-section">
+                <h2>La importancia de un historial limpio</h2>
+                <p>Un historial de commits no es solo un registro, es la documentación viva del proyecto. Un historial claro permite entender por qué se tomó una decisión, rastrear el origen de un error y colaborar de forma más efectiva. La trazabilidad es fundamental para la gobernanza y la calidad del software.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2>`git log`: El Historial del Proyecto</h2>
+                <p>El comando `git log` es la herramienta principal para explorar el historial. Se puede personalizar con muchas opciones para obtener la información exacta que necesitas.</p>
+                <div class="code-block">
+# Log básico
+git log
+
+# Log en una sola línea por commit
+git log --oneline
+
+# Log con un gráfico de las ramas
+git log --graph --oneline --decorate
+
+# Log de un autor específico
+git log --author="Nombre Apellido"
+
+# Log que muestra los cambios introducidos en cada commit
+git log -p
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>`git blame`: ¿Quién escribió esta línea?</h2>
+                <p>Cuando te encuentras con una línea de código y necesitas entender su contexto, `git blame` es tu mejor aliado. Te muestra, para cada línea de un archivo, qué commit la modificó por última vez y quién fue el autor.</p>
+                 <div class="code-block">
+# Muestra el autor de cada línea del archivo especificado
+git blame R/app_logic.R
+
+# Puedes usar la opción -L para acotar a un rango de líneas
+git blame -L 10,25 R/app_logic.R
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2>`git bisect`: Encontrando el commit que introdujo un error</h2>
+                <p>Este es uno de los comandos más potentes y menos conocidos. Cuando sabes que algo funcionaba en el pasado pero ahora está roto, `git bisect` te ayuda a encontrar el commit exacto que introdujo el error mediante una búsqueda binaria.</p>
+                <p>El proceso es:</p>
+                <div class="code-block">
+# 1. Iniciar el proceso de búsqueda
+git bisect start
+
+# 2. Marcar el commit actual como "malo" (donde el error existe)
+git bisect bad
+
+# 3. Marcar un commit antiguo donde sabes que todo funcionaba como "bueno"
+#    Puedes usar el hash del commit o una etiqueta (tag)
+git bisect good v1.2.0
+
+# 4. Git te moverá a un commit intermedio. Prueba el código.
+#    Si el error sigue ahí, ejecuta `git bisect bad`.
+#    Si el error no está, ejecuta `git bisect good`.
+
+# 5. Repite el paso 4. Git continuará acotando la búsqueda hasta
+#    identificar y mostrarte el primer commit defectuoso.
+
+# 6. Para terminar, vuelve a tu rama original
+git bisect reset
+                </div>
+            </section>
+            
+            <div style="text-align: center;">
+                 <a href="sesion_10.html" class="button-back"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 10</a>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

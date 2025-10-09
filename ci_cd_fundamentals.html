@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección: Fundamentos de CI/CD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --icfes-blue-primary: #004884;
+            --icfes-yellow-accent: #F9C22E;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: var(--icfes-yellow-accent);
+            --secondary-color: var(--icfes-blue-primary);
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --link-color: #5dade2;
+            --code-bg: #2d2d2d;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Nunito Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+        .container { max-width: 900px; margin: auto; padding: 20px; }
+        .main-header { background: var(--secondary-color); padding: 50px 20px; border-bottom: 4px solid var(--primary-color); text-align: center; }
+        .main-header h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: var(--primary-color); margin: 0; }
+        .lesson-content { padding: 40px 0; }
+        .lesson-section { margin-bottom: 40px; }
+        .lesson-section h2 { font-family: 'Teko', sans-serif; font-size: 2.2rem; color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .lesson-section p { font-size: 1.1rem; line-height: 1.7; color: var(--text-muted); }
+        .button-back { display: inline-block; margin-top: 20px; background-color: #444; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease; }
+        .button-back:hover { background-color: #555; }
+        .ci-cd-flow { text-align: center; margin: 30px 0; }
+        .ci-cd-flow i { font-size: 2rem; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <h1><i class="fa-solid fa-gears"></i> Fundamentos de CI/CD</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-content">
+
+            <section class="lesson-section">
+                <h2>El Puente entre el Desarrollo y las Operaciones</h2>
+                <p>CI/CD son las siglas de <strong>Integración Continua</strong> y <strong>Entrega/Despliegue Continuo</strong>. Juntas, forman una filosofía y un conjunto de prácticas que automatizan las fases del ciclo de vida del software, permitiendo a los equipos entregar código de manera más frecuente y fiable.</p>
+            </section>
+
+            <section class="lesson-section">
+                <h2><i class="fa-solid fa-puzzle-piece"></i> Integración Continua (CI)</h2>
+                <p>La Integración Continua es la práctica de fusionar (integrar) de forma automática y frecuente los cambios de código de múltiples desarrolladores en un repositorio central. Cada integración dispara un proceso automático de construcción y prueba.</p>
+                <p><strong>Objetivos de la CI:</strong></p>
+                <ul>
+                    <li>Detectar errores de integración de forma temprana.</li>
+                    <li>Evitar que el código defectuoso llegue a ramas principales.</li>
+                    <li>Reducir los conflictos de fusión.</li>
+                    <li>Asegurar que la aplicación siempre esté en un estado "construible".</li>
+                </ul>
+                <div class="ci-cd-flow">
+                    <i class="fa-solid fa-code"></i> &rarr; 
+                    <i class="fa-solid fa-code-commit"></i> (Push a Git) &rarr;
+                    <i class="fa-solid fa-cogs"></i> (Build) &rarr;
+                    <i class="fa-solid fa-vial"></i> (Test) &rarr;
+                    <i class="fa-solid fa-check-circle"></i> (OK)
+                </div>
+            </section>
+
+            <section class="lesson-section">
+                <h2><i class="fa-solid fa-truck-fast"></i> Entrega y Despliegue Continuo (CD)</h2>
+                <p>El CD lleva la automatización un paso más allá. Se refiere a dos prácticas relacionadas:</p>
+                <ul>
+                    <li><strong>Entrega Continua (Continuous Delivery):</strong> Después de la fase de CI, el código se empaqueta y se despliega automáticamente en un entorno de "pre-producción" o "staging". El despliegue a producción final requiere una aprobación manual.</li>
+                    <li><strong>Despliegue Continuo (Continuous Deployment):</strong> Es el paso más avanzado. Cada cambio que pasa todas las pruebas se despliega automáticamente a producción, sin intervención humana.</li>
+                </ul>
+                <p>Plataformas como <strong>Railway</strong>, Heroku o Netlify, y herramientas como <strong>GitHub Actions</strong> o Jenkins, son fundamentales para implementar pipelines de CI/CD.</p>
+            </section>
+            
+            <div style="text-align: center;">
+                 <a href="sesion_10.html" class="button-back"><i class="fa-solid fa-arrow-left"></i> Volver al Módulo 10</a>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
